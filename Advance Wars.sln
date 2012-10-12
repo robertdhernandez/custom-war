@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AW", "AW\AW.vcxproj", "{770B9CDB-6FF8-4BF7-8DFF-5E14316AE34F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TmxParser", "TmxParser\TmxParser.vcxproj", "{0DB72E94-02F8-4572-9171-8EE8BF2B3C36}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXML", "TinyXML\TinyXML.vcxproj", "{A8D3215D-2962-400D-9416-C51019AFC58D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\zlib.vcxproj", "{E2764134-8ED1-40B0-8419-81F56DB9B78F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{770B9CDB-6FF8-4BF7-8DFF-5E14316AE34F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{770B9CDB-6FF8-4BF7-8DFF-5E14316AE34F}.Debug|Win32.Build.0 = Debug|Win32
+		{770B9CDB-6FF8-4BF7-8DFF-5E14316AE34F}.Release|Win32.ActiveCfg = Release|Win32
+		{770B9CDB-6FF8-4BF7-8DFF-5E14316AE34F}.Release|Win32.Build.0 = Release|Win32
+		{0DB72E94-02F8-4572-9171-8EE8BF2B3C36}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0DB72E94-02F8-4572-9171-8EE8BF2B3C36}.Debug|Win32.Build.0 = Debug|Win32
+		{0DB72E94-02F8-4572-9171-8EE8BF2B3C36}.Release|Win32.ActiveCfg = Release|Win32
+		{0DB72E94-02F8-4572-9171-8EE8BF2B3C36}.Release|Win32.Build.0 = Release|Win32
+		{A8D3215D-2962-400D-9416-C51019AFC58D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A8D3215D-2962-400D-9416-C51019AFC58D}.Debug|Win32.Build.0 = Debug|Win32
+		{A8D3215D-2962-400D-9416-C51019AFC58D}.Release|Win32.ActiveCfg = Release|Win32
+		{A8D3215D-2962-400D-9416-C51019AFC58D}.Release|Win32.Build.0 = Release|Win32
+		{E2764134-8ED1-40B0-8419-81F56DB9B78F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E2764134-8ED1-40B0-8419-81F56DB9B78F}.Debug|Win32.Build.0 = Debug|Win32
+		{E2764134-8ED1-40B0-8419-81F56DB9B78F}.Release|Win32.ActiveCfg = Release|Win32
+		{E2764134-8ED1-40B0-8419-81F56DB9B78F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
