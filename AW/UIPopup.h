@@ -9,8 +9,7 @@ namespace aw
 	namespace ui
 	{
 
-		class UIPopup :
-			public sf::Drawable
+		class UIPopup : public sf::Drawable
 		{
 			typedef std::map<sf::Int32, std::string> OptionMap;
 
@@ -26,7 +25,7 @@ namespace aw
 
 			private:
 				void UpdateOptionSize();
-				void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
+				void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 			private:
 				sf::Int32 m_nIndex;

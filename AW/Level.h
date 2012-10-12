@@ -11,11 +11,10 @@ namespace sf
 
 namespace aw
 {
-	class Level :
-		public sf::Drawable
+	class Level : public sf::Drawable
 	{
 		public:
-			Level(const sf::Texture& texture, sf::Uint32 width, sf::Uint32 height);
+			Level( const sf::Texture& texture, sf::Uint32 width, sf::Uint32 height );
 			~Level();
 
 		public:			
@@ -41,7 +40,7 @@ namespace aw
 			static sf::Vector2u ConvertCoord(const sf::Vector2i& pos);
 
 		private:
-			void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
+			void draw( sf::RenderTarget& target, sf::RenderStates state) const;
 
 		private:
 			sf::Uint32 m_uWidth, m_uHeight;

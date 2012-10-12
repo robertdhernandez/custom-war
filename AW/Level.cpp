@@ -136,31 +136,31 @@ bool Level::IsValidPos(const sf::Vector2u& pos) const
 /****************************************************/
 // Rendering
 
-void Level::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
+void Level::draw( sf::RenderTarget& target, sf::RenderStates state ) const
 {
 	sf::Sprite tile(m_Texture);
-	for (sf::Uint32 y = 0; y < m_uHeight; y++)
-		for (sf::Uint32 x = 0; x < m_uWidth; x++)
+	for ( sf::Uint32 y = 0; y < m_uHeight; y++ )
+		for ( sf::Uint32 x = 0; x < m_uWidth; x++ )
 		{
 			const Tile& curTile = m_vecWorld[y][x];
-			tile.SetPosition(ConvertCoord(x, y));
-			tile.SetOrigin(0.f, 0.f);
+			tile.setPosition(ConvertCoord(x, y));
+			tile.setOrigin(0.f, 0.f);
 
-			if (curTile.GetType() != Tile::Grass)
+			if ( curTile.GetType() != Tile::Grass )
 			{
-				tile.SetSubRect(Tile().GetSubRect());
-				target.Draw(tile);
+				tile.setTextureRect( Tile().GetSubRect() );
+				target.draw( tile );
 			}
 
 			sf::IntRect rect = curTile.GetSubRect();
-			tile.SetSubRect(rect);
+			tile.setTextureRect( rect );
 
 			sf::Vector2f origin;
-			origin.x = (rect.Width > TILE_WIDTH) ? rect.Width - TILE_WIDTH : 0.f;
-			origin.y = (rect.Height > TILE_HEIGHT) ? rect.Height - TILE_HEIGHT : 0.f;
-			tile.SetOrigin(origin);
+			origin.x = ( rect.width > TILE_WIDTH ) ? rect.width - TILE_WIDTH : 0.0f;
+			origin.y = ( rect.height > TILE_HEIGHT ) ? rect.height - TILE_HEIGHT : 0.0f;
+			tile.setOrigin( origin );
 
-			target.Draw(tile);
+			target.draw( tile );
 		}
 }
 

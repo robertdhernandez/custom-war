@@ -2,8 +2,8 @@
 
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Graphics\Texture.hpp>
-//#include "Level.h"
-//#include "Skirmish.h"
+#include "Level.h"
+#include "Skirmish.h"
 
 namespace aw
 {
@@ -23,8 +23,8 @@ namespace aw
 
 			sf::Texture m_tOverworld;
 
-			//Level m_TestLevel;
-			//Skirmish m_Skirmish;
+			Level m_TestLevel;
+			Skirmish m_Skirmish;
 	};
 
 } // namespace aw

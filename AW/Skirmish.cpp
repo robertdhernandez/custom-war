@@ -47,7 +47,7 @@ Skirmish::~Skirmish()
 /****************************************************/
 // Interact
 
-void Skirmish::Interact(const sf::Vector2i& pos, bool lmb, bool rmb)
+void Skirmish::Interact( const sf::Vector2i& pos, bool lmb, bool rmb )
 {
 	SetCursorPos(pos);
 
@@ -77,7 +77,7 @@ void Skirmish::Interact(const sf::Vector2i& pos, bool lmb, bool rmb)
 /****************************************************/
 // Mutators
 
-void Skirmish::SetCursorPos(const sf::Vector2i& pos)
+void Skirmish::SetCursorPos( const sf::Vector2i& pos )
 {
 	m_vCursorPos.x = pos.x / Level::TILE_WIDTH;
 	m_vCursorPos.y = pos.y / Level::TILE_HEIGHT;
@@ -87,28 +87,28 @@ void Skirmish::SetCursorPos(const sf::Vector2i& pos)
 /****************************************************/
 // Rendering
 
-void Skirmish::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
+void Skirmish::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	// Draw the level
-	target.Draw(m_Level);
+	target.draw( m_Level );
 
 	// Draw the highlight
-	target.Draw(m_UnitCommand);
+	target.draw( m_UnitCommand );
 
 	// Draw the units
-	target.Draw(m_UnitManager);
+	target.draw( m_UnitManager );
 
 	// Draw the cursor
 	sf::Vector2f pos;
-	pos.x = static_cast<float>(m_vCursorPos.x * Level::TILE_WIDTH);
-	pos.y = static_cast<float>(m_vCursorPos.y * Level::TILE_HEIGHT);
+	pos.x = static_cast< float >( m_vCursorPos.x * Level::TILE_WIDTH );
+	pos.y = static_cast< float >( m_vCursorPos.y * Level::TILE_HEIGHT );
 
-	sf::Sprite cursor(m_Texture);
-	cursor.SetPosition(pos);
-	cursor.SetSubRect(RECT_CURSOR);
-	cursor.SetOrigin(CURSOR_OFFSET);
+	sf::Sprite cursor( m_Texture );
+	cursor.setPosition( pos );
+	cursor.setTextureRect( RECT_CURSOR );
+	cursor.setOrigin( CURSOR_OFFSET );
 
-	target.Draw(cursor);
+	target.draw( cursor );
 }
 
 

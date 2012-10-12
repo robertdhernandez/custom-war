@@ -8,11 +8,11 @@ namespace aw
 /****************************************************/
 // Constructor / Destructor
 
-Game::Game() //:
-	//m_TestLevel(m_tOverworld, 20U, 15U),
-	//m_Skirmish(m_TestLevel, m_tOverworld, 2)
+Game::Game() :
+	m_TestLevel(m_tOverworld, 20U, 15U),
+	m_Skirmish(m_TestLevel, m_tOverworld, 2)
 {
-	/*m_tOverworld.LoadFromFile("AW1Sprites.png");
+	m_tOverworld.loadFromFile("AW1Sprites.png");
 
 	for (unsigned int i = 0; i < m_TestLevel.GetWidth(); i++)
 	{
@@ -37,7 +37,7 @@ Game::Game() //:
 
 	for (unsigned int i = 14; i <= 18; i++)
 		for (unsigned int j = 7; j <= 9; j++)
-			m_TestLevel.SetTile(i, j, Tile::Ocean);*/
+			m_TestLevel.SetTile(i, j, Tile::Ocean);
 }
 
 
@@ -61,6 +61,7 @@ void Game::Run()
 {
 	m_Window.create( sf::VideoMode( 320, 240 ), "Custom Wars", sf::Style::Close );
 	m_Window.setSize( sf::Vector2u( 640U, 480U ) );
+	m_Window.setPosition( m_Window.getPosition() - sf::Vector2i( 320U / 2, 240U / 2) );
 	m_Window.setMouseCursorVisible( false );
 
 	sf::Event _event;
@@ -71,21 +72,21 @@ void Game::Run()
 			if ( _event.type == sf::Event::Closed )
 				m_Window.close();
 
-			//else if ( _event.type == sf::Event::MouseMoved || _event.type == sf::Event::MouseButtonPressed )
-			//	m_Skirmish.Interact(sf::Mouse::GetPosition(m_Window) / 2, sf::Mouse::IsButtonPressed(sf::Mouse::Left), sf::Mouse::IsButtonPressed(sf::Mouse::Right));
-				//m_Skirmish.SetCursorPos(sf::Mouse::GetPosition(m_Window) / 2);
-
-			/*else if (event.Type == sf::Event::MouseButtonPressed)
+			else if ( _event.type == sf::Event::MouseMoved || _event.type == sf::Event::MouseButtonPressed )
 			{
-				sf::Vector2u pos = Level::ConvertCoord(sf::Mouse::GetPosition(m_Window) / 2);
+				m_Skirmish.Interact(sf::Mouse::getPosition(m_Window) / 2, sf::Mouse::isButtonPressed(sf::Mouse::Left), sf::Mouse::isButtonPressed(sf::Mouse::Right));
+				m_Skirmish.SetCursorPos(sf::Mouse::getPosition(m_Window) / 2);
+			}
+
+			else if ( _event.type == sf::Event::MouseButtonPressed)
+			{
+				sf::Vector2u pos = Level::ConvertCoord(sf::Mouse::getPosition(m_Window) / 2);
 				std::cout << (int) m_TestLevel.GetTileDefenseRating(pos.x, pos.y) << std::endl;
-			}*/
+			}
 		}
 
 		m_Window.clear();
-
-			//m_Window.draw(m_Skirmish);
-
+		m_Window.draw(m_Skirmish);
 		m_Window.display();
 	}
 }

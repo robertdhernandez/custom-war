@@ -92,7 +92,7 @@ bool UnitManager::MoveUnit(const UnitID& id, const sf::Vector2u& dest)
 /****************************************************/
 // Renders every unit
 
-void UnitManager::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
+void UnitManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::Sprite unitSprite(m_Texture);
 	for (UnitMap::const_iterator it = m_mapUnits.begin();
@@ -101,11 +101,11 @@ void UnitManager::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
 	{
 		const Unit& unit = it->second.second;
 
-		unitSprite.SetPosition(Level::ConvertCoord(it->first));
-		unitSprite.SetSubRect(unit.GetSubRect(it->second.first));
-		unitSprite.SetColor((unit.IsActive()) ? sf::Color(255, 255, 255) : sf::Color(200, 200, 200));
+		unitSprite.setPosition(Level::ConvertCoord(it->first));
+		unitSprite.setTextureRect(unit.GetSubRect(it->second.first));
+		unitSprite.setColor((unit.IsActive()) ? sf::Color(255, 255, 255) : sf::Color(200, 200, 200));
 
-		target.Draw(unitSprite);
+		target.draw(unitSprite);
 	}
 }
 

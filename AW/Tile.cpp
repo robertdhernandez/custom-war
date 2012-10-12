@@ -243,7 +243,7 @@ sf::IntRect Tile::GetSubRect() const
 		default:				return sf::IntRect(0, 0, 1, 1);
 	}
 
-	rect.Top += (TEAM_DIFF * GetOwner());
+	rect.top += (TEAM_DIFF * GetOwner());
 	return rect;
 }
 

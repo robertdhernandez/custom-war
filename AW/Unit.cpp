@@ -367,10 +367,10 @@ sf::IntRect Unit::GetSubRect(sf::Uint8 playerID) const
 {
 	sf::IntRect rect;
 
-	rect.Left	= BASE_UNIT.x + (UNIT_DIFF * m_eType);
-	rect.Top	= BASE_UNIT.y + (TEAM_DIFF * playerID);
-	rect.Width	= UNIT_WIDTH;
-	rect.Height = UNIT_HEIGHT;
+	rect.left	= BASE_UNIT.x + (UNIT_DIFF * m_eType);
+	rect.top	= BASE_UNIT.y + (TEAM_DIFF * playerID);
+	rect.width	= UNIT_WIDTH;
+	rect.height = UNIT_HEIGHT;
 
 	return rect;
 }

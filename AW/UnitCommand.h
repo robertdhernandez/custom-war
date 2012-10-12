@@ -38,7 +38,7 @@ namespace aw
 				bool Select(const sf::Vector2u& pos);
 				bool TileInteract(const sf::Vector2u& pos);
 
-				void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
+				void draw( sf::RenderTarget& target, sf::RenderStates renderer) const;
 
 			private:
 				Level& m_Level;

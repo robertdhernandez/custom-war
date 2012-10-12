@@ -181,22 +181,22 @@ bool UnitCommand::TileInteract(const sf::Vector2u& pos)
 /****************************************************/
 // Rendering
 
-void UnitCommand::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
+void UnitCommand::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::Sprite tiles(m_Texture);
-	tiles.SetSubRect(RECT_HIGHLIGHT_MOVE);
-	tiles.SetColor(sf::Color(255, 255, 255, 225));
+	tiles.setTextureRect(RECT_HIGHLIGHT_MOVE);
+	tiles.setColor(sf::Color(255, 255, 255, 225));
 
 	for (ActionTiles::const_iterator it = m_ActionTiles.begin();
 		 it != m_ActionTiles.end();
 		 ++it)
 	{
-		tiles.SetPosition(Level::ConvertCoord(*it));
-		target.Draw(tiles);
+		tiles.setPosition(Level::ConvertCoord(*it));
+		target.draw(tiles);
 	}
 
 	if (m_pPopup.get())
-		target.Draw(*m_pPopup.get());
+		target.draw(*m_pPopup.get());
 }
 
 

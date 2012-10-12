@@ -12,8 +12,7 @@ namespace aw
 {
 	class Level;
 
-	class Skirmish :
-		public sf::Drawable
+	class Skirmish : public sf::Drawable
 	{
 		public:
 			Skirmish(Level& level, const sf::Texture& texture, sf::Uint8 num_players);
@@ -24,7 +23,7 @@ namespace aw
 		public:
 			void SetCursorPos(const sf::Vector2i& pos);
 
-			void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
+			void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 		private:
 			Level& m_Level;

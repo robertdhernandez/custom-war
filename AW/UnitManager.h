@@ -32,8 +32,7 @@ namespace aw
 			};
 		}
 
-		class UnitManager :
-			public sf::Drawable
+		class UnitManager : public sf::Drawable
 		{
 
 			typedef std::pair<sf::Uint8, Unit> Unit_;
@@ -55,7 +54,7 @@ namespace aw
 				bool IsValidUnit(const UnitID& unit) const;
 
 			private:
-				void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
+				void draw( sf::RenderTarget& target, sf::RenderStates renderer ) const;
 
 			private:
 				UnitMap m_mapUnits;

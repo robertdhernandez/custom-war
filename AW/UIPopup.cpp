@@ -1,6 +1,6 @@
 #include "UIPopup.h"
 #include <SFML\Graphics\Font.hpp>
-#include <SFML\Graphics\Shape.hpp>
+#include <SFML\Graphics\RectangleShape.hpp>
 #include <SFML\Graphics\RenderTarget.hpp>
 #include <SFML\Graphics\Text.hpp>
 
@@ -87,12 +87,12 @@ void UIPopup::UpdateOptionSize()
 		 ++it)
 	{
 		sf::Text text;
-		text.SetString(it->second);
-		text.SetCharacterSize(FONT_SIZE);
+		text.setString(it->second);
+		text.setCharacterSize(FONT_SIZE);
 
-		sf::FloatRect area = text.GetRect();
-		max.x = (max.x < area.Width)  ? area.Width : max.x;
-		max.y = (max.y < area.Height) ? area.Height : max.y;
+		sf::FloatRect area = text.getLocalBounds();
+		max.x = (max.x < area.width)  ? area.width : max.x;
+		max.y = (max.y < area.height) ? area.height : max.y;
 	}
 }
 
@@ -100,7 +100,7 @@ void UIPopup::UpdateOptionSize()
 /****************************************************/
 // Rendering
 
-void UIPopup::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
+void UIPopup::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	sf::FloatRect area(0.0f, 0.0f, m_fOptionSize.x, m_fOptionSize.y);
 	unsigned int count = 0;
@@ -110,19 +110,22 @@ void UIPopup::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
 		 it != end;
 		 ++it, count++)
 	{
-		area.Top = area.Height * count + ((count != 0) ? OUTLINE_SIZE : 0);
+		area.top = area.height * count + ((count != 0) ? OUTLINE_SIZE : 0);
 
-		sf::Shape box = sf::Shape::Rectangle(area, (m_nIndex == it->first) ? BG_HIGHLIGHT : BG_NORMAL, OUTLINE_SIZE, BG_OUTLINE);
-
-		sf::Text text;
-		text.SetString(it->second);
-		text.SetCharacterSize(FONT_SIZE);
-		sf::FloatRect textArea = text.GetRect();
-		text.SetOrigin(textArea.Width / 2.0f, 0.0f);
-		text.SetPosition(area.Width / 2.0f, area.Top);
+		sf::RectangleShape box( sf::Vector2f( m_fOptionSize.x, m_fOptionSize.y ) );
+		box.setFillColor( ( m_nIndex == it->first ) ? BG_HIGHLIGHT : BG_NORMAL );
+		box.setOutlineThickness( OUTLINE_SIZE );
+		box.setOutlineColor( BG_OUTLINE );
 		
-		target.Draw(box);
-		target.Draw(text);
+		sf::Text text;
+		text.setString(it->second);
+		text.setCharacterSize(FONT_SIZE);
+		sf::FloatRect textArea = text.getLocalBounds();
+		text.setOrigin(textArea.width / 2.0f, 0.0f);
+		text.setPosition(area.width / 2.0f, area.top);
+		
+		target.draw(box);
+		target.draw(text);
 	}
 }
 
