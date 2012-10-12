@@ -1,9 +1,27 @@
-#include "AdvanceWars.h"
+#include "Game.h"
 
-int main(int argc, char* argv[])
+#ifdef _WIN32
+#	include <Windows.h>
+#else
+#	include <iostream>
+#endif
+
+int main( int argc, char** argv )
 {
-	aw::AdvanceWars game(argc, argv);
-	game.Run();
-
-	return 0;
+	try
+	{
+		aw::Game game;
+		game.ParseCmdArgs( argc, argv );
+		game.Run();
+		return EXIT_SUCCESS;
+	}
+	catch ( std::exception& err )
+	{
+#ifdef _WIN32
+		MessageBox( NULL, err.what(), NULL, MB_OK | MB_ICONERROR );
+#else
+		std::cout << err.what() << std::endl;
+#endif
+		return EXIT_FAILURE;
+	}
 }
