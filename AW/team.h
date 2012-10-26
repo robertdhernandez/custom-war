@@ -3,20 +3,23 @@
 #include <string>
 #include <vector>
 
+#include <SFML/System/NonCopyable.hpp>
+
 namespace cw
 {
 	class UnitBase;
 
-	class Team
+	class Team : public sf::NonCopyable
 	{
 	public:
-		int getMoney() const { return m_money; }
+		explicit Team( int id ) : m_id( id ) {}
 
+	public:
 		void addUnit( UnitBase& unit );
 		void removeUnit( UnitBase& unit );
 
 	private:
-		int m_money;
+		const int m_id;
 		std::vector< UnitBase* > m_units;
 	};
 }
