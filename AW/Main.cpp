@@ -1,27 +1,23 @@
-#include "Game.h"
+#include <SFML/Graphics.hpp>
 
-#ifdef _WIN32
-#	include <Windows.h>
-#else
-#	include <iostream>
-#endif
-
-int main( int argc, char** argv )
+int main()
 {
-	try
+	sf::RenderWindow window;
+	window.create( sf::VideoMode( 320, 240 ), "Custom Wars", sf::Style::Close );
+
+	while ( window.isOpen() )
 	{
-		aw::Game game;
-		game.ParseCmdArgs( argc, argv );
-		game.Run();
-		return EXIT_SUCCESS;
+		sf::Event events;
+		while ( window.pollEvent( events ) )
+		{
+			if ( events.type == sf::Event::Closed || ( events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::Escape ) )
+				window.close();
+		}
+
+		window.clear();
+
+		window.display();
 	}
-	catch ( std::exception& err )
-	{
-#ifdef _WIN32
-		MessageBox( NULL, err.what(), NULL, MB_OK | MB_ICONERROR );
-#else
-		std::cout << err.what() << std::endl;
-#endif
-		return EXIT_FAILURE;
-	}
+
+	return 0;
 }
