@@ -81,6 +81,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="team.cpp" />
+    <ClCompile Include="texture_manager.cpp" />
+    <ClCompile Include="unit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="global.h" />
+    <ClInclude Include="resource_manager.h" />
+    <ClInclude Include="team.h" />
+    <ClInclude Include="texture_manager.h" />
+    <ClInclude Include="unit.h" />
+    <ClInclude Include="unit_infantry.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
