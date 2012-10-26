@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\SFML\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\SFML\include;..\TmxParser;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>..\SFML\lib;$(LibraryPath)</LibraryPath>
@@ -81,12 +81,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="team.cpp" />
     <ClCompile Include="texture_manager.cpp" />
     <ClCompile Include="unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="team.h" />
     <ClInclude Include="texture_manager.h" />
