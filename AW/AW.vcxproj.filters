@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Tile">
       <UniqueIdentifier>{b34df57a-9cd3-4d8f-af2e-d9dac52e96f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{5d0942f4-f75e-49ba-b42b-864a509d89c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -88,6 +91,18 @@
     </ClInclude>
     <ClInclude Include="tile_property.h">
       <Filter>Header Files\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reference.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="listener.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
