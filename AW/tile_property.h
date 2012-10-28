@@ -6,15 +6,21 @@ namespace cw
 {
 	class Team;
 
+	//-------------------------------------------------------------------------
+	// A property is a tile that can be owned by a team
+	//-------------------------------------------------------------------------
 	class PropertyBase : public TileBase
 	{
 	public:
-		void setOwner( const Team& team ) { m_owner = &team; }
-		void removeOwner() { m_owner = nullptr; }
+		PropertyBase() : m_owner( nullptr ) {}
+		virtual ~PropertyBase() { removeOwner(); }
+
+		void setOwner( Team& team );
+		void removeOwner();
 
 		bool isOwnedBy( const Team& team ) const { return m_owner == &team; }
 
 	private:
-		const Team* m_owner;
+		Team* m_owner;
 	};
 }

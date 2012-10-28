@@ -27,8 +27,8 @@ namespace cw
 		int getMoney() const { return m_money; }
 
 	public:
-		void addUnit( std::shared_ptr< UnitBase >& );
-		void removeUnit( const std::shared_ptr< UnitBase >& );
+		void addUnit( UnitBase& );
+		void removeUnit( const UnitBase& );
 
 		void addProperty( PropertyBase& );
 		void removeProperty( const PropertyBase& );
@@ -37,7 +37,7 @@ namespace cw
 		const int m_id;
 		int m_money;
 
-		std::vector< std::weak_ptr< UnitBase > > m_units;
+		std::vector< UnitBase* > m_units;
 		std::vector< PropertyBase* > m_properties;
 	};
 }

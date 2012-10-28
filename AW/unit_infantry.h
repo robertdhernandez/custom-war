@@ -14,6 +14,8 @@ namespace cw
 		int getMaxFuel() const { return 99; }
 
 		sf::Vector2i getTextureOffset() const { return sf::Vector2i( 0, 0 ); }
-		Movement getMovementType() const { return Movement::Infantry; }
+
+		bool canCapture() const { return true; }
+		Movement getMovementType() const { return INFANTRY; }
 	};
 }

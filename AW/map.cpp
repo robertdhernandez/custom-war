@@ -54,7 +54,7 @@ int Map::getNumPlayers() const
 
 TileBase& Map::getTile( int x, int y )
 {
-	return const_cast< TileBase& >( getTile( x, y ) );
+	return const_cast< TileBase& >( static_cast< const Map& >( *this ).getTile( x, y ) );
 }
 
 const TileBase& Map::getTile( int x, int y ) const

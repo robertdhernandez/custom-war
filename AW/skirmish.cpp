@@ -48,7 +48,7 @@ void Skirmish::nextTurn()
 void Skirmish::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	target.draw( *m_map );
-	std::for_each( m_units.begin(), m_units.end(), [&target]( UnitBase* u ) { target.draw( *u ); } );
+	std::for_each( m_units.begin(), m_units.end(), [&target]( const std::shared_ptr< UnitBase >& u ) { target.draw( *u ); } );
 }
 
 /***************************************************/
