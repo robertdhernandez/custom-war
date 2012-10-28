@@ -7,6 +7,10 @@
 
 namespace cw
 {
+	//-------------------------------------------------------------------------
+	// Helper class
+	// Contains functions to manage a texture
+	//-------------------------------------------------------------------------
 	class TextureLoader
 	{
 	public:
@@ -17,5 +21,19 @@ namespace cw
 
 	private:
 		std::shared_ptr< sf::Texture > m_texture;
+	};
+
+	//-------------------------------------------------------------------------
+	// Abstract helper class
+	// Complements TextureLoader class
+	//
+	//	sf::Vector2i getTextureOffset() const
+	//		Returns a pixel offset to set the texture rect at
+	//-------------------------------------------------------------------------
+	class TextureOffset
+	{
+	public:
+		virtual ~TextureOffset() {}
+		virtual sf::Vector2i getTextureOffset() const = 0;
 	};
 }

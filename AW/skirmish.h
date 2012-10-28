@@ -13,7 +13,10 @@ namespace cw
 	class Team;
 	class UnitBase;
 
-	class Skirmish : sf::NonCopyable, public sf::Drawable
+	//-------------------------------------------------------------------------
+	// A skirmish is a game instance in which teams combat each other
+	//-------------------------------------------------------------------------
+	class Skirmish : public sf::Drawable, sf::NonCopyable
 	{
 	public:
 		void load( const std::string& file );
@@ -31,6 +34,6 @@ namespace cw
 
 		std::unique_ptr< Map > m_map;
 		std::unique_ptr< std::unique_ptr< Team >[] > m_teams;
-		std::vector< std::unique_ptr< UnitBase > > m_units;
+		std::vector< std::shared_ptr< UnitBase > > m_units;
 	};
 }

@@ -11,7 +11,28 @@ namespace cw
 	class Team;
 	enum Movement;
 
-	class UnitBase : sf::NonCopyable, TextureLoader, public sf::Drawable
+	//-------------------------------------------------------------------------
+	// A unit is a moveable object that the player controls to achieve objectives
+	// They range from infantry to tanks to bombers to battleships
+	// They're created from a specific factory properties
+	//
+	// VIRTUAL FUNCTIONS:
+	//
+	//	int getMaxAmmo() const
+	//		Returns the maximum amount of ammo the unit can carry
+	//
+	//	int getMaxFuel() const
+	//		Returns the maximum amount of fuel the unit carries
+	//
+	//	bool canCapture() const
+	//		Returns true if the unit can capture properties
+	//
+	//	Movement getMovementType() const
+	//		Returns the type of movement the unit has
+	//
+	// See also: "texture_loader.h" for more virtual functions
+	//-------------------------------------------------------------------------
+	class UnitBase : public sf::Drawable, protected TextureLoader, TextureOffset, sf::NonCopyable
 	{
 	public:
 		explicit UnitBase( Team& team );
@@ -37,9 +58,9 @@ namespace cw
 		virtual int getMaxAmmo() const = 0;
 		virtual int getMaxFuel() const = 0;
 
-		virtual Movement getMovementType() const = 0;
+		virtual bool canCapture() const = 0;
 
-		virtual sf::Vector2i getTextureOffset() const = 0;
+		virtual Movement getMovementType() const = 0;
 
 	protected:
 		// Must be called in the constructor
