@@ -30,7 +30,10 @@ namespace cw
 	class TileBase : public sf::Drawable, protected TextureLoader, TextureOffset, sf::NonCopyable
 	{
 	public:
-		void setPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
+		TileBase( int x, int y ) : m_pos( x, y ), m_unit( nullptr ) {}
+		virtual ~TileBase() {}
+
+		bool isEmpty() const { return m_unit == nullptr; }
 
 	public:
 		virtual int getMovementCost( Movement ) const = 0;
@@ -40,8 +43,8 @@ namespace cw
 		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 	private:
-		sf::Vector2i m_pos;
+		const sf::Vector2i m_pos;
 		std::array< TileBase*, 4 > m_neighbors;
-		std::weak_ptr< UnitBase > m_unit;
+		UnitBase* m_unit;
 	};
 }

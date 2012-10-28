@@ -35,6 +35,7 @@ void Map::load( const std::string& file )
 		throw std::runtime_error( "height must be at least 15 tiles" );
 
 	m_tiles.reset( new std::unique_ptr< TileBase >[ m_width * m_height ] );
+	//TODO: create each tile
 }
 
 /***************************************************/

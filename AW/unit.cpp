@@ -17,12 +17,13 @@ static const sf::Color UNIT_UNAVAILABLE_COLOR( 175, 175, 175 );
 
 /***************************************************/
 
-UnitBase::UnitBase( Team& team ) :
+UnitBase::UnitBase( Team& team, TileBase& tile ) :
 	m_team( team ),
 	m_state( true ),
 	m_active( false ),
 	m_ammo( 0 ),
-	m_fuel( 0 )
+	m_fuel( 0 ),
+	m_tile( &tile )
 {
 	setTexture( "units.png" );
 	m_team.addUnit( *this );
@@ -42,7 +43,6 @@ void UnitBase::init()
 void UnitBase::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	sf::Sprite sprite( getTexture() );
-	sprite.setPosition( (float) m_pos.x * TILE_WIDTH, (float) m_pos.y * TILE_HEIGHT );
 	sprite.setTextureRect( sf::IntRect( getTextureOffset(), UNIT_DIMENSION ) );
 	sprite.setColor( getState() ? sf::Color( 255, 255, 255 ) : UNIT_UNAVAILABLE_COLOR );
 	target.draw( sprite );
