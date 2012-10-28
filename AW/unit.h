@@ -53,7 +53,7 @@ namespace cw
 	// See also: "texture_loader.h" for more virtual functions
 	// Note: all child classes must call protected function init() in their constructor
 	//-------------------------------------------------------------------------
-	class UnitBase : public sf::Drawable, protected TextureLoader, TextureOffset, sf::NonCopyable
+	class UnitBase : public sf::Drawable, TextureLoader, TextureOffset, sf::NonCopyable
 	{
 	public:
 		explicit UnitBase( Team& team, TileBase& tile );

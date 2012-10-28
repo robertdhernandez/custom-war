@@ -77,6 +77,11 @@
   <ItemGroup>
     <ProjectReference Include="..\TmxParser\TmxParser.vcxproj">
       <Project>{0db72e94-02f8-4572-9171-8ee8bf2b3c36}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

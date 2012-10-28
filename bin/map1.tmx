@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="players" value="2"/>
+ </properties>
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16">
   <image source="tileset.png" width="464" height="48"/>
  </tileset>
