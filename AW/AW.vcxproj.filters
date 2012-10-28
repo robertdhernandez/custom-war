@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{5d0942f4-f75e-49ba-b42b-864a509d89c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{9424d699-2f0b-4c4c-b3e4-0a1ebf6ac86f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="skirmish.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,13 +101,13 @@
     <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="reference.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="listener.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="controller.h">
+    <ClInclude Include="controller_mouse.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_key.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
