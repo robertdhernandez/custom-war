@@ -1,15 +1,17 @@
 #pragma once
 
+#include "texture_loader.h"
+
 #include <memory>
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
 namespace cw
 {
 	class Team;
+	enum Movement;
 
-	class UnitBase : public sf::Drawable, public sf::NonCopyable
+	class UnitBase : sf::NonCopyable, TextureLoader, public sf::Drawable
 	{
 	public:
 		explicit UnitBase( Team& team );
@@ -35,6 +37,8 @@ namespace cw
 		virtual int getMaxAmmo() const = 0;
 		virtual int getMaxFuel() const = 0;
 
+		virtual Movement getMovementType() const = 0;
+
 		virtual sf::Vector2i getTextureOffset() const = 0;
 
 	protected:
@@ -50,7 +54,5 @@ namespace cw
 
 		int m_ammo, m_fuel;
 		sf::Vector2i m_pos;
-
-		std::shared_ptr< sf::Texture > m_texture;
 	};
 }

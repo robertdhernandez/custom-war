@@ -1,6 +1,7 @@
 #pragma once
 
 #include "unit.h"
+#include "movement.h"
 
 namespace cw
 {
@@ -13,5 +14,6 @@ namespace cw
 		int getMaxFuel() const { return 99; }
 
 		sf::Vector2i getTextureOffset() const { return sf::Vector2i( 0, 0 ); }
+		Movement getMovementType() const { return Movement::Infantry; }
 	};
 }

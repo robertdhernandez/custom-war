@@ -14,7 +14,7 @@ void Team::addUnit( UnitBase& unit )
 	m_units.push_back( &unit );
 }
 
-void Team::removeUnit( UnitBase& unit )
+void Team::removeUnit( const UnitBase& unit )
 {
 	if ( &unit.getTeam() != this )
 		throw std::logic_error( "unit does not belong in the team" );

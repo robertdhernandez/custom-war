@@ -22,9 +22,9 @@ UnitBase::UnitBase( Team& team ) :
 	m_state( true ),
 	m_active( false ),
 	m_ammo( 0 ),
-	m_fuel( 0 ),
-	m_texture( TextureManager::getSingleton().load( "units.png" ) )
+	m_fuel( 0 )
 {
+	setTexture( "units.png" );
 	m_team.addUnit( *this );
 }
 
@@ -41,7 +41,7 @@ void UnitBase::init()
 
 void UnitBase::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
-	sf::Sprite sprite( *m_texture );
+	sf::Sprite sprite( getTexture() );
 	sprite.setPosition( (float) m_pos.x * TILE_WIDTH, (float) m_pos.y * TILE_HEIGHT );
 	sprite.setTextureRect( sf::IntRect( getTextureOffset(), UNIT_DIMENSION ) );
 	sprite.setColor( getState() ? sf::Color( 255, 255, 255 ) : UNIT_UNAVAILABLE_COLOR );
