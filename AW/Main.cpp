@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 
+#include "map.h"
 #include "team.h"
 #include "unit_infantry.h"
 
@@ -18,14 +19,14 @@ int main( int argc, char* argv[] )
 		window.setSize( sf::Vector2u( 640, 480 ) );
 		window.setPosition( window.getPosition() - sf::Vector2i( 160, 120 ) );
 
+		cw::Map map;
+		map.load( "map1.tmx" );
+
 		cw::Team team( 0 );
 
 		std::unique_ptr< cw::Infantry > infantry[ 3 ];
 		for ( int i = 0; i < 3; i++ )
-		{
-			infantry[ i ].reset( new cw::Infantry( team ) );
-			infantry[ i ]->setPosition( i, 0 );
-		}
+			infantry[ i ].reset( new cw::Infantry( team, map.getTile( i, 0 ) ) );
 
 		while ( window.isOpen() )
 		{

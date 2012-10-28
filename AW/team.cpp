@@ -29,7 +29,7 @@ void Team::addProperty( PropertyBase& prop )
 
 void Team::removeProperty( const PropertyBase& prop )
 {
-	if ( !prop.isOwnedBy( *this ) )
+	if ( prop.getOwner() != this )
 		throw std::logic_error( "property does not beling in this team" );
 	m_properties.erase( std::find( m_properties.begin(), m_properties.end(), &prop ) );
 }

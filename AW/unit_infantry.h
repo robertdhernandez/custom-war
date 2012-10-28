@@ -8,7 +8,7 @@ namespace cw
 	class Infantry : public UnitBase
 	{
 	public:
-		Infantry( Team& team ) : UnitBase( team ) { init(); }
+		Infantry( Team& team, TileBase& pos ) : UnitBase( team, pos ) { init(); }
 
 		int getMaxAmmo() const { return 99; }
 		int getMaxFuel() const { return 99; }

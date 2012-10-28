@@ -12,13 +12,14 @@ namespace cw
 	class PropertyBase : public TileBase
 	{
 	public:
-		PropertyBase() : m_owner( nullptr ) {}
+		PropertyBase( int x, int y ) : TileBase( x, y ), m_owner( nullptr ) {}
 		virtual ~PropertyBase() { removeOwner(); }
 
 		void setOwner( Team& team );
 		void removeOwner();
 
-		bool isOwnedBy( const Team& team ) const { return m_owner == &team; }
+		Team* getOwner() { return m_owner; }
+		const Team* getOwner() const { return m_owner; }
 
 	private:
 		Team* m_owner;
