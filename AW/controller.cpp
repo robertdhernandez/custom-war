@@ -1,5 +1,6 @@
 #include "controller_key.h"
 #include "controller_mouse.h"
+#include "controller_text.h"
 
 #include "listener.h"
 
@@ -50,6 +51,20 @@ void MouseController::updateMouseListeners( const Event& ev )
 	case Event::MouseMoved: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseMoved, _1, ev.mouseMove ) ); break;
 	case Event::MouseWheelMoved: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseWheelMoved, _1, ev.mouseWheel ) ); break;
 	}
+}
+
+/***************************************************/
+
+void TextController::addTextListener( TextListener& text )
+{
+	m_textListeners.push_back( &text );
+}
+
+void TextController::updateTextListeners( const sf::Event& ev )
+{
+	auto& vec = m_textListeners;
+	if ( ev.type == Event::TextEntered ) 
+		for_each( vec.begin(), vec.end(), bind( &TextListener::onTextEntered, _1, ev.text ) );
 }
 
 /***************************************************/

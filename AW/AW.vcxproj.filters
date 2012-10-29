@@ -98,9 +98,6 @@
     <ClInclude Include="tile_property.h">
       <Filter>Header Files\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="listener.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -108,6 +105,9 @@
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="controller_key.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_text.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
