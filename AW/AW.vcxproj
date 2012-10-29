@@ -119,6 +119,7 @@
     <ClInclude Include="tile.h" />
     <ClInclude Include="tile_plain.h" />
     <ClInclude Include="tile_property.h" />
+    <ClInclude Include="tile_road.h" />
     <ClInclude Include="unit.h" />
     <ClInclude Include="unit_infantry.h" />
   </ItemGroup>

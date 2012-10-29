@@ -33,14 +33,15 @@ namespace cw
 	{
 	public:
 		TileBase( int x, int y ) : m_pos( x, y ), m_unit( nullptr ) {}
-		virtual ~TileBase() {}
-
-		typedef std::array< std::unique_ptr< TileBase >*, 4 > Neighbors;
+		virtual ~TileBase() {}		
 
 		bool isEmpty() const { return m_unit == nullptr; }
 		const sf::Vector2i& getPos() const { return m_pos; }
 
-		void setNeighbors( Neighbors& neighbors ) { m_neighbors = neighbors; }
+	public:
+		typedef std::array< std::unique_ptr< TileBase >*, 4 > Neighbors;
+
+		void setNeighbors( Neighbors& neighbors );
 
 		TileBase* getNeighbor( Direction );
 		const TileBase* getNeighbor( Direction ) const;
@@ -50,11 +51,16 @@ namespace cw
 		virtual int getDefenseRating() const = 0;
 
 	private:
+		void autoTile();
 		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 	private:
 		const sf::Vector2i m_pos;
 		Neighbors m_neighbors;
 		UnitBase* m_unit;
+		sf::IntRect m_textureRect;
 	};
+
+	std::unique_ptr< TileBase > createTile( const std::string& type, int x, int y );
+	bool isValidTileType( const std::string& type );
 }

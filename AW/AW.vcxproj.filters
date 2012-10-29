@@ -155,5 +155,8 @@
     <ClInclude Include="tile_plain.h">
       <Filter>Header Files\Tile\Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="tile_road.h">
+      <Filter>Header Files\Tile\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
