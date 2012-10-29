@@ -6,6 +6,9 @@
 #include <string>
 #include <memory>
 
+#include <unordered_map>
+#include <functional>
+
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -17,6 +20,13 @@ namespace cw
 	public:
 		static Console& getSingleton();
 		void setState( bool state ) { m_active = state; }
+
+		// To define your own console function, they must have a signature of:
+		//	void (*)( const std::vector< std::string >& )
+		typedef std::function< void( const std::vector< std::string >& ) > Fn;
+		typedef std::unordered_map< std::string, Console::Fn > Cmds;
+
+		void addCommands( const Cmds& );
 
 		enum ConsoleColors
 		{
@@ -45,9 +55,11 @@ namespace cw
 		bool m_active;
 		int m_index;
 
+		std::unique_ptr< sf::Font > m_font;
+
 		std::string m_input;
 		std::vector< std::pair< std::string, int > > m_history;
-		
-		std::unique_ptr< sf::Font > m_font;
+
+		Cmds m_cmds;
 	};
 }

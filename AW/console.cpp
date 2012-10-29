@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <sstream>
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -18,6 +19,24 @@ static const unsigned FONT_SIZE = 12U;
 sf::Color hexToColor( int color )
 {
 	return sf::Color( color >> 16, ( color >> 8 ) & 0xFF, color & 0xFF );
+}
+
+std::vector< std::string > parseArguments( const std::string& str, const std::string& delimiters = " " )
+{
+	std::vector< std::string > args;
+	if ( str.empty() ) return args;
+
+    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    std::string::size_type pos = str.find_first_of( delimiters, lastPos );
+
+    while ( pos != std::string::npos || lastPos != std::string::npos )
+    {
+        args.push_back( str.substr( lastPos, pos - lastPos ) );
+        lastPos = str.find_first_not_of( delimiters, pos );
+        pos = str.find_first_of( delimiters, lastPos );
+    }
+
+	return args;
 }
 
 /***************************************************/
@@ -35,10 +54,15 @@ Console::Console() :
 {
 	m_font->loadFromFile( "console.ttf" );
 	clearHistory();
-	//clearCommands();
+	clearCommands();
 }
 
 /***************************************************/
+
+void Console::clearCommands()
+{
+	m_cmds.clear();
+}
 
 void Console::clearHistory()
 {
@@ -49,6 +73,26 @@ void Console::clearHistory()
 void Console::pushLine( const std::string& str, unsigned color )
 {
 	m_history.push_back( std::make_pair( str, color ) );
+}
+
+void Console::execute( const std::string& line )
+{
+	std::string::size_type pos = line.find( ' ' );
+	auto find = m_cmds.find( std::string( line.begin(), pos != std::string::npos ? line.begin() + pos : line.end() ) );
+
+	try
+	{
+		if ( find != m_cmds.end() )
+			find->second( parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
+		else
+			pushLine( "Unknown command", ERROR_COLOR );
+	}
+	catch ( std::exception& err )
+	{
+		std::ostringstream ss;
+		ss << "Error executing " << find->first << ": " << err.what();
+		pushLine( ss.str(), ERROR_COLOR );
+	}
 }
 
 /***************************************************/
@@ -74,6 +118,7 @@ void Console::onKeyPressed( const sf::Event::KeyEvent& ev )
 		if ( !m_input.empty() )
 		{
 			pushLine( m_input );
+			execute( m_input );
 			m_index = 0;
 			m_input.clear();
 		}
