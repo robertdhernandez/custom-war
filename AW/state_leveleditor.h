@@ -14,7 +14,7 @@ namespace cw
 		public:
 			LevelEditor();
 
-
+			void setCurrentTile( const std::string& tile );
 
 		private:
 			void onKeyPressed( const sf::Event::KeyEvent& );
@@ -30,6 +30,9 @@ namespace cw
 
 		private:
 			Map m_map;
+			std::string m_curTile;
+
+			std::pair< bool, sf::Vector2i > m_mouse;
 		};
 	}
 }

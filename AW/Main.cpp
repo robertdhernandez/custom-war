@@ -19,8 +19,8 @@ int main( int argc, char* argv[] )
 
 		sf::RenderWindow window;
 		window.create( sf::VideoMode( cw::SCREEN_WIDTH, cw::SCREEN_HEIGHT ), "Custom Wars", sf::Style::Close );
-		window.setSize( sf::Vector2u( cw::SCREEN_WIDTH * 2, cw::SCREEN_HEIGHT * 2) );
-		window.setPosition( window.getPosition() - sf::Vector2i( cw::SCREEN_WIDTH / 2, cw::SCREEN_HEIGHT / 2 ) );
+		//window.setSize( sf::Vector2u( cw::SCREEN_WIDTH * 2, cw::SCREEN_HEIGHT * 2) );
+		//window.setPosition( window.getPosition() - sf::Vector2i( cw::SCREEN_WIDTH / 2, cw::SCREEN_HEIGHT / 2 ) );
 
 		while ( window.isOpen() )
 		{

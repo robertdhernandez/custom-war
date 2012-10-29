@@ -1,5 +1,8 @@
 #include "state_leveleditor.h"
 
+#include "global.h"
+
+#include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cw
@@ -14,12 +17,31 @@ LevelEditor::LevelEditor()
 	addKeyListener( *this );
 	addMouseListener( *this );
 	m_map.create( 20, 15 );
+	setCurrentTile( "plains" );
+}
+
+void LevelEditor::setCurrentTile( const std::string& type )
+{
+	if ( !isValidTileType( type ) )
+		throw std::runtime_error( "invalid tile type" );
+	m_curTile = type;
+	std::cout << "Current tile set to: " << m_curTile << std::endl;
 }
 
 /***************************************************/
 
 void LevelEditor::onKeyPressed( const sf::Event::KeyEvent& ev )
 {
+	switch ( ev.code )
+	{
+	case sf::Keyboard::Num1:
+		setCurrentTile( "plains" );
+	break;
+
+	case sf::Keyboard::Num2:
+		setCurrentTile( "road" );
+	break;
+	}
 }
 
 void LevelEditor::onKeyReleased( const sf::Event::KeyEvent& ev )
@@ -28,14 +50,32 @@ void LevelEditor::onKeyReleased( const sf::Event::KeyEvent& ev )
 
 void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 {
+	switch ( ev.button )
+	{
+	case sf::Mouse::Left:
+		m_mouse.first = true;
+		m_mouse.second.x = ev.x / TILE_WIDTH;
+		m_mouse.second.y = ev.y / TILE_HEIGHT;
+	break;
+	}
 }
 
 void LevelEditor::onMouseButtonReleased( const sf::Event::MouseButtonEvent& ev )
 {
+	m_mouse.first = false;
 }
 
 void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 {
+	if ( m_mouse.first )
+	{
+		int x = ev.x / TILE_WIDTH, y = ev.y / TILE_HEIGHT;
+		if ( m_mouse.second.x != x || m_mouse.second.y != y )
+		{
+			m_mouse.second.x = x; m_mouse.second.y = y;
+			m_map.setTile( createTile( m_curTile, ev.x / TILE_WIDTH, ev.y / TILE_HEIGHT ) );
+		}
+	}
 }
 
 void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
