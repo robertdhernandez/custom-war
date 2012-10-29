@@ -1,9 +1,12 @@
 #include "tile.h"
 #include "tile_property.h"
 
+#include "tile_plain.h"
+
 #include "global.h"
 #include "unit.h"
 #include "team.h"
+#include "movement.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -37,6 +40,30 @@ void PropertyBase::removeOwner()
 	if ( m_owner )
 		m_owner->removeProperty( *this );
 	m_owner = nullptr;
+}
+
+/***************************************************/
+// Plains
+
+tile::Plains::Plains( int x, int y ) :
+	TileBase( x, y )
+{
+	setTexture( "tileset.png" );
+}
+
+int tile::Plains::getMovementCost( Movement m ) const
+{
+	return 1;
+}
+
+int tile::Plains::getDefenseRating() const
+{
+	return 1;
+}
+
+sf::Vector2i tile::Plains::getTextureOffset() const
+{
+	return sf::Vector2i( 1 * TILE_WIDTH, 1 * TILE_HEIGHT );
 }
 
 /***************************************************/

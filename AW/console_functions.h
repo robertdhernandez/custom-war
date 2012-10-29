@@ -7,5 +7,6 @@ namespace cw
 	namespace console
 	{
 		void defaultCommands( Console& );
+		void levelEditorCommands( Console& );
 	}
 }

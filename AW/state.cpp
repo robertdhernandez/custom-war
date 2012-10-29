@@ -16,7 +16,7 @@ StateBase& StateBase::getGlobal()
 	return *GLOBAL_STATE;
 }
 
-std::unique_ptr< StateBase > setGlobal( std::unique_ptr< StateBase > state )
+std::unique_ptr< StateBase > StateBase::setGlobal( std::unique_ptr< StateBase > state )
 {
 	std::unique_ptr< StateBase > temp = std::move( GLOBAL_STATE );
 	GLOBAL_STATE = std::move( state );

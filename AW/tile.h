@@ -11,6 +11,8 @@
 namespace cw
 {
 	enum Movement;
+	enum Direction;
+
 	class UnitBase;
 
 	//-------------------------------------------------------------------------
@@ -33,7 +35,15 @@ namespace cw
 		TileBase( int x, int y ) : m_pos( x, y ), m_unit( nullptr ) {}
 		virtual ~TileBase() {}
 
+		typedef std::array< std::unique_ptr< TileBase >*, 4 > Neighbors;
+
 		bool isEmpty() const { return m_unit == nullptr; }
+		const sf::Vector2i& getPos() const { return m_pos; }
+
+		void setNeighbors( Neighbors& neighbors ) { m_neighbors = neighbors; }
+
+		TileBase* getNeighbor( Direction );
+		const TileBase* getNeighbor( Direction ) const;
 
 	public:
 		virtual int getMovementCost( Movement ) const = 0;
@@ -44,7 +54,7 @@ namespace cw
 
 	private:
 		const sf::Vector2i m_pos;
-		std::array< TileBase*, 4 > m_neighbors;
+		Neighbors m_neighbors;
 		UnitBase* m_unit;
 	};
 }

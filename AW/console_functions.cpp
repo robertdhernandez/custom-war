@@ -11,6 +11,7 @@ using std::make_pair;
 using namespace std::placeholders;
 
 /***************************************************/
+//	COMMON COMMANDS
 
 void clearConsole( const std::vector< std::string >& args )
 {
@@ -27,6 +28,14 @@ void defaultCommands( Console& console )
 
 	console.addCommands( cmds );
 }
+
+/***************************************************/
+// LEVEL EDITOR COMMANDS
+
+void levelEditorCommands( Console& console )
+{
+}
+
 
 /***************************************************/
 

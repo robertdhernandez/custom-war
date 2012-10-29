@@ -16,6 +16,8 @@ namespace cw
 	class Map : sf::NonCopyable, public sf::Drawable
 	{
 	public:
+		void create( int width, int height );
+
 		void load( const std::string& file );
 
 	public:
@@ -27,7 +29,10 @@ namespace cw
 		TileBase& getTile( int x, int y );
 		const TileBase& getTile( int x, int y ) const;
 
+		void setTile( std::unique_ptr< TileBase > tile );
+
 	private:
+		std::unique_ptr< TileBase >* getTilePtr( int x, int y );
 		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 	private:

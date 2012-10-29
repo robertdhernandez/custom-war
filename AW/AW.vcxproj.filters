@@ -37,6 +37,18 @@
     <Filter Include="Source Files\Console">
       <UniqueIdentifier>{d8334523-deea-455e-83cd-7f074aab3f7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State">
+      <UniqueIdentifier>{b408a8f2-e6fa-4961-9de9-0f704cee13d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\State">
+      <UniqueIdentifier>{5c126aa3-edc8-49af-a705-976c52c28934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tile\Terrain">
+      <UniqueIdentifier>{f4476f4b-6cc8-4f36-ad17-23983612ec9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tile\Property">
+      <UniqueIdentifier>{d5060419-0bda-41f6-bf32-92b31fba073f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="console_functions.cpp">
       <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="state_leveleditor.cpp">
+      <Filter>Source Files\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="console_functions.h">
       <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="state_leveleditor.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_plain.h">
+      <Filter>Header Files\Tile\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
