@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="console.cpp" />
+    <ClCompile Include="console_functions.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
+    <ClInclude Include="console_functions.h" />
     <ClInclude Include="controller_key.h" />
     <ClInclude Include="controller_mouse.h" />
     <ClInclude Include="controller_text.h" />

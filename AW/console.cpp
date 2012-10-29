@@ -1,4 +1,5 @@
 #include "console.h"
+#include "console_functions.h"
 
 #include "global.h"
 
@@ -59,9 +60,16 @@ Console::Console() :
 
 /***************************************************/
 
+void Console::addCommands( const Console::Cmds& cmds )
+{
+	for ( auto it = cmds.begin(); it != cmds.end(); ++it )
+		m_cmds.insert( std::make_pair( it->first, it->second ) );
+}
+
 void Console::clearCommands()
 {
 	m_cmds.clear();
+	console::defaultCommands( *this );
 }
 
 void Console::clearHistory()
