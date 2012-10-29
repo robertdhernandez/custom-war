@@ -19,7 +19,7 @@ namespace cw
 	{
 	public:
 		static Console& getSingleton();
-		void setState( bool state ) { m_active = state; }
+		bool isActive() const { return m_active; }
 
 		// To define your own console function, they must have a signature of:
 		//	void (*)( const std::vector< std::string >& )

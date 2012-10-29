@@ -139,12 +139,15 @@ void Console::onKeyPressed( const sf::Event::KeyEvent& ev )
 	case sf::Keyboard::Right:
 		m_index = std::min( (int) m_input.size(), m_index + 1 );
 	break;
+
+	case sf::Keyboard::Tilde:
+		m_active = !m_active;
+	break;
 	}
 }
 
 void Console::onKeyReleased( const sf::Event::KeyEvent& ev )
 {
-	if ( ev.code == sf::Keyboard::Tilde ) m_active = !m_active;
 }
 
 void Console::onTextEntered( const sf::Event::TextEvent& ev )
