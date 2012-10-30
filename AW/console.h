@@ -57,6 +57,7 @@ namespace cw
 			return (*fn)( *this );
 		}
 
+		void setBufferColor( int c ) { m_bufferColor = c; }
 		void pushBuffer();
 
 	private:
@@ -79,7 +80,7 @@ namespace cw
 		std::string m_input;
 		std::vector< std::pair< std::string, int > > m_history;
 
-		int m_bufferOffset;
+		int m_bufferOffset, m_bufferColor;
 		std::ostringstream m_buffer;
 
 		Cmds m_cmds;
@@ -88,5 +89,9 @@ namespace cw
 	namespace con
 	{
 		Console& endl( Console& );
+
+		Console& setcdef( Console& );  // Default color 
+		Console& setcerr( Console& );  // Error color
+		Console& setcinfo( Console& ); // Info color
 	}
 }

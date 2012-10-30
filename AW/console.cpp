@@ -3,9 +3,7 @@
 
 #include "global.h"
 
-#include <cassert>
 #include <algorithm>
-#include <sstream>
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -52,7 +50,8 @@ Console::Console() :
 	m_active( false ),
 	m_index( 0 ),
 	m_font( new sf::Font() ),
-	m_bufferOffset( 0 )
+	m_bufferOffset( 0 ),
+	m_bufferColor( DEFAULT_COLOR )
 {
 	m_font->loadFromFile( "console.ttf" );
 	clearHistory();
@@ -82,8 +81,9 @@ void Console::clearHistory()
 
 void Console::pushBuffer()
 {
-	pushLine( m_buffer.str() );
+	pushLine( m_buffer.str(), m_bufferColor );
 	m_buffer.str( "" );
+	m_bufferColor = DEFAULT_COLOR;
 }
 
 void Console::pushLine( const std::string& str, unsigned color )
@@ -101,13 +101,12 @@ void Console::execute( const std::string& line )
 		if ( find != m_cmds.end() )
 			find->second( parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
 		else
-			pushLine( "Unknown command", ERROR_COLOR );
+			*this << con::setcerr << "Unknown command" << con::endl;
 	}
 	catch ( std::exception& err )
 	{
-		std::ostringstream ss;
-		ss << "Error executing " << find->first << ": " << err.what();
-		pushLine( ss.str(), ERROR_COLOR );
+		*this << con::setcerr << "Error executing " << find->first << ": " << con::endl;
+		*this << con::setcerr << err.what() << con::endl;
 	}
 }
 
@@ -141,11 +140,19 @@ void Console::onKeyPressed( const sf::Event::KeyEvent& ev )
 	break;
 
 	case sf::Keyboard::PageUp:
-		m_bufferOffset = std::min( (int) m_history.size(), m_bufferOffset + 1 );
+		m_bufferOffset = std::min( (int) m_history.size() - 1, m_bufferOffset + 1 );
 	break;
 
 	case sf::Keyboard::PageDown:
 		m_bufferOffset = std::max( 0, m_bufferOffset - 1 );
+	break;
+
+	case sf::Keyboard::Home:
+		m_bufferOffset = m_history.size() - 1;
+	break;
+
+	case sf::Keyboard::End:
+		m_bufferOffset = 0;
 	break;
 
 	case sf::Keyboard::Left:
@@ -217,7 +224,7 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 		else
 		{
 			text.setPosition( (float) text.getLocalBounds().width, yPos );
-			text.setString( " " );
+			text.setString( "_" );
 			text.setStyle( sf::Text::Underlined );
 			target.draw( text );
 
@@ -241,6 +248,24 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 Console& con::endl( Console& c )
 {
 	c.pushBuffer();
+	return c;
+}
+
+Console& con::setcdef( Console& c )
+{
+	c.setBufferColor( Console::DEFAULT_COLOR );
+	return c;
+}
+
+Console& con::setcerr( Console& c )
+{
+	c.setBufferColor( Console::ERROR_COLOR );
+	return c;
+}
+
+Console& con::setcinfo( Console& c )
+{
+	c.setBufferColor( Console::INFO_COLOR );
 	return c;
 }
 
