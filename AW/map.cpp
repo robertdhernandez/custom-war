@@ -6,12 +6,6 @@
 #include "texture_manager.h"
 
 #include <sstream>
-
-#include <TmxImage.h>
-#include <TmxLayer.h>
-#include <TmxTile.h>
-#include <TmxTileset.h>
-
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cw
@@ -22,11 +16,18 @@ static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
 
 /***************************************************/
 
+Map::Map() :
+	m_width( MIN_WIDTH ),
+	m_height( MIN_HEIGHT ),
+	m_players( 2 )
+{
+}
+
 void Map::create( int width, int height )
 {
-	if ( m_width = width < MIN_WIDTH )
+	if ( width < MIN_WIDTH )
 		throw std::logic_error( "width must be at least 20 tiles" );
-	if ( m_height = height < MIN_HEIGHT )
+	if ( height < MIN_HEIGHT )
 		throw std::logic_error( "height must be at least 15 tiles" );
 
 	m_width = width;
@@ -38,38 +39,7 @@ void Map::create( int width, int height )
 			setTile( std::unique_ptr< TileBase >( new tile::Plains( x, y ) ) );
 }
 
-void Map::load( const std::string& file )
-{
-	m_tiles.reset( nullptr );
-	m_data = Tmx::Map();
-
-	m_data.ParseFile( file );
-	if ( m_data.HasError() )
-		throw std::runtime_error( m_data.GetErrorText() );
-
-	if ( m_width = m_data.GetWidth() < MIN_WIDTH )
-		throw std::runtime_error( "width must be at least 20 tiles" );
-	if ( m_height = m_data.GetHeight() < MIN_HEIGHT )
-		throw std::runtime_error( "height must be at least 15 tiles" );
-
-	m_tiles.reset( new std::unique_ptr< TileBase >[ m_width * m_height ] );
-	//TODO: create each tile
-}
-
 /***************************************************/
-
-int Map::getNumPlayers() const
-{
-	const auto& attributes = m_data.GetProperties().GetList();
-	auto find = attributes.find( "players" );
-	if ( find == attributes.end() )
-		throw std::logic_error( "map is missing \"players\" property" );
-
-	int val;
-	if ( std::istringstream( find->second ) >> val && val > 0 )
-		return val;
-	throw std::logic_error( "\"players\" property must be a integer greater than 1" );
-}
 
 TileBase& Map::getTile( int x, int y )
 {
@@ -103,10 +73,10 @@ void Map::setTile( std::unique_ptr< TileBase > tile )
 		tilePtr = std::move( tile );
 
 		TileBase::Neighbors neighbors;
-		neighbors[ UP ] = getTilePtr( pos.x, pos.y - 1 );
-		neighbors[ DOWN ] = getTilePtr( pos.x, pos.y + 1 );
-		neighbors[ LEFT ] = getTilePtr( pos.x - 1, pos.y );
-		neighbors[ RIGHT ] = getTilePtr( pos.x + 1, pos.y );
+		neighbors[ UP ]		= getTilePtr( pos.x, pos.y - 1 );
+		neighbors[ DOWN ]	= getTilePtr( pos.x, pos.y + 1 );
+		neighbors[ LEFT ]	= getTilePtr( pos.x - 1, pos.y );
+		neighbors[ RIGHT ]	= getTilePtr( pos.x + 1, pos.y );
 
 		tilePtr->setNeighbors( neighbors );
 	}

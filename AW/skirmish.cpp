@@ -21,7 +21,7 @@ void Skirmish::load( const std::string& file )
 		m_units.clear();
 
 		m_map.reset( new Map() );
-		m_map->load( file );
+		//m_map->load( file );
 
 		m_numTeams = m_map->getNumPlayers();
 		m_teams.reset( new std::unique_ptr< Team >[ m_numTeams ] );

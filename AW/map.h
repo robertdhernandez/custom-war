@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <memory>
 
-#include <TmxMap.h>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/NonCopyable.hpp>
@@ -16,12 +15,12 @@ namespace cw
 	class Map : sf::NonCopyable, public sf::Drawable
 	{
 	public:
+		Map();
+
 		void create( int width, int height );
 
-		void load( const std::string& file );
-
 	public:
-		int getNumPlayers() const;
+		int getNumPlayers() const { return m_players; }
 
 		int getWidth() const { return m_width; }
 		int getHeight() const { return m_height; }
@@ -36,9 +35,7 @@ namespace cw
 		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 	private:
-		Tmx::Map m_data;
-
-		int m_width, m_height;
+		int m_width, m_height, m_players;
 		std::unique_ptr< std::unique_ptr< TileBase >[] > m_tiles;
 	};
 }
