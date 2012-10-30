@@ -60,6 +60,7 @@ void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 	case sf::Mouse::Left:
 		m_mouse.first = true;
 		m_mouse.second = convertMousePos( ev.x, ev.y );
+		m_map.setTile( createTile( m_curTile, m_mouse.second.x, m_mouse.second.y ) );
 	break;
 	}
 }

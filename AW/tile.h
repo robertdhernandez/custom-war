@@ -50,6 +50,10 @@ namespace cw
 		virtual int getMovementCost( Movement ) const = 0;
 		virtual int getDefenseRating() const = 0;
 
+	protected:
+		template< typename T >
+		const T* getNeighbor( Direction d ) const { return dynamic_cast< const T* >( getNeighbor( d ) ); }
+
 	private:
 		void autoTile();
 		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;

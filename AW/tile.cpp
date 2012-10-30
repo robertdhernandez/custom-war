@@ -65,7 +65,9 @@ void TileBase::autoTile()
 void TileBase::setNeighbors( Neighbors& neighbors )
 {
 	m_neighbors = neighbors;
-	std::for_each( m_neighbors.begin(), m_neighbors.end(), std::bind( &TileBase::autoTile, this ) );
+	for ( auto it = m_neighbors.begin(); it != m_neighbors.end(); ++it ) 
+		if ( *it && (*it)->get() ) 
+			(**it)->autoTile();
 	autoTile();
 }
 
@@ -149,14 +151,35 @@ int tile::Road::getDefenseRating() const
 
 sf::Vector2i tile::Road::getTextureOffset() const
 {
-	/*bool up		= getNeighbor( UP ) && dynamic_cast< const tile::Road* >( getNeighbor( UP ) ) != nullptr;
-	bool down	= getNeighbor( DOWN ) && dynamic_cast< const tile::Road* >( getNeighbor( DOWN ) ) != nullptr;
-	bool left	= getNeighbor( LEFT ) && dynamic_cast< const tile::Road* >( getNeighbor( LEFT ) ) != nullptr;
-	bool right	= getNeighbor( RIGHT ) && dynamic_cast< const tile::Road* >( getNeighbor( RIGHT ) ) != nullptr;
+	bool up		= getNeighbor< tile::Road >( UP ) != nullptr;
+	bool down	= getNeighbor< tile::Road >( DOWN ) != nullptr;
+	bool left	= getNeighbor< tile::Road >( LEFT ) != nullptr;
+	bool right	= getNeighbor< tile::Road >( RIGHT ) != nullptr;
 
-	if ( up && down && left && right )
-		return sf::Vector2i( 28 * TILE_WIDTH, 1 * TILE_HEIGHT );*/
-	return sf::Vector2i( 25, 0 );
+	if ( up && down && left && right ) // Center tile
+		return sf::Vector2i( 27, 1 );
+	else if ( up && down && right ) // Left T-intersection
+		return sf::Vector2i( 26, 1 );
+	else if ( up && down && left ) // Right T-intersection
+		return sf::Vector2i( 28, 1 );
+	else if ( up && left && right ) // Down T-intersection
+		return sf::Vector2i( 27, 2 );
+	else if ( down && left && right ) // Up T-intersection
+		return sf::Vector2i( 27, 0 );
+	else if ( down && right ) // Top-left corner
+		return sf::Vector2i( 26, 0 );
+	else if ( down && left ) // Top-right corner
+		return sf::Vector2i( 28, 0 );
+	else if ( up && right ) // Bottom-left corner
+		return sf::Vector2i( 26, 2 );
+	else if ( up && left ) // Bottom-right corner
+		return sf::Vector2i( 28, 2 );
+	else if ( up || down ) // Up-down
+		return sf::Vector2i( 25, 2 );
+	else if ( left || right ) // Left-right
+		return sf::Vector2i( 25, 1 );
+	else // Default: Up-down
+		return sf::Vector2i( 25, 0 );
 }
 
 /***************************************************/
