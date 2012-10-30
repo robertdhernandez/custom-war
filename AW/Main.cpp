@@ -10,10 +10,33 @@
 #include <iostream>
 #endif
 
+class ConsoleController : public cw::util::KeyController, public cw::util::TextController
+{
+public:
+	ConsoleController()
+	{
+		addKeyListener( cw::Console::getSingleton() );
+		addTextListener( cw::Console::getSingleton() );
+	}
+
+	void update( const sf::Event& ev )
+	{
+		updateKeyListeners( ev );
+		updateTextListeners( ev );
+	}
+
+	bool isActive() const
+	{
+		return cw::Console::getSingleton().isActive();
+	}
+};
+
 int main( int argc, char* argv[] )
 {
 	try
 	{
+		ConsoleController cc;
+
 		std::unique_ptr< cw::state::LevelEditor > editor( new cw::state::LevelEditor() );
 		cw::StateBase::setGlobal( std::move( editor ) );
 
@@ -31,7 +54,8 @@ int main( int argc, char* argv[] )
 			{
 				if ( events.type == sf::Event::Closed || ( events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::Escape ) )
 					window.close();
-				state.handleEvents( events );
+
+				if ( !cc.isActive() ) state.handleEvents( events ); else cc.update( events );
 			}
 
 			state.update();

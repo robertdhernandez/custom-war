@@ -25,12 +25,6 @@
     <Filter Include="Header Files\Tile">
       <UniqueIdentifier>{b34df57a-9cd3-4d8f-af2e-d9dac52e96f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Utility">
-      <UniqueIdentifier>{5d0942f4-f75e-49ba-b42b-864a509d89c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Utility">
-      <UniqueIdentifier>{9424d699-2f0b-4c4c-b3e4-0a1ebf6ac86f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Console">
       <UniqueIdentifier>{2222729d-caa0-414e-b2b3-e1f56a1506d1}</UniqueIdentifier>
     </Filter>
@@ -48,6 +42,12 @@
     </Filter>
     <Filter Include="Header Files\Tile\Property">
       <UniqueIdentifier>{d5060419-0bda-41f6-bf32-92b31fba073f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{1ab41bd6-0eca-43f5-be02-7e8bb52d216f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{6675a6c4-aaab-4902-aa72-c29318e15935}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +75,6 @@
     <ClCompile Include="skirmish.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="console.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
@@ -89,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="state_leveleditor.cpp">
       <Filter>Source Files\State</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,18 +128,6 @@
     <ClInclude Include="tile_property.h">
       <Filter>Header Files\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="listener.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_mouse.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_key.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_text.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="console.h">
       <Filter>Header Files\Console</Filter>
     </ClInclude>
@@ -157,6 +145,18 @@
     </ClInclude>
     <ClInclude Include="tile_road.h">
       <Filter>Header Files\Tile\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_key.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="listener.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_mouse.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_text.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

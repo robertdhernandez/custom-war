@@ -7,6 +7,24 @@ namespace cw
 
 static std::unique_ptr< StateBase > GLOBAL_STATE( nullptr );
 
+static class ConsoleListener : public util::KeyListener
+{
+	void onKeyPressed( const sf::Event::KeyEvent& ev )
+	{
+		Console& c = Console::getSingleton();
+		switch ( ev.code )
+		{
+		case sf::Keyboard::Tilde:
+			c.setState( !c.isActive() );
+		break;
+		}
+	}
+
+	void onKeyReleased( const sf::Event::KeyEvent& )
+	{
+	}
+} CONSOLE_LISTENER;
+
 /***************************************************/
 
 StateBase& StateBase::getGlobal()
@@ -27,8 +45,7 @@ std::unique_ptr< StateBase > StateBase::setGlobal( std::unique_ptr< StateBase > 
 
 StateBase::StateBase()
 {
-	addKeyListener( Console::getSingleton() );
-	addTextListener( Console::getSingleton() );
+	addKeyListener( CONSOLE_LISTENER );
 }
 
 StateBase::~StateBase()
