@@ -10,6 +10,11 @@ namespace cw
 namespace state
 {
 
+static sf::Vector2i convertMousePos( int x, int y )
+{
+	return sf::Vector2i( x / TILE_WIDTH, y / TILE_HEIGHT );
+}
+
 /***************************************************/
 
 LevelEditor::LevelEditor()
@@ -54,8 +59,7 @@ void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 	{
 	case sf::Mouse::Left:
 		m_mouse.first = true;
-		m_mouse.second.x = ev.x / TILE_WIDTH;
-		m_mouse.second.y = ev.y / TILE_HEIGHT;
+		m_mouse.second = convertMousePos( ev.x, ev.y );
 	break;
 	}
 }
@@ -69,11 +73,11 @@ void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 {
 	if ( m_mouse.first )
 	{
-		int x = ev.x / TILE_WIDTH, y = ev.y / TILE_HEIGHT;
-		if ( m_mouse.second.x != x || m_mouse.second.y != y )
+		sf::Vector2i pos = convertMousePos( ev.x, ev.y );
+		if ( m_mouse.second != pos )
 		{
-			m_mouse.second.x = x; m_mouse.second.y = y;
-			m_map.setTile( createTile( m_curTile, ev.x / TILE_WIDTH, ev.y / TILE_HEIGHT ) );
+			m_mouse.second = pos;
+			m_map.setTile( createTile( m_curTile, m_mouse.second.x, m_mouse.second.y ) );
 		}
 	}
 }
