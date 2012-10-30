@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <sstream>
 
 #include <unordered_map>
 #include <functional>
@@ -28,7 +29,7 @@ namespace cw
 
 		void addCommands( const Cmds& );
 
-		enum ConsoleColors
+		enum ConsoleColor
 		{
 			DEFAULT_COLOR = 0xFFFFFF,
 			ERROR_COLOR   = 0xFF0000,
@@ -39,6 +40,22 @@ namespace cw
 
 		void clearHistory();
 		void clearCommands();
+
+	public:
+		template< typename T >
+		Console& operator<<( T t )
+		{
+			m_buffer << t;
+			return *this;
+		}
+
+		template<>
+		Console& operator<<( Console& (*fn)( Console& ) )
+		{
+			return (*fn)( *this );
+		}
+
+		void pushBuffer();
 
 	private:
 		Console();
@@ -60,6 +77,14 @@ namespace cw
 		std::string m_input;
 		std::vector< std::pair< std::string, int > > m_history;
 
+		int m_bufferOffset;
+		std::ostringstream m_buffer;
+
 		Cmds m_cmds;
 	};
+
+	namespace con
+	{
+		Console& endl( Console& );
+	}
 }

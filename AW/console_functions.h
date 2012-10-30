@@ -4,7 +4,7 @@ namespace cw
 {
 	class Console;
 
-	namespace console
+	namespace con
 	{
 		void defaultCommands( Console& );
 		void levelEditorCommands( Console& );

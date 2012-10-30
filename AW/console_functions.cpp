@@ -1,19 +1,23 @@
 #include "console.h"
 #include "console_functions.h"
 
+#include "state_leveleditor.h"
+
 namespace cw
 {
-namespace console
+namespace con
 {
 
 using std::bind;
 using std::make_pair;
 using namespace std::placeholders;
 
+typedef const std::vector< std::string >& Arguments;
+
 /***************************************************/
 //	COMMON COMMANDS
 
-void clearConsole( const std::vector< std::string >& args )
+void clearConsole( Arguments args )
 {
 	Console::getSingleton().clearHistory();
 }
@@ -32,8 +36,31 @@ void defaultCommands( Console& console )
 /***************************************************/
 // LEVEL EDITOR COMMANDS
 
+using state::LevelEditor;
+
+LevelEditor& getLevelEditor()
+{
+	LevelEditor* ret = dynamic_cast< LevelEditor* >( &StateBase::getGlobal() );
+	if ( ret == nullptr )
+		throw std::runtime_error( "must be in level editor" );
+	return *ret;
+}
+
+void le_create( Arguments args )
+{
+	if ( args.size() >= 2 )
+		getLevelEditor().createMap( std::stoi( args[ 0 ] ), std::stoi( args[ 1 ] ) );
+}
+
 void levelEditorCommands( Console& console )
 {
+	static Console::Cmds cmds;
+	if ( cmds.empty() )
+	{
+		cmds.insert( make_pair( "le_create", bind( le_create, _1 ) ) );
+	}
+
+	console.addCommands( cmds );
 }
 
 

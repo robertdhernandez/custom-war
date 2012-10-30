@@ -51,7 +51,8 @@ Console& Console::getSingleton()
 Console::Console() :
 	m_active( false ),
 	m_index( 0 ),
-	m_font( new sf::Font() )
+	m_font( new sf::Font() ),
+	m_bufferOffset( 0 )
 {
 	m_font->loadFromFile( "console.ttf" );
 	clearHistory();
@@ -69,13 +70,20 @@ void Console::addCommands( const Console::Cmds& cmds )
 void Console::clearCommands()
 {
 	m_cmds.clear();
-	console::defaultCommands( *this );
+	con::defaultCommands( *this );
 }
 
 void Console::clearHistory()
 {
 	m_history.clear();
+	m_bufferOffset = 0;
 	pushLine( "Custom Wars Console", INFO_COLOR );
+}
+
+void Console::pushBuffer()
+{
+	pushLine( m_buffer.str() );
+	m_buffer.str( "" );
 }
 
 void Console::pushLine( const std::string& str, unsigned color )
@@ -130,6 +138,14 @@ void Console::onKeyPressed( const sf::Event::KeyEvent& ev )
 			m_index = 0;
 			m_input.clear();
 		}
+	break;
+
+	case sf::Keyboard::PageUp:
+		m_bufferOffset = std::min( (int) m_history.size(), m_bufferOffset + 1 );
+	break;
+
+	case sf::Keyboard::PageDown:
+		m_bufferOffset = std::max( 0, m_bufferOffset - 1 );
 	break;
 
 	case sf::Keyboard::Left:
@@ -211,13 +227,21 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 	}
 
 	// History
-	for ( auto it = m_history.rbegin(); it != m_history.rend(); ++it )
+	for ( auto it = m_history.rbegin() + m_bufferOffset; it != m_history.rend() && yPos >= 0.0f; ++it )
 	{
 		text.setPosition( 0.0f, yPos -= height );
 		text.setString( it->first );
 		text.setColor( hexToColor( it->second ) );
 		target.draw( text );
 	}
+}
+
+/***************************************************/
+
+Console& con::endl( Console& c )
+{
+	c.pushBuffer();
+	return c;
 }
 
 /***************************************************/
