@@ -9,7 +9,7 @@
 
 namespace cw
 {
-namespace util
+namespace cont
 {
 
 using sf::Event;

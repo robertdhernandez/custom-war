@@ -4,7 +4,7 @@
 
 namespace cw
 {
-	namespace util
+	namespace cont
 	{
 		//-------------------------------------------------------------------------
 		// Classes that inherit this interface can be interacted via keyboard input

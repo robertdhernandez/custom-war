@@ -9,7 +9,7 @@ namespace cw
 {
 	namespace state
 	{
-		class LevelEditor : public StateBase, public util::KeyListener, public util::MouseListener
+		class LevelEditor : public StateBase, public cont::KeyListener, public cont::MouseListener
 		{
 		public:
 			LevelEditor();
