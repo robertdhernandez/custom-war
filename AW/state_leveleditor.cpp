@@ -2,7 +2,9 @@
 
 #include "global.h"
 
-#include <iostream>
+#include "console.h"
+#include "console_functions.h"
+
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cw
@@ -21,8 +23,14 @@ LevelEditor::LevelEditor()
 {
 	addKeyListener( *this );
 	addMouseListener( *this );
-	m_map.create( 20, 15 );
+	createMap( 20, 15 );
 	setCurrentTile( "plains" );
+	con::levelEditorCommands( Console::getSingleton() );
+}
+
+void LevelEditor::createMap( int width, int height )
+{
+	m_map.create( 20, 15 );
 }
 
 void LevelEditor::setCurrentTile( const std::string& type )
@@ -30,7 +38,7 @@ void LevelEditor::setCurrentTile( const std::string& type )
 	if ( !isValidTileType( type ) )
 		throw std::runtime_error( "invalid tile type" );
 	m_curTile = type;
-	std::cout << "Current tile set to: " << m_curTile << std::endl;
+	Console::getSingleton() << "Current tile set to: " << m_curTile << con::endl;
 }
 
 /***************************************************/

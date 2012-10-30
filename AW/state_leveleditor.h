@@ -14,6 +14,8 @@ namespace cw
 		public:
 			LevelEditor();
 
+			void createMap( int x, int y );
+
 			void setCurrentTile( const std::string& tile );
 
 		private:

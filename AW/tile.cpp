@@ -66,7 +66,7 @@ void TileBase::setNeighbors( Neighbors& neighbors )
 {
 	m_neighbors = neighbors;
 	for ( auto it = m_neighbors.begin(); it != m_neighbors.end(); ++it ) 
-		if ( *it && (*it)->get() ) 
+		if ( *it && **it ) 
 			(**it)->autoTile();
 	autoTile();
 }
