@@ -30,7 +30,7 @@ LevelEditor::LevelEditor()
 
 void LevelEditor::createMap( int width, int height )
 {
-	m_map.create( 20, 15 );
+	m_map.create( width, height );
 }
 
 void LevelEditor::setCurrentTile( const std::string& type )

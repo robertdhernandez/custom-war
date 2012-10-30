@@ -7,7 +7,7 @@ namespace cw
 
 static std::unique_ptr< StateBase > GLOBAL_STATE( nullptr );
 
-static class ConsoleListener : public util::KeyListener
+static class : public util::KeyListener
 {
 	void onKeyPressed( const sf::Event::KeyEvent& ev )
 	{
