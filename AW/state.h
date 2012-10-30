@@ -20,9 +20,9 @@ namespace cw
 	//-------------------------------------------------------------------------
 	class StateBase : 
 		public sf::Drawable, 
-		public cont::KeyController, 
-		public cont::MouseController, 
-		public cont::TextController, 
+		public util::KeyController, 
+		public util::MouseController, 
+		public util::TextController, 
 		private sf::NonCopyable
 	{
 	public:

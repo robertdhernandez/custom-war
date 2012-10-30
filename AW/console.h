@@ -16,7 +16,7 @@
 
 namespace cw
 {
-	class Console : public sf::Drawable, public cont::TextListener, public cont::KeyListener, sf::NonCopyable
+	class Console : public sf::Drawable, public util::TextListener, public util::KeyListener, sf::NonCopyable
 	{
 	public:
 		static Console& getSingleton();
