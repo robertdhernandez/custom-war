@@ -19,6 +19,9 @@ namespace cw
 
 			void setCurrentTile( const std::string& tile );
 
+			MapViewer& getMapViewer() { return m_viewer; }
+			const MapViewer& getMapViewer() const { return m_viewer; }
+
 		private:
 			void onKeyPressed( const sf::Event::KeyEvent& );
 			void onKeyReleased( const sf::Event::KeyEvent& );

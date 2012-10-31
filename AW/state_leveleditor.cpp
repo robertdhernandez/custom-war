@@ -36,6 +36,7 @@ LevelEditor::LevelEditor() :
 void LevelEditor::createMap( int width, int height )
 {
 	m_map.create( width, height );
+	m_viewer.setPosition( 0.0f, 0.0f );
 }
 
 void LevelEditor::setCurrentTile( const std::string& type )
@@ -72,8 +73,7 @@ void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 	{
 	case sf::Mouse::Left:
 		m_mouse.first = true;
-		m_mouse.second = convertMousePos( ev.x, ev.y, m_viewer.getPosition() );
-		m_map.setTile( createTile( m_curTile, m_mouse.second.x, m_mouse.second.y ) );
+		m_mouse.second = sf::Vector2i( ev.x, ev.y );
 	break;
 	}
 }
@@ -94,14 +94,7 @@ void LevelEditor::onMouseLeft()
 void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 {
 	if ( m_mouse.first )
-	{
-		sf::Vector2i pos = convertMousePos( ev.x, ev.y, m_viewer.getPosition() );
-		if ( m_mouse.second != pos )
-		{
-			m_mouse.second = pos;
-			m_map.setTile( createTile( m_curTile, m_mouse.second.x, m_mouse.second.y ) );
-		}
-	}
+		m_mouse.second = sf::Vector2i( ev.x, ev.y );
 }
 
 void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
@@ -113,6 +106,12 @@ void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 void LevelEditor::update()
 {
 	m_viewer.update();
+
+	if ( m_mouse.first )
+	{
+		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition() );
+		m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
+	}
 }
 
 void LevelEditor::draw( sf::RenderTarget& target, sf::RenderStates states ) const
