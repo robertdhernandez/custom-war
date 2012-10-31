@@ -90,6 +90,7 @@ void LevelEditor::onMouseEntered()
 
 void LevelEditor::onMouseLeft()
 {
+	m_mouse.first = false;
 }
 
 void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
@@ -111,7 +112,8 @@ void LevelEditor::update()
 	if ( m_mouse.first )
 	{
 		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition(), m_viewer.getScale() );
-		m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
+		if ( m_map.isInBounds( pos.x, pos.y ) )
+			m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
 	}
 }
 

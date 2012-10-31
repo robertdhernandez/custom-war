@@ -103,11 +103,19 @@ void MapViewer::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 
 	sf::Vector2f scale = getScale();
 	scale.x = std::max( MAX_ZOOM_FACTOR, std::max( 1.0f * SCREEN_WIDTH / ( m_map.getWidth() * TILE_WIDTH ), std::min( MIN_ZOOM_FACTOR, scale.x + change ) ) );
-	scale.y = scale.x;
+	scale.y = std::max( MAX_ZOOM_FACTOR, std::max( 1.0f * SCREEN_HEIGHT / ( m_map.getHeight() * TILE_HEIGHT ), std::min( MIN_ZOOM_FACTOR, scale.y + change ) ) );
 
-	setScale( scale );
+	float scaleFactor = std::max( scale.x, scale.y );
 
-	reposition( getPosition().x, getPosition().y );
+	if ( scaleFactor != getScale().x )
+	{
+		sf::Vector2f pos = getPosition();
+		pos.x += ( TILE_WIDTH * scaleFactor * ( ( ev.delta > 0 ) ? -1.0f : 1.0f ) ) + ( SCREEN_WIDTH / 2 / TILE_WIDTH * scaleFactor * ( ( ev.delta > 0 ) ? -1.0f : 1.0f ) );
+		pos.y += ( TILE_HEIGHT * scaleFactor * ( ( ev.delta > 0 ) ? -1.0f : 1.0f ) ) + ( SCREEN_HEIGHT / 2 / TILE_HEIGHT * scaleFactor * ( ( ev.delta > 0 ) ? -1.0f : 1.0f ) );
+
+		setScale( scaleFactor, scaleFactor );
+		reposition( pos.x, pos.y );
+	}
 }
 
 /***************************************************/
@@ -115,13 +123,6 @@ void MapViewer::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 void MapViewer::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	states.transform *= getTransform();
-
-	//if ( m_mouse.pressed )
-	//{
-	//	sf::View view = target.getView();
-	//	view.move( m_mouse.move );
-	//	target.setView( view );
-	//}
 
 	//TODO: rework rendering to draw only what's visible in the sf::View
 	for ( int y = 0; y < m_map.getHeight(); y++ )

@@ -39,6 +39,11 @@ void Map::create( int width, int height )
 			setTile( std::unique_ptr< TileBase >( new tile::Plains( x, y ) ) );
 }
 
+bool Map::isInBounds( int x, int y ) const
+{
+	return 0 <= x && x < m_width && 0 <= y && y < m_height;
+}
+
 /***************************************************/
 
 TileBase& Map::getTile( int x, int y )
@@ -48,7 +53,7 @@ TileBase& Map::getTile( int x, int y )
 
 const TileBase& Map::getTile( int x, int y ) const
 {
-	if ( 0 <= x && x < m_width && 0 <= y && y < m_height )
+	if ( isInBounds( x, y ) )
 		return *m_tiles[ y * m_width + x ];
 
 	std::ostringstream ss;
@@ -58,7 +63,7 @@ const TileBase& Map::getTile( int x, int y ) const
 
 std::unique_ptr< TileBase >* Map::getTilePtr( int x, int y )
 {
-	if ( 0 <= x && x < m_width && 0 <= y && y < m_height )
+	if ( isInBounds( x, y ) )
 		return &m_tiles[ y * m_width + x ];
 	return nullptr;
 }

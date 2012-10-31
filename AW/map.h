@@ -19,6 +19,8 @@ namespace cw
 
 		void create( int width, int height );
 
+		bool isInBounds( int x, int y ) const;
+
 	public:
 		int getNumPlayers() const { return m_players; }
 
