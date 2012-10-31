@@ -8,7 +8,7 @@
 namespace cw
 {
 
-static const float MAX_MOVE_SPEED = 5.0f;
+static const float MAX_MOVE_SPEED = 7.5f;
 static const float MOVE_SPEED_MULTIPLIER = 10.0f;
 
 static const int MIN_WIDTH = SCREEN_WIDTH / TILE_WIDTH;
@@ -24,7 +24,16 @@ MapViewer::MapViewer( Map& map ) :
 
 void MapViewer::update()
 {
-	if ( m_mouse.pressed ) move( m_mouse.move );
+	if ( m_mouse.pressed ) 
+	{
+		const sf::Vector2f curPos = -getPosition(), &scale = getScale();
+
+		sf::Vector2f pos;
+		pos.x = std::min( 1.0f * m_map.getWidth()  * TILE_WIDTH * scale.x - SCREEN_WIDTH,  std::max( 0.0f, curPos.x - m_mouse.move.x ) );
+		pos.y = std::min( 1.0f * m_map.getHeight() * TILE_HEIGHT * scale.y - SCREEN_HEIGHT, std::max( 0.0f, curPos.y - m_mouse.move.y ) );
+
+		setPosition( -pos );
+	}
 }
 
 /***************************************************/
