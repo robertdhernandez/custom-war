@@ -170,5 +170,8 @@
     <ClInclude Include="console_command.h">
       <Filter>Header Files\Console</Filter>
     </ClInclude>
+    <ClInclude Include="reference.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
