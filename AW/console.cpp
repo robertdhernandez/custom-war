@@ -88,7 +88,27 @@ void Console::pushBuffer()
 
 void Console::pushLine( const std::string& str, unsigned color )
 {
-	m_history.push_back( std::make_pair( str, color ) );
+	sf::Text text( "", *m_font, FONT_SIZE );
+	std::string input;
+
+	int insertCount = 0;
+	for ( auto it = str.begin(); it != str.end(); ++it )
+	{
+		input.push_back( *it );
+
+		text.setString( input );
+		sf::FloatRect rect = text.getLocalBounds();
+		if ( rect.width >= SCREEN_WIDTH )
+		{
+			input.erase( input.end() - 1 );
+			m_history.push_back( std::make_pair( input, color ) );
+			input.clear();
+			input.push_back( *it );
+			insertCount++;
+		}
+	}
+
+	if ( !insertCount ) m_history.push_back( std::make_pair( str, color ) );
 }
 
 void Console::execute( const std::string& line )
