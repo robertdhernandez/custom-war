@@ -16,6 +16,7 @@ namespace cw
 			LevelEditor();
 
 			void createMap( int x, int y );
+			void resizeMap( int width, int height );
 
 			void setCurrentTile( const std::string& tile );
 

@@ -40,6 +40,13 @@ void LevelEditor::createMap( int width, int height )
 	m_viewer.setScale( 1.0f, 1.0f );
 }
 
+void LevelEditor::resizeMap( int width, int height )
+{
+	m_map.resize( width, height );
+	m_viewer.setPosition( 0.0f, 0.0f );
+	m_viewer.setScale( 1.0f, 1.0f );
+}
+
 void LevelEditor::setCurrentTile( const std::string& type )
 {
 	if ( !isValidTileType( type ) )

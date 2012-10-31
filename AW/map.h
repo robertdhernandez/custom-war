@@ -18,6 +18,7 @@ namespace cw
 		Map();
 
 		void create( int width, int height );
+		void resize( int width, int height );
 
 		bool isInBounds( int x, int y ) const;
 

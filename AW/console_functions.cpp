@@ -52,12 +52,19 @@ void le_create( Arguments args )
 		getLevelEditor().createMap( std::stoi( args[ 0 ] ), std::stoi( args[ 1 ] ) );
 }
 
+void le_resize( Arguments args )
+{
+	if ( args.size() >= 2 )
+		getLevelEditor().resizeMap( std::stoi( args[ 0 ] ), std::stoi( args[ 1 ] ) );
+}
+
 void levelEditorCommands( Console& console )
 {
 	static Console::Cmds cmds;
 	if ( cmds.empty() )
 	{
 		cmds.insert( make_pair( "le_create", bind( le_create, _1 ) ) );
+		cmds.insert( make_pair( "le_resize", bind( le_resize, _1 ) ) );
 	}
 
 	console.addCommands( cmds );

@@ -39,6 +39,30 @@ void Map::create( int width, int height )
 			setTile( std::unique_ptr< TileBase >( new tile::Plains( x, y ) ) );
 }
 
+void Map::resize( int width, int height )
+{
+	if ( width < MIN_WIDTH )
+		throw std::logic_error( "width must be at least 20 tiles" );
+	if ( height < MIN_HEIGHT )
+		throw std::logic_error( "height must be at least 15 tiles" );
+
+	auto oldTiles = std::move( m_tiles );
+	std::swap( m_width, width );
+	std::swap( m_height, height );
+
+	m_tiles.reset( new std::unique_ptr< TileBase >[ m_width * m_height ] );
+
+	// Swap all parameters with the temporary so Map can appropriately set them
+	for ( int y = 0; y < m_height; y++ )
+		for ( int x = 0; x < m_width; x++ )
+		{
+			if ( x < width && y < height )
+				setTile( std::move( oldTiles[ y * width + x ] ) );
+			else
+				setTile( std::unique_ptr< TileBase >( new tile::Plains( x, y ) ) );
+		}
+}
+
 bool Map::isInBounds( int x, int y ) const
 {
 	return 0 <= x && x < m_width && 0 <= y && y < m_height;
