@@ -1,5 +1,7 @@
 #pragma once
 
+#include "controller_general.h"
+
 #include <vector>
 #include <SFML/Window/Event.hpp>
 
@@ -9,7 +11,7 @@ namespace cw
 	{
 		class KeyListener;
 
-		class KeyController
+		class KeyController : public virtual GeneralController
 		{
 		public:
 			virtual ~KeyController() {}

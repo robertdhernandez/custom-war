@@ -78,8 +78,10 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="console_functions.cpp" />
     <ClCompile Include="controller.cpp" />
+    <ClCompile Include="controller_general.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="mapviewer.cpp" />
     <ClCompile Include="skirmish.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="state_leveleditor.cpp" />
@@ -98,6 +100,7 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="listener.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="mapviewer.h" />
     <ClInclude Include="movement.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="skirmish.h" />
