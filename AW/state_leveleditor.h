@@ -2,6 +2,7 @@
 
 #include "state.h"
 #include "map.h"
+#include "mapviewer.h"
 
 #include "listener.h"
 
@@ -24,6 +25,8 @@ namespace cw
 
 			void onMouseButtonPressed( const sf::Event::MouseButtonEvent& );
 			void onMouseButtonReleased( const sf::Event::MouseButtonEvent& );
+			void onMouseEntered();
+			void onMouseLeft();
 			void onMouseMoved( const sf::Event::MouseMoveEvent& );
 			void onMouseWheelMoved( const sf::Event::MouseWheelEvent& );
 
@@ -32,6 +35,8 @@ namespace cw
 
 		private:
 			Map m_map;
+			MapViewer m_viewer;
+
 			std::string m_curTile;
 
 			std::pair< bool, sf::Vector2i > m_mouse;

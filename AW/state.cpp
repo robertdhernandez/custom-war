@@ -54,6 +54,7 @@ StateBase::~StateBase()
 
 void StateBase::handleEvents( const sf::Event& events )
 {
+	updateGeneralListeners( events );
 	updateKeyListeners( events );
 	updateMouseListeners( events );
 	updateTextListeners( events );

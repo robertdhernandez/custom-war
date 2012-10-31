@@ -12,17 +12,22 @@ namespace cw
 namespace state
 {
 
-static sf::Vector2i convertMousePos( int x, int y )
+static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset )
 {
-	return sf::Vector2i( x / TILE_WIDTH, y / TILE_HEIGHT );
+	return sf::Vector2i( ( x - offset.x ) / TILE_WIDTH, ( y - offset.y ) / TILE_HEIGHT );
 }
 
 /***************************************************/
 
-LevelEditor::LevelEditor()
+LevelEditor::LevelEditor() :
+	m_viewer( m_map )
 {
 	addKeyListener( *this );
+	addKeyListener( m_viewer );
+
 	addMouseListener( *this );
+	addMouseListener( m_viewer );
+
 	createMap( 20, 15 );
 	setCurrentTile( "plains" );
 	con::levelEditorCommands( Console::getSingleton() );
@@ -67,7 +72,7 @@ void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 	{
 	case sf::Mouse::Left:
 		m_mouse.first = true;
-		m_mouse.second = convertMousePos( ev.x, ev.y );
+		m_mouse.second = convertMousePos( ev.x, ev.y, m_viewer.getPosition() );
 		m_map.setTile( createTile( m_curTile, m_mouse.second.x, m_mouse.second.y ) );
 	break;
 	}
@@ -78,11 +83,19 @@ void LevelEditor::onMouseButtonReleased( const sf::Event::MouseButtonEvent& ev )
 	m_mouse.first = false;
 }
 
+void LevelEditor::onMouseEntered()
+{
+}
+
+void LevelEditor::onMouseLeft()
+{
+}
+
 void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 {
 	if ( m_mouse.first )
 	{
-		sf::Vector2i pos = convertMousePos( ev.x, ev.y );
+		sf::Vector2i pos = convertMousePos( ev.x, ev.y, m_viewer.getPosition() );
 		if ( m_mouse.second != pos )
 		{
 			m_mouse.second = pos;
@@ -99,11 +112,12 @@ void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 
 void LevelEditor::update()
 {
+	m_viewer.update();
 }
 
 void LevelEditor::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
-	target.draw( m_map );
+	target.draw( m_viewer );
 }
 
 /***************************************************/

@@ -86,8 +86,8 @@ void TileBase::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 	sf::Sprite sprite( getTexture() );
 	sprite.setPosition( (float) m_pos.x * TILE_WIDTH, (float) m_pos.y * TILE_HEIGHT );
 	sprite.setTextureRect( m_textureRect );
-	target.draw( sprite );
-	if ( m_unit ) target.draw( *m_unit );
+	target.draw( sprite, states );
+	if ( m_unit ) target.draw( *m_unit, states );
 }
 
 /***************************************************/
