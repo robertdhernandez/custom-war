@@ -17,6 +17,7 @@ namespace cw
 			virtual ~GeneralListener() {}
 			virtual void onLostFocus() {}
 			virtual void onGainedFocus() {}
+			virtual void onResize( const sf::Event::SizeEvent& ) {}
 		};
 
 		//-------------------------------------------------------------------------

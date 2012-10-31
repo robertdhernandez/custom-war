@@ -32,6 +32,7 @@ void GeneralController::updateGeneralListeners( const sf::Event& ev )
 	{
 	case Event::GainedFocus:	for_each( list.begin(), list.end(), bind( &GeneralListener::onGainedFocus, _1 ) ); break;
 	case Event::LostFocus:		for_each( list.begin(), list.end(), bind( &GeneralListener::onLostFocus, _1 ) ); break;
+	case Event::Resized:		for_each( list.begin(), list.end(), bind( &GeneralListener::onResize, _1, ev.size ) ); break;
 	}
 }
 
@@ -66,12 +67,12 @@ void MouseController::updateMouseListeners( const Event& ev )
 	auto& vec = m_mouseListeners;
 	switch ( ev.type )
 	{
-	case Event::MouseButtonPressed:  for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseButtonPressed,  _1, ev.mouseButton ) ); break;
-	case Event::MouseButtonReleased: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseButtonReleased, _1, ev.mouseButton ) ); break;
-	case Event::MouseEntered: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseEntered, _1 ) ); break;
-	case Event::MouseLeft: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseLeft, _1 ) ); break;
-	case Event::MouseMoved: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseMoved, _1, ev.mouseMove ) ); break;
-	case Event::MouseWheelMoved: for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseWheelMoved, _1, ev.mouseWheel ) ); break;
+	case Event::MouseButtonPressed:		for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseButtonPressed,  _1, ev.mouseButton ) ); break;
+	case Event::MouseButtonReleased:	for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseButtonReleased, _1, ev.mouseButton ) ); break;
+	case Event::MouseEntered:			for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseEntered, _1 ) ); break;
+	case Event::MouseLeft:				for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseLeft, _1 ) ); break;
+	case Event::MouseMoved:				for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseMoved, _1, ev.mouseMove ) ); break;
+	case Event::MouseWheelMoved:		for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseWheelMoved, _1, ev.mouseWheel ) ); break;
 	}
 }
 
