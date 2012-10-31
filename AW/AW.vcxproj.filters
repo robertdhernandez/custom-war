@@ -167,5 +167,8 @@
     <ClInclude Include="mapviewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="console_command.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

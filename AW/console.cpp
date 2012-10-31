@@ -60,10 +60,9 @@ Console::Console() :
 
 /***************************************************/
 
-void Console::addCommands( const Console::Cmds& cmds )
+void Console::addCommand( con::Command& cmd )
 {
-	for ( auto it = cmds.begin(); it != cmds.end(); ++it )
-		m_cmds.insert( std::make_pair( it->first, it->second ) );
+	m_cmds.insert( &cmd );
 }
 
 void Console::clearCommands()
@@ -94,18 +93,23 @@ void Console::pushLine( const std::string& str, unsigned color )
 void Console::execute( const std::string& line )
 {
 	std::string::size_type pos = line.find( ' ' );
-	auto find = m_cmds.find( std::string( line.begin(), pos != std::string::npos ? line.begin() + pos : line.end() ) );
+	std::string cmd = std::string( line.begin(), pos != std::string::npos ? line.begin() + pos : line.end() );
+
+	//auto find = std::find_if( m_cmds.begin(), m_cmds.end(), std::bind( &con::Command::operator==, _1, cmd ) );
+	std::set< con::Command* >::iterator find;
+	for ( find = m_cmds.begin(); find != m_cmds.end(); ++find )
+		if ( **find == cmd ) break;
 
 	try
 	{
 		if ( find != m_cmds.end() )
-			find->second( parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
+			(**find)( parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
 		else
 			*this << con::setcerr << "Unknown command" << con::endl;
 	}
 	catch ( std::exception& err )
 	{
-		*this << con::setcerr << "Error executing " << find->first << ": " << con::endl;
+		*this << con::setcerr << "Error executing " << (*find)->getName() << ": " << con::endl;
 		*this << con::setcerr << err.what() << con::endl;
 	}
 }
@@ -241,6 +245,25 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 		text.setColor( hexToColor( it->second ) );
 		target.draw( text );
 	}
+}
+
+/***************************************************/
+
+void con::Command::operator()( const Arguments& args )
+{
+	unsigned argReq = getMinArgs();
+	auto size = args.size();
+
+	if ( argReq < size )
+	{
+		std::ostringstream ss;
+		ss << "Requires at least " << argReq << " arguments -- see \"" << getName() << "help \" for more details";
+		throw std::runtime_error( ss.str() );
+	}
+	else if ( size >= 1 && args[ 0 ] == "help" )
+		help( Console::getSingleton() );
+	else
+		execute( args );
 }
 
 /***************************************************/

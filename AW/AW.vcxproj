@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
+    <ClInclude Include="console_command.h" />
     <ClInclude Include="console_functions.h" />
     <ClInclude Include="controller_key.h" />
     <ClInclude Include="controller_mouse.h" />

@@ -1,14 +1,15 @@
 #pragma once
 
 #include "listener.h"
+#include "console_command.h"
 
 #include <vector>
 #include <string>
 #include <memory>
 #include <sstream>
 
-#include <unordered_map>
 #include <functional>
+#include <set>
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -24,12 +25,7 @@ namespace cw
 		void setState( bool state ) { m_active = state; }
 		bool isActive() const { return m_active; }
 
-		// To define your own console function, they must have a signature of:
-		//	void (*)( const std::vector< std::string >& )
-		typedef std::function< void( const std::vector< std::string >& ) > Fn;
-		typedef std::unordered_map< std::string, Console::Fn > Cmds;
-
-		void addCommands( const Cmds& );
+		void addCommand( con::Command& );
 
 		enum ConsoleColor
 		{
@@ -83,7 +79,7 @@ namespace cw
 		int m_bufferOffset, m_bufferColor;
 		std::ostringstream m_buffer;
 
-		Cmds m_cmds;
+		std::set< con::Command* > m_cmds;
 	};
 
 	namespace con
