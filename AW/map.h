@@ -12,7 +12,7 @@
 
 namespace cw
 {
-	class Map : sf::NonCopyable, public sf::Drawable
+	class Map : sf::NonCopyable
 	{
 	public:
 		Map();
@@ -32,7 +32,6 @@ namespace cw
 
 	private:
 		std::unique_ptr< TileBase >* getTilePtr( int x, int y );
-		void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 	private:
 		int m_width, m_height, m_players;

@@ -90,13 +90,4 @@ void Map::setTile( std::unique_ptr< TileBase > tile )
 
 /***************************************************/
 
-void Map::draw( sf::RenderTarget& target, sf::RenderStates states ) const
-{
-	for ( int y = 0; y < MIN_HEIGHT; y++ )
-		for ( int x = 0; x < MIN_WIDTH; x++ )
-			target.draw( getTile( x, y ) );
-}
-
-/***************************************************/
-
 }
