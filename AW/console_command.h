@@ -15,6 +15,7 @@ namespace cw
 			virtual ~Command() {}
 			
 			bool operator==( const std::string& str ) const { return getName() == str; }
+			bool operator<( const Command& c ) const { return getName() < c.getName(); }
 
 			typedef std::vector< std::string > Arguments;
 			void operator()( const Arguments& );

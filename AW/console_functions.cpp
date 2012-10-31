@@ -18,7 +18,35 @@ typedef const std::vector< std::string >& Arguments;
 /***************************************************/
 //	COMMON COMMANDS
 
-static class : public Command
+static class HELP : public con::Command
+{
+	std::string getName() const
+	{
+		return "help";
+	}
+
+	unsigned getMinArgs() const
+	{
+		return 0;
+	}
+
+	void help( Console& c )
+	{
+		c << setcinfo << "Displays the list of console commands" << endl;
+	}
+
+	void execute( const Arguments& args )
+	{
+		Console& c = Console::getSingleton();
+		const auto& cmds = c.getCommands();
+
+		c << setcinfo << "Commands:" << endl;
+		for ( auto it = cmds.begin(); it != cmds.end(); ++it )
+			c << setcinfo << "\t" << (*it)->getName() << endl;
+	}
+} HELP;
+
+static class CLEAR : public Command
 {
 	std::string getName() const
 	{
@@ -43,6 +71,7 @@ static class : public Command
 
 void defaultCommands( Console& console )
 {
+	console.addCommand( HELP );
 	console.addCommand( CLEAR );
 }
 
@@ -59,7 +88,7 @@ LevelEditor& getLevelEditor()
 	return *ret;
 }
 
-static class : public con::Command
+static class LE_CREATE : public con::Command
 {
 	std::string getName() const
 	{
@@ -73,6 +102,11 @@ static class : public con::Command
 
 	void help( Console& c )
 	{
+		c << setcinfo << "[Level Editor only]" << endl;
+		c << setcinfo << "Generates an empty map" << endl;
+		c << setcinfo << "le_create width height" << endl;
+		c << setcinfo << "\twidth: width (in tiles) of the new map" << endl;
+		c << setcinfo << "\theight: height (in tiles) of the new map" << endl;
 	}
 
 	void execute( const Arguments& args )
@@ -81,7 +115,7 @@ static class : public con::Command
 	}
 } LE_CREATE;
 
-static class : public con::Command
+static class LE_RESIZE : public con::Command
 {
 	std::string getName() const
 	{
@@ -103,7 +137,7 @@ static class : public con::Command
 	}
 } LE_RESIZE;
 
-static class : public con::Command
+static class LE_SETTILE : public con::Command
 {
 	std::string getName() const
 	{

@@ -62,7 +62,8 @@ Console::Console() :
 
 void Console::addCommand( con::Command& cmd )
 {
-	m_cmds.insert( &cmd );
+	m_cmds.push_back( &cmd );
+	std::sort( m_cmds.begin(), m_cmds.end() );
 }
 
 void Console::clearCommands()
@@ -96,9 +97,7 @@ void Console::execute( const std::string& line )
 	std::string cmd = std::string( line.begin(), pos != std::string::npos ? line.begin() + pos : line.end() );
 
 	//auto find = std::find_if( m_cmds.begin(), m_cmds.end(), std::bind( &con::Command::operator==, _1, cmd ) );
-	std::set< con::Command* >::iterator find;
-	for ( find = m_cmds.begin(); find != m_cmds.end(); ++find )
-		if ( **find == cmd ) break;
+	auto find = std::find_if( m_cmds.begin(), m_cmds.end(), std::bind( &con::Command::operator==, std::placeholders::_1, cmd ) );
 
 	try
 	{
@@ -254,14 +253,14 @@ void con::Command::operator()( const Arguments& args )
 	unsigned argReq = getMinArgs();
 	auto size = args.size();
 
-	if ( argReq < size )
+	if ( size >= 1 && args[ 0 ] == "help" )
+		help( Console::getSingleton() );
+	else if ( size < argReq )
 	{
 		std::ostringstream ss;
 		ss << "Requires at least " << argReq << " arguments -- see \"" << getName() << "help \" for more details";
 		throw std::runtime_error( ss.str() );
 	}
-	else if ( size >= 1 && args[ 0 ] == "help" )
-		help( Console::getSingleton() );
 	else
 		execute( args );
 }

@@ -9,7 +9,7 @@
 #include <sstream>
 
 #include <functional>
-#include <set>
+#include <vector>
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -26,12 +26,13 @@ namespace cw
 		bool isActive() const { return m_active; }
 
 		void addCommand( con::Command& );
+		const std::vector< con::Command* >& getCommands() const { return m_cmds; }
 
 		enum ConsoleColor
 		{
 			DEFAULT_COLOR = 0xFFFFFF,
 			ERROR_COLOR   = 0xFF0000,
-			INFO_COLOR    = 0x999999
+			INFO_COLOR    = 0x666666
 		};
 
 		void pushLine( const std::string& str, unsigned color = DEFAULT_COLOR );
@@ -79,7 +80,7 @@ namespace cw
 		int m_bufferOffset, m_bufferColor;
 		std::ostringstream m_buffer;
 
-		std::set< con::Command* > m_cmds;
+		std::vector< con::Command* > m_cmds;
 	};
 
 	namespace con
