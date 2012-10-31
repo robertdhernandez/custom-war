@@ -1,5 +1,7 @@
 #pragma once
 
+#include "reference.h"
+
 #include <string>
 #include <vector>
 
@@ -37,7 +39,7 @@ namespace cw
 		const int m_id;
 		int m_money;
 
-		std::vector< UnitBase* > m_units;
-		std::vector< PropertyBase* > m_properties;
+		std::vector< util::Reference< UnitBase > > m_units;
+		std::vector< util::Reference< PropertyBase > > m_properties;
 	};
 }
