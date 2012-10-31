@@ -17,6 +17,8 @@ namespace cw
 		void update();
 
 	private:
+		void reposition( float x, float y );
+
 		void onKeyPressed( const sf::Event::KeyEvent& );
 		void onKeyReleased( const sf::Event::KeyEvent& );
 

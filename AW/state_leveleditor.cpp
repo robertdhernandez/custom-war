@@ -12,9 +12,9 @@ namespace cw
 namespace state
 {
 
-static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset )
+static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale )
 {
-	return sf::Vector2i( ( x - offset.x ) / TILE_WIDTH, ( y - offset.y ) / TILE_HEIGHT );
+	return sf::Vector2i( ( x - offset.x ) / ( TILE_WIDTH * scale.x ), ( y - offset.y ) / ( TILE_HEIGHT * scale.y ) );
 }
 
 /***************************************************/
@@ -37,6 +37,7 @@ void LevelEditor::createMap( int width, int height )
 {
 	m_map.create( width, height );
 	m_viewer.setPosition( 0.0f, 0.0f );
+	m_viewer.setScale( 1.0f, 1.0f );
 }
 
 void LevelEditor::setCurrentTile( const std::string& type )
@@ -109,7 +110,7 @@ void LevelEditor::update()
 
 	if ( m_mouse.first )
 	{
-		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition() );
+		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition(), m_viewer.getScale() );
 		m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
 	}
 }
