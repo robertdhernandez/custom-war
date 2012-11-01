@@ -19,7 +19,7 @@ namespace cw
 
 	private:
 		void reposition( float x, float y );
-		void zoom( float rate, bool inward );
+		void zoom( float rate, int dir, sf::Vector2i center );
 
 		void onKeyPressed( const sf::Event::KeyEvent& );
 		void onKeyReleased( const sf::Event::KeyEvent& );

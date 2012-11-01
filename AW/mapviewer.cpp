@@ -23,6 +23,12 @@ static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
 static const int EDGE_SCROLL_MIN_HORI = TILE_WIDTH * 2;
 static const int EDGE_SCROLL_MIN_VERT = TILE_HEIGHT * 2;
 
+enum
+{
+	ZOOM_IN = -1,
+	ZOOM_OUT = 1
+};
+
 /***************************************************/
 
 MapViewer::MapViewer( Map& map ) :
@@ -41,7 +47,7 @@ void MapViewer::update()
 		reposition( curPos.x - m_move.x, curPos.y - m_move.y );
 	}
 
-	if ( m_zoom.active ) zoom( m_zoom.rate, m_zoom.inward );
+	//if ( m_zoom.active ) zoom( m_zoom.rate, m_zoom.inward );
 }
 
 void MapViewer::reposition( float x, float y )
@@ -55,7 +61,7 @@ void MapViewer::reposition( float x, float y )
 	setPosition( -pos );
 }
 
-void MapViewer::zoom( float rate, bool inward )
+void MapViewer::zoom( float rate, int dir, sf::Vector2i center )
 {
 	sf::Vector2f scale = getScale();
 	scale.x = std::max( MAX_ZOOM_FACTOR, std::max( 1.0f * SCREEN_WIDTH / ( m_map.getWidth() * TILE_WIDTH ), std::min( MIN_ZOOM_FACTOR, scale.x + rate ) ) );
@@ -66,11 +72,9 @@ void MapViewer::zoom( float rate, bool inward )
 	if ( scaleFactor != getScale().x )
 	{
 		// For zooming in or out
-		float mult = ( inward ) ? -1.0f : 1.0f;
-
 		sf::Vector2f pos = getPosition();
-		pos.x += ( TILE_WIDTH * scaleFactor * mult + ( SCREEN_WIDTH / 2 / TILE_WIDTH * scaleFactor * mult ) );
-		pos.y += ( TILE_HEIGHT * scaleFactor * mult + ( SCREEN_HEIGHT / 2 / TILE_HEIGHT * scaleFactor * mult ) );
+		pos.x += ( center.x / ( TILE_WIDTH * scaleFactor ) * dir );
+		pos.y += ( center.y / ( TILE_HEIGHT * scaleFactor ) * dir );
 
 		setScale( scaleFactor, scaleFactor );
 		reposition( pos.x, pos.y );
@@ -153,24 +157,12 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 
 	case sf::Keyboard::Equal:
 	case sf::Keyboard::Q:
-		if ( !m_zoom.active )
-		{
-			m_zoom.active = true;
-			m_zoom.inward = true;
-			m_zoom.key = ev.code;
-			m_zoom.rate = MAX_ZOOM_SPEED;
-		}
+		
 	break;
 
 	case sf::Keyboard::Dash:
 	case sf::Keyboard::E:
-		if ( !m_zoom.active )
-		{
-			m_zoom.active = true;
-			m_zoom.inward = false;
-			m_zoom.key = ev.code;
-			m_zoom.rate = -MAX_ZOOM_SPEED;
-		}
+		
 	break;
 	}
 }
@@ -258,7 +250,7 @@ void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 		m_move.y = std::min( MAX_MOVE_SPEED, ( ev.y - m_mouse.second.y ) / MOVE_SPEED_MULTIPLIER );
 	}
 	// Edge scroll -- can't move while key is active
-	else if ( std::find( m_dir.begin(), m_dir.end(), true ) == m_dir.end() )
+	/*else if ( std::find( m_dir.begin(), m_dir.end(), true ) == m_dir.end() )
 	{
 		if ( ev.x < EDGE_SCROLL_MIN_HORI )
 			m_move.x = -MAX_MOVE_SPEED;
@@ -275,12 +267,12 @@ void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 			m_move.y = 0.0f;
 
 		m_edgeScroll = !( m_move.x == 0.0f && m_move.y == 0.0f );
-	}
+	}*/
 }
 
 void MapViewer::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 {
-	zoom( ev.delta / ZOOM_SPEED_MULTIPLIER, ev.delta > 0 );
+	zoom( ev.delta / ZOOM_SPEED_MULTIPLIER, ( ev.delta > 0 ) ? ZOOM_IN : ZOOM_OUT, sf::Vector2i( ev.x, ev.y ) );
 }
 
 /***************************************************/
