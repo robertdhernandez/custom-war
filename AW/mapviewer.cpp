@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include <iostream>
+
 namespace cw
 {
 
@@ -13,7 +15,7 @@ static const float MAX_MOVE_SPEED = 7.5f;
 static const float MOVE_SPEED_MULTIPLIER = 10.0f;
 
 static const float MIN_ZOOM_FACTOR = 1.0f;
-static const float MAX_ZOOM_FACTOR = 0.5f;
+static const float MAX_ZOOM_FACTOR = 0.75f;
 static const float ZOOM_SPEED_MULTIPLIER = 50.0f;
 static const float MOUSE_ZOOM_MULTIPLIER = 2.0f;
 
@@ -34,6 +36,35 @@ inline int getZoomDir( float f )
 	return ( f < 0 ) ? ZOOM_OUT : ZOOM_IN;
 }
 
+inline sf::Vector2f calculateScreenDim( float scale )
+{
+	scale = 1 / scale;
+	return sf::Vector2f( SCREEN_WIDTH * scale, SCREEN_HEIGHT * scale );
+}
+
+inline sf::Vector2f getCenter( const sf::FloatRect& rect )
+{
+	return sf::Vector2f( rect.left + ( rect.width / 2 ), rect.top + ( rect.height / 2 ) );
+}
+
+inline void adjustToCenter( sf::FloatRect& rect, const sf::Vector2f& pos )
+{
+	rect.left = pos.x - ( rect.width / 2.0f );
+	rect.top = pos.y - ( rect.height / 2.0f );
+}
+
+inline sf::Vector2f scalePos( sf::Vector2i origin, const sf::Vector2f& oldBounds, const sf::Vector2f& newBounds )
+{
+	sf::Vector2f ratio;
+	ratio.x = newBounds.x / oldBounds.x;
+	ratio.y = newBounds.y / oldBounds.y;
+
+	sf::Vector2f pos;
+	pos.x = origin.x * ratio.x;
+	pos.y = origin.y * ratio.y;
+	return pos;
+}
+
 /***************************************************/
 
 MapViewer::MapViewer( Map& map ) :
@@ -49,8 +80,8 @@ void MapViewer::update()
 {
 	if ( m_mouse.first || std::find( m_dir.begin(), m_dir.end(), true ) != m_dir.end() || m_edgeScroll ) 
 	{
-		const sf::Vector2f& curPos = getPosition();
-		reposition( curPos.x - m_move.x, curPos.y - m_move.y );
+		sf::Vector2f curPos = -getPosition();
+		reposition( curPos.x + m_move.x, curPos.y + m_move.y );
 	}
 
 	if ( std::get< 0 >( m_zoom ) ) 
@@ -62,8 +93,8 @@ void MapViewer::reposition( float x, float y )
 	const sf::Vector2f& scale = getScale();
 
 	sf::Vector2f pos;
-	pos.x = std::min( 1.0f * m_map.getWidth()  * TILE_WIDTH * scale.x - SCREEN_WIDTH,  std::max( 0.0f, -x ) );
-	pos.y = std::min( 1.0f * m_map.getHeight() * TILE_HEIGHT * scale.y - SCREEN_HEIGHT, std::max( 0.0f, -y ) );
+	pos.x = std::min( 1.0f * m_map.getWidth()  * TILE_WIDTH * scale.x - SCREEN_WIDTH,  std::max( 0.0f, x ) );
+	pos.y = std::min( 1.0f * m_map.getHeight() * TILE_HEIGHT * scale.y - SCREEN_HEIGHT, std::max( 0.0f, y ) );
 
 	setPosition( -pos );
 }
@@ -78,18 +109,17 @@ void MapViewer::zoom( float rate, sf::Vector2i center )
 
 	if ( scaleFactor != getScale().x )
 	{
-		int dir = -getZoomDir( rate );
+		sf::FloatRect viewRect( -getPosition(), calculateScreenDim( getScale().x ) );
+		adjustToCenter( viewRect, getCenter( viewRect ) );
 
-		// For zooming in or out
-		sf::Vector2f pos = getPosition();
-		float addX = center.x / ( TILE_WIDTH * scaleFactor ) * dir;
-		float addY = center.y / ( TILE_HEIGHT * scaleFactor ) * dir;
+		int dir = getZoomDir( rate );
 
-		pos.x += addX;
-		pos.y += addY;
+		sf::Vector2f fcenter = scalePos( center, calculateScreenDim( scaleFactor ), calculateScreenDim( getScale().x ) );
+		fcenter.x /= ( TILE_WIDTH * scaleFactor * dir );
+		fcenter.y /= ( TILE_HEIGHT * scaleFactor * dir );
 
 		setScale( scaleFactor, scaleFactor );
-		reposition( pos.x, pos.y );
+		reposition( viewRect.left + fcenter.x, viewRect.top + fcenter.y );
 	}
 }
 
