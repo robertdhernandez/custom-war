@@ -14,8 +14,8 @@ static const float MOVE_SPEED_MULTIPLIER = 10.0f;
 
 static const float MIN_ZOOM_FACTOR = 1.0f;
 static const float MAX_ZOOM_FACTOR = 0.5f;
-static const float ZOOM_SPEED_MULTIPLIER = 25.0f;
-static const float MAX_ZOOM_SPEED = 1.0f / 100.0f;
+static const float ZOOM_SPEED_MULTIPLIER = 50.0f;
+static const float MOUSE_ZOOM_MULTIPLIER = 2.0f;
 
 static const int MIN_WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
@@ -25,9 +25,14 @@ static const int EDGE_SCROLL_MIN_VERT = TILE_HEIGHT * 2;
 
 enum
 {
-	ZOOM_IN = -1,
-	ZOOM_OUT = 1
+	ZOOM_IN = 1,
+	ZOOM_OUT = -1
 };
+
+inline int getZoomDir( float f )
+{
+	return ( f < 0 ) ? ZOOM_OUT : ZOOM_IN;
+}
 
 /***************************************************/
 
@@ -36,6 +41,7 @@ MapViewer::MapViewer( Map& map ) :
 	m_edgeScroll( false )
 {
 	m_mouse.first = false;
+	std::get< 0 >( m_zoom ) = false;
 	std::fill( m_dir.begin(), m_dir.end(), false );
 }
 
@@ -47,7 +53,8 @@ void MapViewer::update()
 		reposition( curPos.x - m_move.x, curPos.y - m_move.y );
 	}
 
-	//if ( m_zoom.active ) zoom( m_zoom.rate, m_zoom.inward );
+	if ( std::get< 0 >( m_zoom ) ) 
+		zoom( std::get< 1 >( m_zoom ) / ZOOM_SPEED_MULTIPLIER, sf::Vector2i( SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 ) );
 }
 
 void MapViewer::reposition( float x, float y )
@@ -61,7 +68,7 @@ void MapViewer::reposition( float x, float y )
 	setPosition( -pos );
 }
 
-void MapViewer::zoom( float rate, int dir, sf::Vector2i center )
+void MapViewer::zoom( float rate, sf::Vector2i center )
 {
 	sf::Vector2f scale = getScale();
 	scale.x = std::max( MAX_ZOOM_FACTOR, std::max( 1.0f * SCREEN_WIDTH / ( m_map.getWidth() * TILE_WIDTH ), std::min( MIN_ZOOM_FACTOR, scale.x + rate ) ) );
@@ -71,10 +78,15 @@ void MapViewer::zoom( float rate, int dir, sf::Vector2i center )
 
 	if ( scaleFactor != getScale().x )
 	{
+		int dir = -getZoomDir( rate );
+
 		// For zooming in or out
 		sf::Vector2f pos = getPosition();
-		pos.x += ( center.x / ( TILE_WIDTH * scaleFactor ) * dir );
-		pos.y += ( center.y / ( TILE_HEIGHT * scaleFactor ) * dir );
+		float addX = center.x / ( TILE_WIDTH * scaleFactor ) * dir;
+		float addY = center.y / ( TILE_HEIGHT * scaleFactor ) * dir;
+
+		pos.x += addX;
+		pos.y += addY;
 
 		setScale( scaleFactor, scaleFactor );
 		reposition( pos.x, pos.y );
@@ -157,12 +169,14 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 
 	case sf::Keyboard::Equal:
 	case sf::Keyboard::Q:
-		
+		if ( !std::get< 0 >( m_zoom ) )
+			m_zoom = std::make_tuple( true, ZOOM_IN, ev.code );
 	break;
 
 	case sf::Keyboard::Dash:
 	case sf::Keyboard::E:
-		
+		if ( !std::get< 0 >( m_zoom ) )
+			m_zoom = std::make_tuple( true, ZOOM_OUT, ev.code );
 	break;
 	}
 }
@@ -199,11 +213,8 @@ void MapViewer::onKeyReleased( const sf::Event::KeyEvent& ev )
 	case sf::Keyboard::Q:
 	case sf::Keyboard::Dash:
 	case sf::Keyboard::E:
-		if ( m_zoom.active && m_zoom.key == ev.code )
-		{
-			m_zoom.active = false;
-			m_zoom.rate = 0.0f;
-		}
+		if ( std::get< 0 >( m_zoom ) && std::get< 2 >( m_zoom ) == ev.code )
+			std::get< 0 >( m_zoom ) = false;
 	break;
 	}
 }
@@ -272,7 +283,7 @@ void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 
 void MapViewer::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 {
-	zoom( ev.delta / ZOOM_SPEED_MULTIPLIER, ( ev.delta > 0 ) ? ZOOM_IN : ZOOM_OUT, sf::Vector2i( ev.x, ev.y ) );
+	zoom( ev.delta / ( ZOOM_SPEED_MULTIPLIER / MOUSE_ZOOM_MULTIPLIER ), sf::Vector2i( ev.x, ev.y ) );
 }
 
 /***************************************************/

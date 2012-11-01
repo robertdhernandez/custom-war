@@ -3,6 +3,7 @@
 #include "listener.h"
 
 #include <array>
+#include <tuple>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
@@ -19,7 +20,7 @@ namespace cw
 
 	private:
 		void reposition( float x, float y );
-		void zoom( float rate, int dir, sf::Vector2i center );
+		void zoom( float rate, sf::Vector2i center );
 
 		void onKeyPressed( const sf::Event::KeyEvent& );
 		void onKeyReleased( const sf::Event::KeyEvent& );
@@ -47,14 +48,6 @@ namespace cw
 		sf::Vector2f m_move;
 
 		// Zoom rate -- for use with keys
-		struct Zoom
-		{
-			Zoom() : active( false ) {}
-
-			bool active;
-			bool inward;
-			sf::Keyboard::Key key;
-			float rate;
-		} m_zoom;
+		std::tuple< bool, int, sf::Keyboard::Key > m_zoom;
 	};
 }
