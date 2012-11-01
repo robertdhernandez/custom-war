@@ -2,6 +2,7 @@
 
 #include "listener.h"
 
+#include <array>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 
@@ -17,6 +18,7 @@ namespace cw
 		void update();
 
 	private:
+		void zoom( float rate, bool inward );
 		void reposition( float x, float y );
 
 		void onKeyPressed( const sf::Event::KeyEvent& );
@@ -35,11 +37,23 @@ namespace cw
 		Map& m_map;
 
 		// Right-mouse camera movement
-		struct
+		std::pair< bool, sf::Vector2i > m_mouse;
+
+		// Non-mouse movement
+		std::array< bool, 4 > m_dir;
+
+		// Movement vector
+		sf::Vector2f m_move;
+
+		// Zoom rate -- for use with keys
+		struct Zoom
 		{
-			bool pressed;
-			sf::Vector2i pressedPos;
-			sf::Vector2f move;
-		} m_mouse;
+			Zoom() : active( false ) {}
+
+			bool active;
+			bool inward;
+			sf::Keyboard::Key key;
+			float rate;
+		} m_zoom;
 	};
 }
