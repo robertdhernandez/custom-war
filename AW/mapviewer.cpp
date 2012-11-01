@@ -20,10 +20,14 @@ static const float MAX_ZOOM_SPEED = 1.0f / 100.0f;
 static const int MIN_WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
 
+static const int EDGE_SCROLL_MIN_HORI = TILE_WIDTH * 2;
+static const int EDGE_SCROLL_MIN_VERT = TILE_HEIGHT * 2;
+
 /***************************************************/
 
 MapViewer::MapViewer( Map& map ) :
-	m_map( map )
+	m_map( map ),
+	m_edgeScroll( false )
 {
 	m_mouse.first = false;
 	std::fill( m_dir.begin(), m_dir.end(), false );
@@ -31,7 +35,7 @@ MapViewer::MapViewer( Map& map ) :
 
 void MapViewer::update()
 {
-	if ( m_mouse.first || std::find( m_dir.begin(), m_dir.end(), true ) != m_dir.end() ) 
+	if ( m_mouse.first || std::find( m_dir.begin(), m_dir.end(), true ) != m_dir.end() || m_edgeScroll ) 
 	{
 		const sf::Vector2f& curPos = getPosition();
 		reposition( curPos.x - m_move.x, curPos.y - m_move.y );
@@ -81,7 +85,7 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 	{
 	case sf::Keyboard::W:
 	case sf::Keyboard::Up:
-		if ( !m_mouse.first )
+		if ( !m_mouse.first && !m_edgeScroll )
 		{
 			if ( !m_dir[ DOWN ]  )
 			{
@@ -98,7 +102,7 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 
 	case sf::Keyboard::S:
 	case sf::Keyboard::Down:
-		if ( !m_mouse.first )
+		if ( !m_mouse.first && !m_edgeScroll  )
 		{
 			if ( !m_dir[ UP ] )
 			{
@@ -115,7 +119,7 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 
 	case sf::Keyboard::A:
 	case sf::Keyboard::Left:
-		if ( !m_mouse.first )
+		if ( !m_mouse.first && !m_edgeScroll  )
 		{
 			if ( !m_dir[ RIGHT ] )
 			{
@@ -132,7 +136,7 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 
 	case sf::Keyboard::D:
 	case sf::Keyboard::Right:
-		if ( !m_mouse.first )
+		if ( !m_mouse.first && !m_edgeScroll  )
 		{
 			if ( !m_dir[ LEFT ] )
 			{
@@ -243,6 +247,7 @@ void MapViewer::onMouseEntered()
 void MapViewer::onMouseLeft()
 {
 	m_mouse.first = false;
+	m_edgeScroll = false;
 }
 
 void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
@@ -251,6 +256,25 @@ void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 	{
 		m_move.x = std::min( MAX_MOVE_SPEED, ( ev.x - m_mouse.second.x ) / MOVE_SPEED_MULTIPLIER );
 		m_move.y = std::min( MAX_MOVE_SPEED, ( ev.y - m_mouse.second.y ) / MOVE_SPEED_MULTIPLIER );
+	}
+	// Edge scroll -- can't move while key is active
+	else if ( std::find( m_dir.begin(), m_dir.end(), true ) == m_dir.end() )
+	{
+		if ( ev.x < EDGE_SCROLL_MIN_HORI )
+			m_move.x = -MAX_MOVE_SPEED;
+		else if ( SCREEN_WIDTH - EDGE_SCROLL_MIN_HORI < ev.x )
+			m_move.x = MAX_MOVE_SPEED;
+		else
+			m_move.x = 0.0f;
+
+		if ( ev.y < EDGE_SCROLL_MIN_HORI )
+			m_move.y = -MAX_MOVE_SPEED;
+		else if ( SCREEN_HEIGHT - EDGE_SCROLL_MIN_HORI < ev.y )
+			m_move.y = MAX_MOVE_SPEED;
+		else
+			m_move.y = 0.0f;
+
+		m_edgeScroll = !( m_move.x == 0.0f && m_move.y == 0.0f );
 	}
 }
 

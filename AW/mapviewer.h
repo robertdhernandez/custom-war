@@ -18,8 +18,8 @@ namespace cw
 		void update();
 
 	private:
-		void zoom( float rate, bool inward );
 		void reposition( float x, float y );
+		void zoom( float rate, bool inward );
 
 		void onKeyPressed( const sf::Event::KeyEvent& );
 		void onKeyReleased( const sf::Event::KeyEvent& );
@@ -38,6 +38,7 @@ namespace cw
 
 		// Right-mouse camera movement
 		std::pair< bool, sf::Vector2i > m_mouse;
+		bool m_edgeScroll;
 
 		// Non-mouse movement
 		std::array< bool, 4 > m_dir;
