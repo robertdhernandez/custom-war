@@ -15,7 +15,7 @@ static const float MAX_MOVE_SPEED = 7.5f;
 static const float MOVE_SPEED_MULTIPLIER = 10.0f;
 
 static const float MIN_ZOOM_FACTOR = 1.0f;
-static const float MAX_ZOOM_FACTOR = 0.75f;
+static const float MAX_ZOOM_FACTOR = 0.5f;
 static const float ZOOM_SPEED_MULTIPLIER = 50.0f;
 static const float MOUSE_ZOOM_MULTIPLIER = 2.0f;
 
@@ -65,6 +65,44 @@ inline sf::Vector2f scalePos( sf::Vector2i origin, const sf::Vector2f& oldBounds
 	return pos;
 }
 
+template< typename T >
+std::ostream& operator<<( std::ostream& s, const sf::Vector2< T >& v )
+{
+	s << "(" << v.x << "," << v.y << ")";
+	return s;
+}
+
+template< typename T >
+sf::Vector2< T > operator*( const sf::Vector2< T >& a, const sf::Vector2< T >& b )
+{
+	return sf::Vector2< T >( a.x * b.x, a.y * b.y );
+}
+
+template< typename T >
+sf::Vector2< T >& operator*=( sf::Vector2< T >& a, const sf::Vector2< T >& b )
+{
+	a = a * b;
+	return a;
+}
+
+template< typename T >
+sf::Vector2< T > operator/( const sf::Vector2< T>& a, const sf::Vector2f& b )
+{
+	return sf::Vector2< T >( a.x / b.x, a.y / b.y );
+}
+
+template< typename T >
+std::ostream& operator<<( std::ostream& s, const sf::Rect< T >& r )
+{
+	s << "(" << r.left << ", " << r.top << ", " << r.width << ", " << r.height << ")";
+	return s;
+}
+
+inline float distance( const sf::Vector2f& a, const sf::Vector2f& b )
+{
+	return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
+}
+
 /***************************************************/
 
 MapViewer::MapViewer( Map& map ) :
@@ -109,17 +147,24 @@ void MapViewer::zoom( float rate, sf::Vector2i center )
 
 	if ( scaleFactor != getScale().x )
 	{
-		sf::FloatRect viewRect( -getPosition(), calculateScreenDim( getScale().x ) );
-		adjustToCenter( viewRect, getCenter( viewRect ) );
+		sf::Vector2f pos = -getPosition(), centerPos( center.x / getScale().x, center.y / getScale().x );
+		sf::Vector2f oldDim = calculateScreenDim( getScale().x ), newDim = calculateScreenDim( scaleFactor );
 
-		int dir = getZoomDir( rate );
+		sf::Vector2f L = ( newDim - oldDim ) / 2.0f;
+		sf::Vector2f P2 = L + ( oldDim - centerPos );
+		float dist = distance( centerPos, P2 );
 
-		sf::Vector2f fcenter = scalePos( center, calculateScreenDim( scaleFactor ), calculateScreenDim( getScale().x ) );
-		fcenter.x /= ( TILE_WIDTH * scaleFactor * dir );
-		fcenter.y /= ( TILE_HEIGHT * scaleFactor * dir );
+		sf::Vector2f P2final;
+		P2final.x = std::sqrt( std::pow( dist, 2 ) - std::pow( P2.x - centerPos.x, 2 ) ) * -rate;// * ( TILE_WIDTH / scaleFactor );
+		P2final.y = std::sqrt( std::pow( dist, 2 ) - std::pow( P2.y - centerPos.y, 2 ) ) * -rate;// * ( TILE_HEIGHT / scaleFactor );
+
+		sf::Vector2f ratio = sf::Vector2f( SCREEN_WIDTH / ( TILE_WIDTH / scaleFactor ), SCREEN_HEIGHT / ( TILE_HEIGHT / scaleFactor ) );
+		P2final *= ratio;
+
+		pos += P2final;
 
 		setScale( scaleFactor, scaleFactor );
-		reposition( viewRect.left + fcenter.x, viewRect.top + fcenter.y );
+		reposition( pos.x, pos.y );
 	}
 }
 
