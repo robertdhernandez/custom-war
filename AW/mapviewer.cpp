@@ -6,8 +6,6 @@
 #include <algorithm>
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include <iostream>
-
 namespace cw
 {
 
@@ -31,76 +29,22 @@ enum
 	ZOOM_OUT = -1
 };
 
-inline int getZoomDir( float f )
-{
-	return ( f < 0 ) ? ZOOM_OUT : ZOOM_IN;
-}
-
 inline sf::Vector2f calculateScreenDim( float scale )
 {
 	scale = 1 / scale;
 	return sf::Vector2f( SCREEN_WIDTH * scale, SCREEN_HEIGHT * scale );
 }
 
-inline sf::Vector2f getCenter( const sf::FloatRect& rect )
-{
-	return sf::Vector2f( rect.left + ( rect.width / 2 ), rect.top + ( rect.height / 2 ) );
-}
-
-inline void adjustToCenter( sf::FloatRect& rect, const sf::Vector2f& pos )
-{
-	rect.left = pos.x - ( rect.width / 2.0f );
-	rect.top = pos.y - ( rect.height / 2.0f );
-}
-
-inline sf::Vector2f scalePos( sf::Vector2i origin, const sf::Vector2f& oldBounds, const sf::Vector2f& newBounds )
-{
-	sf::Vector2f ratio;
-	ratio.x = newBounds.x / oldBounds.x;
-	ratio.y = newBounds.y / oldBounds.y;
-
-	sf::Vector2f pos;
-	pos.x = origin.x * ratio.x;
-	pos.y = origin.y * ratio.y;
-	return pos;
-}
-
 template< typename T >
-std::ostream& operator<<( std::ostream& s, const sf::Vector2< T >& v )
-{
-	s << "(" << v.x << "," << v.y << ")";
-	return s;
-}
-
-template< typename T >
-sf::Vector2< T > operator*( const sf::Vector2< T >& a, const sf::Vector2< T >& b )
+const sf::Vector2< T > operator*( const sf::Vector2< T >& a, const sf::Vector2< T >& b )
 {
 	return sf::Vector2< T >( a.x * b.x, a.y * b.y );
 }
 
 template< typename T >
-sf::Vector2< T >& operator*=( sf::Vector2< T >& a, const sf::Vector2< T >& b )
-{
-	a = a * b;
-	return a;
-}
-
-template< typename T >
-sf::Vector2< T > operator/( const sf::Vector2< T >& a, const sf::Vector2f& b )
+const sf::Vector2< T > operator/( const sf::Vector2< T >& a, const sf::Vector2< T >& b )
 {
 	return sf::Vector2< T >( a.x / b.x, a.y / b.y );
-}
-
-template< typename T >
-std::ostream& operator<<( std::ostream& s, const sf::Rect< T >& r )
-{
-	s << "(" << r.left << ", " << r.top << ", " << r.width << ", " << r.height << ")";
-	return s;
-}
-
-inline float distance( const sf::Vector2f& a, const sf::Vector2f& b )
-{
-	return std::sqrt( std::pow( a.x - b.x, 2 ) + std::pow( a.y - b.y, 2 ) );
 }
 
 /***************************************************/
