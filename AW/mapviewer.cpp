@@ -155,7 +155,8 @@ void MapViewer::zoom( float rate )
 		sf::Vector2f oldCenter( ( center.x * oldDim.x ) / SCREEN_WIDTH, ( center.y * oldDim.y ) / SCREEN_HEIGHT );
 		sf::Vector2f newCenter( oldCenter.x * ( newDim.x / oldDim.x ), oldCenter.y * ( newDim.y / oldDim.y ) );
 
-		sf::Vector2f newPos = ( pos * newCenter ) / oldCenter;
+		sf::Vector2f offset = newCenter - oldCenter;
+		sf::Vector2f newPos = ( pos * newCenter ) / oldCenter + offset;
 
 		setScale( scaleFactor, scaleFactor );
 		reposition( newPos.x, newPos.y );
