@@ -28,7 +28,7 @@ LevelEditor::LevelEditor() :
 	addMouseListener( *this );
 	addMouseListener( m_viewer );
 
-	createMap( 20, 15 );
+	createMap( 100, 100 );
 	setCurrentTile( "plains" );
 	con::levelEditorCommands( Console::getSingleton() );
 }

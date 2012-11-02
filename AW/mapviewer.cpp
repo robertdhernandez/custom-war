@@ -86,7 +86,7 @@ sf::Vector2< T >& operator*=( sf::Vector2< T >& a, const sf::Vector2< T >& b )
 }
 
 template< typename T >
-sf::Vector2< T > operator/( const sf::Vector2< T>& a, const sf::Vector2f& b )
+sf::Vector2< T > operator/( const sf::Vector2< T >& a, const sf::Vector2f& b )
 {
 	return sf::Vector2< T >( a.x / b.x, a.y / b.y );
 }
@@ -123,7 +123,7 @@ void MapViewer::update()
 	}
 
 	if ( std::get< 0 >( m_zoom ) ) 
-		zoom( std::get< 1 >( m_zoom ) / ZOOM_SPEED_MULTIPLIER, sf::Vector2i( SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 ) );
+		zoom( std::get< 1 >( m_zoom ) / ZOOM_SPEED_MULTIPLIER );
 }
 
 void MapViewer::reposition( float x, float y )
@@ -137,7 +137,7 @@ void MapViewer::reposition( float x, float y )
 	setPosition( -pos );
 }
 
-void MapViewer::zoom( float rate, sf::Vector2i center )
+void MapViewer::zoom( float rate )
 {
 	sf::Vector2f scale = getScale();
 	scale.x = std::max( MAX_ZOOM_FACTOR, std::max( 1.0f * SCREEN_WIDTH / ( m_map.getWidth() * TILE_WIDTH ), std::min( MIN_ZOOM_FACTOR, scale.x + rate ) ) );
@@ -147,24 +147,18 @@ void MapViewer::zoom( float rate, sf::Vector2i center )
 
 	if ( scaleFactor != getScale().x )
 	{
-		sf::Vector2f pos = -getPosition(), centerPos( center.x / getScale().x, center.y / getScale().x );
-		sf::Vector2f oldDim = calculateScreenDim( getScale().x ), newDim = calculateScreenDim( scaleFactor );
+		sf::Vector2i center( SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 );
 
-		sf::Vector2f L = ( newDim - oldDim ) / 2.0f;
-		sf::Vector2f P2 = L + ( oldDim - centerPos );
-		float dist = distance( centerPos, P2 );
+		sf::Vector2f pos = -getPosition();
+		sf::Vector2f oldDim = calculateScreenDim( 1.0f / getScale().x ), newDim = calculateScreenDim( 1.0f / scaleFactor );
 
-		sf::Vector2f P2final;
-		P2final.x = std::sqrt( std::pow( dist, 2 ) - std::pow( P2.x - centerPos.x, 2 ) ) * -rate;// * ( TILE_WIDTH / scaleFactor );
-		P2final.y = std::sqrt( std::pow( dist, 2 ) - std::pow( P2.y - centerPos.y, 2 ) ) * -rate;// * ( TILE_HEIGHT / scaleFactor );
+		sf::Vector2f oldCenter( ( center.x * oldDim.x ) / SCREEN_WIDTH, ( center.y * oldDim.y ) / SCREEN_HEIGHT );
+		sf::Vector2f newCenter( oldCenter.x * ( newDim.x / oldDim.x ), oldCenter.y * ( newDim.y / oldDim.y ) );
 
-		sf::Vector2f ratio = sf::Vector2f( SCREEN_WIDTH / ( TILE_WIDTH / scaleFactor ), SCREEN_HEIGHT / ( TILE_HEIGHT / scaleFactor ) );
-		P2final *= ratio;
-
-		pos += P2final;
+		sf::Vector2f newPos = ( pos * newCenter ) / oldCenter;
 
 		setScale( scaleFactor, scaleFactor );
-		reposition( pos.x, pos.y );
+		reposition( newPos.x, newPos.y );
 	}
 }
 
@@ -358,7 +352,7 @@ void MapViewer::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 
 void MapViewer::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 {
-	zoom( ev.delta / ( ZOOM_SPEED_MULTIPLIER / MOUSE_ZOOM_MULTIPLIER ), sf::Vector2i( ev.x, ev.y ) );
+	zoom( ev.delta / ( ZOOM_SPEED_MULTIPLIER / MOUSE_ZOOM_MULTIPLIER ) );
 }
 
 /***************************************************/
