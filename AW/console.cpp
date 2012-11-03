@@ -122,7 +122,7 @@ void Console::execute( const std::string& line )
 	try
 	{
 		if ( find != m_cmds.end() )
-			(**find)( parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
+			(**find)( *this, parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
 		else
 			*this << con::setcerr << "Unknown command" << con::endl;
 	}
@@ -268,7 +268,7 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 
 /***************************************************/
 
-void con::Command::operator()( const Arguments& args )
+void con::Command::operator()( Console& c, const Arguments& args )
 {
 	unsigned argReq = getMinArgs();
 	auto size = args.size();
@@ -282,7 +282,7 @@ void con::Command::operator()( const Arguments& args )
 		throw std::runtime_error( ss.str() );
 	}
 	else
-		execute( args );
+		execute( c, args );
 }
 
 /***************************************************/

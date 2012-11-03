@@ -35,9 +35,8 @@ static class HELP : public con::Command
 		c << setcinfo << "Displays the list of console commands" << endl;
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
-		Console& c = Console::getSingleton();
 		const auto& cmds = c.getCommands();
 
 		c << setcinfo << "Commands:" << endl;
@@ -63,9 +62,9 @@ static class CLEAR : public Command
 		c << "Clears the console" << endl;
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
-		Console::getSingleton().clearHistory();
+		c.clearHistory();
 	}
 } CLEAR;
 
@@ -109,7 +108,7 @@ static class LE_CREATE : public con::Command
 		c << setcinfo << "\theight: height (in tiles) of the new map" << endl;
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
 		getLevelEditor().createMap( std::stoi( args[ 0 ] ), std::stoi( args[ 1 ] ) );
 	}
@@ -131,7 +130,7 @@ static class LE_RESIZE : public con::Command
 	{
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
 		getLevelEditor().resizeMap( std::stoi( args[ 0 ] ), std::stoi( args[ 1 ] ) );
 	}
@@ -153,7 +152,7 @@ static class LE_SETTILE : public con::Command
 	{
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
 		getLevelEditor().setCurrentTile( args[ 0 ] );
 	}
@@ -175,10 +174,11 @@ static class LE_SAVE : public con::Command
 	{
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
+		std::string name = args[ 0 ] + ".cwmap";
 		getLevelEditor().save( args[ 0 ] + ".cwmap" );
-		Console::getSingleton() << con::setcinfo << "Saved to " << name << con::endl;
+		c << con::setcinfo << "Saved to " << name << con::endl;
 	}
 } LE_SAVE;
 
@@ -198,11 +198,11 @@ static class LE_LOAD : public con::Command
 	{
 	}
 
-	void execute( const Arguments& args )
+	void execute( Console& c, const Arguments& args )
 	{
-		std::string name = args[ 0 ] + ".cwmap" );
-		getLevelEditor().load( args[ 0 ] + ".cwmap" );
-		Console::getSingleton() << con::setcinfo << "Saved to " << name << con::endl;
+		std::string name = args[ 0 ] + ".cwmap";
+		getLevelEditor().load( name );
+		c << con::setcinfo << "Saved to " << name << con::endl;
 	}
 } LE_LOAD;
 

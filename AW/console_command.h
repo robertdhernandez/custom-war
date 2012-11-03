@@ -18,7 +18,7 @@ namespace cw
 			bool operator<( const Command& c ) const { return getName() < c.getName(); }
 
 			typedef std::vector< std::string > Arguments;
-			void operator()( const Arguments& );
+			void operator()( Console&, const Arguments& );
 
 			virtual std::string getName() const = 0;
 
@@ -26,7 +26,7 @@ namespace cw
 			virtual unsigned getMinArgs() const = 0;
 
 			virtual void help( Console& ) = 0;
-			virtual void execute( const Arguments& ) = 0;
+			virtual void execute( Console&, const Arguments& ) = 0;
 
 		};
 	}
