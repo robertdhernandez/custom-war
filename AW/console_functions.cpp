@@ -177,8 +177,8 @@ static class LE_SAVE : public con::Command
 	void execute( Console& c, const Arguments& args )
 	{
 		std::string name = args[ 0 ] + ".cwmap";
-		getLevelEditor().save( args[ 0 ] + ".cwmap" );
-		c << con::setcinfo << "Saved to " << name << con::endl;
+		getLevelEditor().save( name );
+		c << con::setcinfo << "Loaded " << name << con::endl;
 	}
 } LE_SAVE;
 

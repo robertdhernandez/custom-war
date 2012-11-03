@@ -15,6 +15,8 @@ namespace cw
 static const int MIN_WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
 
+/***************************************************/
+
 class WidthTooSmallException : public std::exception
 {
 public:
@@ -37,7 +39,23 @@ public:
 	HeightTooSmallException()
 	{
 		std::stringstream ss;
-		ss << "Height must be at least " << MIN_WIDTH << " tiles";
+		ss << "Height must be at least " << MIN_HEIGHT << " tiles";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
+
+class MapPositionOutOfBoundsException : public std::exception
+{
+public:
+	MapPositionOutOfBoundsException( int x, int y )
+	{
+		std::ostringstream ss;
+		ss << "(" << x << "," << y << ") is out of map bounds";
 		m_err = ss.str();
 	}
 
@@ -112,10 +130,7 @@ const TileBase& Map::getTile( int x, int y ) const
 {
 	if ( isInBounds( x, y ) )
 		return *m_tiles[ y * m_width + x ];
-
-	std::ostringstream ss;
-	ss << "(" << x << "," << y << ") is out of map bounds";
-	throw std::out_of_range( ss.str() );
+	throw MapPositionOutOfBoundsException( x, y );
 }
 
 std::unique_ptr< TileBase >* Map::getTilePtr( int x, int y )
@@ -144,9 +159,7 @@ void Map::setTile( std::unique_ptr< TileBase > tile )
 	}
 	catch ( ... )
 	{
-		std::ostringstream ss;
-		ss << "(" << pos.x << "," << pos.y << ") is out of map bounds";
-		throw std::out_of_range( ss.str() );
+		throw MapPositionOutOfBoundsException( pos.x, pos.y );
 	}
 }
 
