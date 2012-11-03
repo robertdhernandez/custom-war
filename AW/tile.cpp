@@ -9,6 +9,8 @@
 #include "team.h"
 #include "movement.h"
 
+#include "datastream.h"
+
 #include <functional>
 #include <unordered_map>
 
@@ -17,6 +19,12 @@
 
 namespace cw
 {
+
+enum
+{
+	ID_PLAINS = 0,
+	ID_ROAD = 1
+};
 
 /***************************************************/
 // Factory function
@@ -55,6 +63,24 @@ bool isValidTileType( const std::string& type )
 
 /***************************************************/
 //	TileBase
+
+std::unique_ptr< TileBase > TileBase::generate( serial::InputDatastream& ds, int x, int y )
+{
+	char type;
+	ds >> type;
+
+	std::unique_ptr< TileBase > ptr;
+
+	switch( type )
+	{
+	case ID_PLAINS:		ptr.reset( new tile::Plains( x, y ) ); break;
+	case ID_ROAD:		ptr.reset( new tile::Road( x, y ) ); break;
+	default:			throw std::exception( "Unknown tile type" );
+	}
+
+	ptr->read( ds );
+	return ptr;
+}
 
 void TileBase::autoTile()
 {
@@ -130,6 +156,16 @@ sf::Vector2i tile::Plains::getTextureOffset() const
 	return sf::Vector2i( 1, 1 );
 }
 
+void tile::Plains::read( serial::InputDatastream& )
+{
+}
+
+void tile::Plains::write( serial::OutputDatastream& ds ) const
+{
+	char id = ID_PLAINS;
+	ds << id;
+}
+
 /***************************************************/
 //	Road
 
@@ -180,6 +216,16 @@ sf::Vector2i tile::Road::getTextureOffset() const
 		return sf::Vector2i( 25, 1 );
 	else // Default: Up-down
 		return sf::Vector2i( 25, 0 );
+}
+
+void tile::Road::read( serial::InputDatastream& )
+{
+}
+
+void tile::Road::write( serial::OutputDatastream& ds ) const
+{
+	char id = ID_ROAD;
+	ds << id;
 }
 
 /***************************************************/

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "serializable.h"
 #include "texture_loader.h"
 
 #include <array>
@@ -29,11 +30,18 @@ namespace cw
 	//
 	// See also: "texture_loader.h" for more virtual functions
 	//-------------------------------------------------------------------------
-	class TileBase : public sf::Drawable, protected TextureLoader, TextureOffset, sf::NonCopyable
+	class TileBase : 
+		public sf::Drawable, 
+		public serial::Serializable, 
+		protected TextureLoader, 
+		private TextureOffset, 
+		private sf::NonCopyable
 	{
 	public:
 		TileBase( int x, int y ) : m_pos( x, y ), m_unit( nullptr ) {}
-		virtual ~TileBase() {}		
+		virtual ~TileBase() {}
+
+		static std::unique_ptr< TileBase > generate( serial::InputDatastream&, int x, int y );
 
 		bool isEmpty() const { return m_unit == nullptr; }
 		const sf::Vector2i& getPos() const { return m_pos; }

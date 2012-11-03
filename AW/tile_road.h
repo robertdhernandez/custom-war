@@ -12,6 +12,10 @@ namespace cw
 			Road( int x, int y );
 
 		private:
+			void read( serial::InputDatastream& );
+			void write( serial::OutputDatastream& ) const;
+
+		private:
 			int getMovementCost( Movement ) const;
 			int getDefenseRating() const;
 

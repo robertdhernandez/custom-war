@@ -3,6 +3,7 @@
 #include "tile_plain.h"
 
 #include "global.h"
+#include "datastream.h"
 #include "texture_manager.h"
 
 #include <sstream>
@@ -13,6 +14,38 @@ namespace cw
 
 static const int MIN_WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 static const int MIN_HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
+
+class WidthTooSmallException : public std::exception
+{
+public:
+	WidthTooSmallException()
+	{
+		std::stringstream ss;
+		ss << "Width must be at least " << MIN_WIDTH << " tiles";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
+
+class HeightTooSmallException : public std::exception
+{
+public:
+	HeightTooSmallException()
+	{
+		std::stringstream ss;
+		ss << "Height must be at least " << MIN_WIDTH << " tiles";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
 
 /***************************************************/
 
@@ -26,9 +59,9 @@ Map::Map() :
 void Map::create( int width, int height )
 {
 	if ( width < MIN_WIDTH )
-		throw std::logic_error( "width must be at least 20 tiles" );
+		throw WidthTooSmallException();
 	if ( height < MIN_HEIGHT )
-		throw std::logic_error( "height must be at least 15 tiles" );
+		throw HeightTooSmallException();
 
 	m_width = width;
 	m_height = height;
@@ -42,9 +75,9 @@ void Map::create( int width, int height )
 void Map::resize( int width, int height )
 {
 	if ( width < MIN_WIDTH )
-		throw std::logic_error( "width must be at least 20 tiles" );
+		throw WidthTooSmallException();
 	if ( height < MIN_HEIGHT )
-		throw std::logic_error( "height must be at least 15 tiles" );
+		throw HeightTooSmallException();
 
 	auto oldTiles = std::move( m_tiles );
 	std::swap( m_width, width );
@@ -119,4 +152,24 @@ void Map::setTile( std::unique_ptr< TileBase > tile )
 
 /***************************************************/
 
+void Map::read( serial::InputDatastream& ds )
+{
+	ds >> m_width >> m_height >> m_players;
+	m_tiles.reset( new std::unique_ptr< TileBase >[ m_width * m_height ] );
+
+	for ( int y = 0; y < m_height; y++ )
+		for ( int x = 0; x < m_width; x++ )
+			setTile( TileBase::generate( ds, x, y ) );
 }
+
+void Map::write( serial::OutputDatastream& ds ) const
+{
+	ds << m_width << m_height << m_players;
+	for ( int y = 0; y < m_height; y++ )
+		for ( int x = 0; x < m_width; x++ )
+			ds << *m_tiles[ y * m_width + x ];
+}
+
+/***************************************************/
+
+} // namespace cw

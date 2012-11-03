@@ -107,6 +107,7 @@
     <ClInclude Include="movement.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="resource_manager.h" />
+    <ClInclude Include="serializable.h" />
     <ClInclude Include="skirmish.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="state_leveleditor.h" />

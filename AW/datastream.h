@@ -1,5 +1,7 @@
 #pragma once
 
+#include "serializable.h"
+
 #include <string>
 #include <sstream>
 #include <type_traits>
@@ -13,26 +15,10 @@ namespace cw
 		public:
 			virtual ~InputDatastream() {}
 
-			template< typename T >
-			InputDatastream& operator>>( T& t )
-			{
-				static_assert( std::is_integral< T >::value || std::is_floating_point< T >::value, "Type must be an integral type or std::string" );
-				read( (char*) &t, sizeof( T ) );
-				return *this;
-			}
-
-			template<>
-			InputDatastream& operator>>( std::string& str )
-			{
-				char c;
-				read( &c, sizeof( char ) );
-				while ( c != 0 )
-				{
-					str.push_back( c );
-					read( &c, sizeof( char ) );
-				}
-				return *this;
-			}
+			InputDatastream& operator>>( char& t );
+			InputDatastream& operator>>( int& t );
+			InputDatastream& operator>>( std::string& str );
+			InputDatastream& operator>>( Serializable& s );
 
 		private:
 			virtual void read( char*, size_t ) = 0;
@@ -43,23 +29,10 @@ namespace cw
 		public:
 			virtual ~OutputDatastream() {}
 
-			template< typename T >
-			OutputDatastream& operator<<( T& t )
-			{
-				static_assert( std::is_integral< T >::value || std::is_floating_point< T >::value, "Type must be an integral type or std::string" );
-				write( (char*) &t, sizeof( T ) );
-				return *this;
-			}
-
-			template<>
-			OutputDatastream& operator<<( std::string& t )
-			{
-				for ( auto it = t.begin(); it != t.end(); ++it )
-					write( &*it, sizeof( char ) );
-				char c = 0; 
-				write( &c, sizeof( char ) );
-				return *this;
-			}
+			OutputDatastream& operator<<( char t );
+			OutputDatastream& operator<<( int t );
+			OutputDatastream& operator<<( const std::string& t );
+			OutputDatastream& operator<<( const Serializable& s );
 
 		private:
 			virtual void write( char*, size_t ) = 0;

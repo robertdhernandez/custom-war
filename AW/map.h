@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tile.h"
+#include "serializable.h"
 
 #include <string>
 #include <unordered_map>
@@ -12,7 +13,7 @@
 
 namespace cw
 {
-	class Map : sf::NonCopyable
+	class Map : public serial::Serializable, sf::NonCopyable
 	{
 	public:
 		Map();
@@ -32,6 +33,10 @@ namespace cw
 		const TileBase& getTile( int x, int y ) const;
 
 		void setTile( std::unique_ptr< TileBase > tile );
+
+	public:
+		void read( serial::InputDatastream& );
+		void write( serial::OutputDatastream& ) const;
 
 	private:
 		std::unique_ptr< TileBase >* getTilePtr( int x, int y );

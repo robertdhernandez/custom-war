@@ -20,8 +20,8 @@ namespace cw
 
 			void setCurrentTile( const std::string& tile );
 
-			MapViewer& getMapViewer() { return m_viewer; }
-			const MapViewer& getMapViewer() const { return m_viewer; }
+			void load( const std::string& );
+			void save( const std::string& ) const;
 
 		private:
 			void onKeyPressed( const sf::Event::KeyEvent& );

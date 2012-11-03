@@ -5,6 +5,9 @@
 #include "console.h"
 #include "console_functions.h"
 
+#include "datastream.h"
+
+#include <fstream>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cw
@@ -17,6 +20,22 @@ static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, c
 	return sf::Vector2i( ( x - offset.x ) / ( TILE_WIDTH * scale.x ), ( y - offset.y ) / ( TILE_HEIGHT * scale.y ) );
 }
 
+class FileNotFoundException : public std::exception
+{
+public:
+	FileNotFoundException( const std::string& file )
+	{
+		std::ostringstream ss;
+		ss << "Failed to open file \"" << file << "\"";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
+
 /***************************************************/
 
 LevelEditor::LevelEditor() :
@@ -28,7 +47,7 @@ LevelEditor::LevelEditor() :
 	addMouseListener( *this );
 	addMouseListener( m_viewer );
 
-	createMap( 20, 15 );
+	createMap( SCREEN_WIDTH / TILE_WIDTH, SCREEN_HEIGHT / TILE_HEIGHT );
 	setCurrentTile( "plains" );
 	con::levelEditorCommands( Console::getSingleton() );
 }
@@ -53,6 +72,33 @@ void LevelEditor::setCurrentTile( const std::string& type )
 		throw std::runtime_error( "invalid tile type" );
 	m_curTile = type;
 	Console::getSingleton() << "Current tile set to: " << m_curTile << con::endl;
+}
+
+/***************************************************/
+
+void LevelEditor::load( const std::string& str )
+{
+	std::ifstream file( str );
+	if ( !file.is_open() )
+		throw FileNotFoundException( str );
+
+	serial::Datastream ds;
+	ds.input( file );
+	ds >> m_map;
+
+	m_viewer.setPosition( 0.0f, 0.0f );
+	m_viewer.setScale( 1.0f, 1.0f );
+}
+
+void LevelEditor::save( const std::string& str ) const
+{
+	std::ofstream file( str );
+	if ( !file.is_open() )
+		throw FileNotFoundException( str );
+
+	serial::Datastream ds;
+	ds << m_map;
+	ds.output( file );
 }
 
 /***************************************************/

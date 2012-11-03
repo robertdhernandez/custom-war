@@ -159,11 +159,60 @@ static class LE_SETTILE : public con::Command
 	}
 } LE_SETTILE;
 
+static class LE_SAVE : public con::Command
+{
+	std::string getName() const
+	{
+		return "le_save";
+	}
+
+	unsigned getMinArgs() const
+	{
+		return 1;
+	}
+
+	void help( Console& c )
+	{
+	}
+
+	void execute( const Arguments& args )
+	{
+		getLevelEditor().save( args[ 0 ] + ".cwmap" );
+		Console::getSingleton() << con::setcinfo << "Saved to " << name << con::endl;
+	}
+} LE_SAVE;
+
+static class LE_LOAD : public con::Command
+{
+	std::string getName() const
+	{
+		return "le_load";
+	}
+
+	unsigned getMinArgs() const
+	{
+		return 1;
+	}
+
+	void help( Console& c )
+	{
+	}
+
+	void execute( const Arguments& args )
+	{
+		std::string name = args[ 0 ] + ".cwmap" );
+		getLevelEditor().load( args[ 0 ] + ".cwmap" );
+		Console::getSingleton() << con::setcinfo << "Saved to " << name << con::endl;
+	}
+} LE_LOAD;
+
 void levelEditorCommands( Console& console )
 {
 	console.addCommand( LE_CREATE );
 	console.addCommand( LE_RESIZE );
 	console.addCommand( LE_SETTILE );
+	console.addCommand( LE_SAVE );
+	console.addCommand( LE_LOAD );
 }
 
 
