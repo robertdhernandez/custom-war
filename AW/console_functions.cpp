@@ -178,7 +178,7 @@ static class LE_SAVE : public con::Command
 	{
 		std::string name = args[ 0 ] + ".cwmap";
 		getLevelEditor().save( name );
-		c << con::setcinfo << "Loaded " << name << con::endl;
+		c << con::setcinfo << "Saved to " << name << con::endl;
 	}
 } LE_SAVE;
 
@@ -202,7 +202,7 @@ static class LE_LOAD : public con::Command
 	{
 		std::string name = args[ 0 ] + ".cwmap";
 		getLevelEditor().load( name );
-		c << con::setcinfo << "Saved to " << name << con::endl;
+		c << con::setcinfo << "Loaded " << name << con::endl;
 	}
 } LE_LOAD;
 
