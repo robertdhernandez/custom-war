@@ -79,6 +79,7 @@
     <ClCompile Include="console_functions.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="controller_general.h" />
+    <ClCompile Include="datastream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapviewer.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="controller_key.h" />
     <ClInclude Include="controller_mouse.h" />
     <ClInclude Include="controller_text.h" />
+    <ClInclude Include="datastream.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="listener.h" />
     <ClInclude Include="map.h" />
