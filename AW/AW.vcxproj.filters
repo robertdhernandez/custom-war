@@ -46,14 +46,8 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{1ab41bd6-0eca-43f5-be02-7e8bb52d216f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utility">
-      <UniqueIdentifier>{6675a6c4-aaab-4902-aa72-c29318e15935}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Serialization">
       <UniqueIdentifier>{d69c9dab-50fe-466d-9e57-e3658485d5c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Serialization">
-      <UniqueIdentifier>{d4e00096-54c6-48bf-8395-802529777d00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +87,6 @@
     <ClCompile Include="state_leveleditor.cpp">
       <Filter>Source Files\State</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="mapviewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,7 +94,10 @@
       <Filter>Header Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="datastream.cpp">
-      <Filter>Source Files\Serialization</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +180,12 @@
       <Filter>Header Files\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="serializable.h">
+      <Filter>Header Files\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="filestream.h">
+      <Filter>Header Files\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="packetstream.h">
       <Filter>Header Files\Serialization</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,7 @@
 #include "console.h"
 #include "console_functions.h"
 
-#include "datastream.h"
+#include "filestream.h"
 
 #include <fstream>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -17,24 +17,9 @@ namespace state
 
 static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale )
 {
-	return sf::Vector2i( ( x - offset.x ) / ( TILE_WIDTH * scale.x ), ( y - offset.y ) / ( TILE_HEIGHT * scale.y ) );
+	return sf::Vector2i( static_cast< int >( ( x - offset.x ) / ( TILE_WIDTH * scale.x ) ), 
+						 static_cast< int >( ( y - offset.y ) / ( TILE_HEIGHT * scale.y ) ) );
 }
-
-class FileNotFoundException : public std::exception
-{
-public:
-	FileNotFoundException( const std::string& file )
-	{
-		std::ostringstream ss;
-		ss << "Failed to open file \"" << file << "\"";
-		m_err = ss.str();
-	}
-
-	const char* what() const { return m_err.c_str(); }
-
-private:
-	std::string m_err;
-};
 
 /***************************************************/
 
@@ -69,7 +54,7 @@ void LevelEditor::resizeMap( int width, int height )
 void LevelEditor::setCurrentTile( const std::string& type )
 {
 	if ( !isValidTileType( type ) )
-		throw std::runtime_error( "invalid tile type" );
+		throw std::runtime_error( "Invalid tile type" );
 	m_curTile = type;
 	Console::getSingleton() << "Current tile set to: " << m_curTile << con::endl;
 }
@@ -78,13 +63,7 @@ void LevelEditor::setCurrentTile( const std::string& type )
 
 void LevelEditor::load( const std::string& str )
 {
-	std::ifstream file( str );
-	if ( !file.is_open() )
-		throw FileNotFoundException( str );
-
-	serial::Datastream ds;
-	ds.input( file );
-	ds >> m_map;
+	serial::InputFilestream( str ) >> m_map;
 
 	m_viewer.setPosition( 0.0f, 0.0f );
 	m_viewer.setScale( 1.0f, 1.0f );
@@ -92,13 +71,7 @@ void LevelEditor::load( const std::string& str )
 
 void LevelEditor::save( const std::string& str ) const
 {
-	std::ofstream file( str );
-	if ( !file.is_open() )
-		throw FileNotFoundException( str );
-
-	serial::Datastream ds;
-	ds << m_map;
-	ds.output( file );
+	serial::OutputFilestream( str ) << m_map;
 }
 
 /***************************************************/

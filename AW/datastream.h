@@ -1,15 +1,13 @@
 #pragma once
 
-#include "serializable.h"
-
 #include <string>
-#include <sstream>
-#include <type_traits>
 
 namespace cw
 {
 	namespace serial
 	{
+		class Serializable;
+
 		class InputDatastream
 		{
 		public:
@@ -35,21 +33,7 @@ namespace cw
 			OutputDatastream& operator<<( const Serializable& s );
 
 		private:
-			virtual void write( char*, size_t ) = 0;
-		};
-
-		class Datastream : public InputDatastream, public OutputDatastream
-		{
-		public:
-			void input( std::istream& );
-			void output( std::ostream& );
-
-		private:
-			void read( char*, size_t );
-			void write( char*, size_t );
-
-		private:
-			std::stringstream m_ss;
+			virtual void write( const char*, size_t ) = 0;
 		};
 	}
 }

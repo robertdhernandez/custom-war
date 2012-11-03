@@ -1,10 +1,29 @@
 #include "datastream.h"
+#include "filestream.h"
+#include "packetstream.h"
+
 #include "serializable.h"
 
 namespace cw
 {
 namespace serial
 {
+
+class FileNotFoundException : public std::exception
+{
+public:
+	FileNotFoundException( const std::string& file )
+	{
+		std::ostringstream ss;
+		ss << "Failed to open file \"" << file << "\"";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
 
 /***************************************************/
 
@@ -69,24 +88,70 @@ OutputDatastream& OutputDatastream::operator<<( const Serializable& s )
 
 /***************************************************/
 
-void Datastream::input( std::istream& s )
+InputFilestream::InputFilestream( const std::string& file ) :
+	m_file( file, std::ios_base::binary | std::ios_base::in )
 {
-	m_ss << s.rdbuf();
+	if ( !m_file.is_open() )
+		throw FileNotFoundException( file );
 }
 
-void Datastream::output( std::ostream& s )
+void InputFilestream::read( char* c, size_t size )
 {
-	s << m_ss.rdbuf();
+	m_file.read( c, size );
 }
 
-void Datastream::read( char* c, size_t size )
+OutputFilestream::OutputFilestream( const std::string& file ) :
+	m_file( file, std::ios_base::binary | std::ios_base::out )
 {
-	m_ss.read( c, size );
 }
 
-void Datastream::write( char* c, size_t size )
+void OutputFilestream::write( const char* c, size_t size )
 {
-	m_ss.write( c, size );
+	m_file.write( c, size );
+}
+
+/***************************************************/
+
+Packetstream::Packetstream() :
+	m_data( std::ios_base::binary | std::ios_base::in | std::ios_base::out )
+{
+}
+
+Packetstream::Packetstream( const sf::Packet& p ) :
+	m_data( std::ios_base::binary | std::ios_base::in | std::ios_base::out )
+{
+	*this = p;
+}
+
+Packetstream& Packetstream::operator=( const sf::Packet& p )
+{
+	m_data.str( "" );
+	m_data.clear();
+	m_data.write( (char*) p.getData(), p.getDataSize() );
+	return *this;
+}
+
+const sf::Packet Packetstream::toPacket() const
+{
+	sf::Packet packet;
+	std::string data = m_data.str();
+	packet.append( data.c_str(), data.size() );
+	return packet;
+}
+
+Packetstream::operator const sf::Packet() const
+{
+	return toPacket();
+}
+
+void Packetstream::read( char* c, std::size_t size )
+{
+	m_data.read( c, size );
+}
+
+void Packetstream::write( const char* c, std::size_t size )
+{
+	m_data.write( c, size );
 }
 
 /***************************************************/
