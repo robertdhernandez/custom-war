@@ -1,22 +1,26 @@
 #pragma once
 
-#include "netbase.h"
-
 #include <SFML/Network/TcpSocket.hpp>
 
 namespace cw
 {
+	namespace serial
+	{
+		class Packetstream;
+	}
+
 	namespace net
 	{
-		class Client : public virtual NetBase
+		class Client
 		{
 		public:
+			Client();
 			virtual ~Client() {}
 			void updateClient();
 
 			void connect( sf::IpAddress&, unsigned short port = 8888 );
-			void send( serial::Packetstream& );
-			void disconnect();
+			void sendToHost( serial::Packetstream& );
+			void disconnectClient();
 
 			bool isConnected() const;
 
@@ -27,6 +31,7 @@ namespace cw
 
 		private:
 			sf::TcpSocket m_socket;
+			bool m_init;
 		};
 	}
 }

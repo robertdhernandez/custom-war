@@ -2,6 +2,9 @@
 #include "console_command.h"
 #include "console_functions.h"
 
+#include "host.h"
+#include "client.h"
+
 #include "state_leveleditor.h"
 
 #include <SFML/Network/IpAddress.hpp>
@@ -81,7 +84,7 @@ LevelEditor& getLevelEditor()
 {
 	LevelEditor* ret = dynamic_cast< LevelEditor* >( &StateBase::getGlobal() );
 	if ( ret == nullptr )
-		throw std::runtime_error( "must be in level editor" );
+		throw std::runtime_error( "Must be in level editor" );
 	return *ret;
 }
 
@@ -216,6 +219,22 @@ void levelEditorCommands( Console& console )
 /***************************************************/
 // NETWORK COMMANDS
 
+net::Host& getHost()
+{
+	net::Host* ret = dynamic_cast< net::Host* >( &StateBase::getGlobal() );
+	if ( ret == nullptr )
+		throw std::runtime_error( "Host commands are currently unavailable" );
+	return *ret;
+}
+
+net::Client& getClient()
+{
+	net::Client* ret = dynamic_cast< net::Client* >( &StateBase::getGlobal() );
+	if ( ret == nullptr )
+		throw std::runtime_error( "Client commands are currently unavailable" );
+	return *ret;
+}
+
 static class CONNECT : public con::Command
 {
 	std::string getName() const
@@ -234,11 +253,7 @@ static class CONNECT : public con::Command
 
 	void execute( Console& c, const Arguments& args )
 	{
-		sf::IpAddress addr( args[ 0 ] );
-		if ( addr == sf::IpAddress::None )
-			throw std::exception( "Invalid IP address" );
-		c << con::setcinfo <<  "Attempting to connect to " << addr << con::endl;
-		getLevelEditor().connect( sf::IpAddress( args[ 0 ] ) );
+		getClient().connect( sf::IpAddress( args[ 0 ] ) );
 	}
 } CONNECT;
 
@@ -251,7 +266,7 @@ static class HOST : public con::Command
 
 	unsigned getMinArgs() const 
 	{
-		return 0;
+		return 1;
 	}
 
 	void help( Console& c )
@@ -260,8 +275,7 @@ static class HOST : public con::Command
 
 	void execute( Console& c, const Arguments& args )
 	{
-		c << con::setcinfo << "Hosting..." << con::endl;
-		getLevelEditor().host();
+		getHost().host( std::stoi( args[ 0 ] ) );
 	}
 } HOST;
 
@@ -283,7 +297,7 @@ static class DISCONNECT : public con::Command
 
 	void execute( Console& c, const Arguments& args )
 	{
-		getLevelEditor().disconnect();
+		//getLevelEditor().disconnect();
 	}
 } DISCONNECT;
 
@@ -291,7 +305,7 @@ void networkCommands( Console& c )
 {
 	c.addCommand( CONNECT );
 	c.addCommand( HOST );
-	c.addCommand( DISCONNECT );
+	//c.addCommand( DISCONNECT );
 }
 
 /***************************************************/

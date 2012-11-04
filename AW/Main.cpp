@@ -2,7 +2,7 @@
 
 #include "global.h"
 #include "console.h"
-#include "state_leveleditor.h"
+#include "state_multileveleditor.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -37,7 +37,7 @@ int main( int argc, char* argv[] )
 	{
 		ConsoleController cc;
 
-		std::unique_ptr< cw::state::LevelEditor > editor( new cw::state::LevelEditor() );
+		std::unique_ptr< cw::state::LevelEditor > editor( new cw::state::MultiplayerLevelEditor() );
 		cw::StateBase::setGlobal( std::move( editor ) );
 
 		sf::RenderWindow window;

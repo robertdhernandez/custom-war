@@ -212,11 +212,11 @@
     <ClInclude Include="host.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="netbase.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="client.h">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="state_multileveleditor.h">
+      <Filter>Header Files\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

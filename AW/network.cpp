@@ -35,15 +35,17 @@ Host::Host() :
 
 void Host::updateHost()
 {
+	if ( !isHosting() ) return;
+
 	// Search for new clients if not maxed out
 	if ( !isFull() )
 	{
 		sf::TcpSocket& connect = getFreeSocket( m_clients, m_maxClients );
 		if ( m_tcpListener.accept( connect ) == sf::Socket::Done )
 		{
-			onHostConnect( connect );			
-			Console::getSingleton() << con::setcinfo << "Established connection from " << connect.getRemoteAddress() << con::endl;
 			m_numClients++;
+			onHostConnect( connect );			
+			Console::getSingleton() << con::setcinfo << "Established connection from " << connect.getRemoteAddress() << " (" << (int) m_numClients << "/" << (int) m_maxClients << ")" << con::endl;
 		}
 
 		if ( isFull() )
@@ -58,13 +60,13 @@ void Host::updateHost()
 			switch ( m_clients[ i ].receive( ps ) )
 			{
 			case sf::Socket::Done:
-				send( ps );
+				sendToClients( ps );
 			break;
 
 			case sf::Socket::Disconnected:
-				Console::getSingleton() << con::setcinfo << "Client " << m_clients[ i ].getRemoteAddress() << " disconnected" << con::endl;
-				m_clients[ i ].disconnect();
 				m_numClients--;
+				Console::getSingleton() << con::setcinfo << "Client " << m_clients[ i ].getRemoteAddress() << " disconnected (" << (int) m_numClients << "/" << (int) m_maxClients << ")" << con::endl;
+				m_clients[ i ].disconnect();
 			break;
 			}
 		}
@@ -76,17 +78,22 @@ void Host::host( unsigned char clients, unsigned short port )
 		throw std::exception( "Hosting requires at least 2 clients" );
 
 	if ( isHosting() )
-		disconnect();
+		disconnectHost();
 
 	m_numClients = 0U;
 	m_maxClients = clients;
 
+	m_tcpListener.listen( port );
+
 	m_clients.reset( new sf::TcpSocket[ clients ] );
 	for ( unsigned i = 0; i < clients; i++ )
 		m_clients[ i ].setBlocking( false );
+
+	Console::getSingleton() << con::setcinfo << "Awaiting connections..." << con::endl;
+	onHost();
 }
 
-void Host::send( serial::Packetstream& ps )
+void Host::sendToClients( serial::Packetstream& ps )
 {
 	// Forwards the packet to every connected client
 	for ( unsigned i = 0; i < m_maxClients; i++ )
@@ -94,7 +101,7 @@ void Host::send( serial::Packetstream& ps )
 			m_clients[ i ].send( ps );
 }
 
-void Host::disconnect()
+void Host::disconnectHost()
 {
 	m_tcpListener.close();
 	m_clients.reset();
@@ -104,13 +111,34 @@ void Host::disconnect()
 
 /***************************************************/
 
+Client::Client() :
+	m_init( false )
+{
+	m_socket.setBlocking( false );
+}
+
 void Client::updateClient()
 {
 	if ( isConnected() )
 	{
 		serial::Packetstream ps;
-		if ( m_socket.receive( ps ) == sf::Socket::Done )
-			onClientRecieve( ps );
+		switch ( m_socket.receive( ps ) )
+		{
+		case sf::Socket::Done:
+			if ( m_init )
+				onClientRecieve( ps );
+			else
+			{
+				onClientConnect( ps );
+				m_init = true;
+			}
+		break;
+
+		case sf::Socket::Disconnected:
+			Console::getSingleton() << con::setcerr << "Lost connection to host" << con::endl;
+			m_socket.disconnect();
+		break;
+		}
 	}
 }
 
@@ -120,31 +148,45 @@ void Client::connect( sf::IpAddress& addr, unsigned short port )
 		throw std::exception( "Invalid IP address" );
 
 	if ( isConnected() ) 
-		disconnect();
+		disconnectClient();
 
-	if ( m_socket.connect( addr, port ) != sf::Socket::Done )
-		throw std::exception( "Failed to connect" );
+	m_init = false;
+	Console::getSingleton() << con::setcinfo << "Attempting to connect to " << addr << con::endl;
 
-	serial::Packetstream connect;
-	if ( m_socket.receive( connect ) != sf::Socket::Done )
-		throw std::exception( "Failed to synchronise" );
+	switch ( m_socket.connect( addr, port ) )
+	{
+	case sf::Socket::Done:
+		{
+			serial::Packetstream connect;
+			if ( m_socket.receive( connect ) == sf::Socket::Done )
+			{
+				onClientConnect( connect );
+				m_init = true;
+			}
+		}
+	break;
 
-	onClientConnect( connect );
+	case sf::Socket::NotReady: break;
+
+	default: throw std::exception( "Failed to connect" );
+	}
+		
 	Console::getSingleton() << con::setcinfo << "Succcessfully connected to " << addr << con::endl;
 }
 
-void Client::send( serial::Packetstream& ps )
+void Client::sendToHost( serial::Packetstream& ps )
 {
 	if ( !isConnected() )
 		throw std::exception( "Not connected to anyone" );
 	m_socket.send( ps );
 }
 
-void Client::disconnect()
+void Client::disconnectClient()
 {
 	Console::getSingleton() << con::setcinfo << "Disconnected from " << m_socket.getRemoteAddress() << con::endl;
 	m_socket.disconnect();
 	onClientDisconnect();
+	m_init = false;
 }
 
 bool Client::isConnected() const

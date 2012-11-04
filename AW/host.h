@@ -1,34 +1,37 @@
 #pragma once
 
-#include "netbase.h"
-
 #include <memory>
-
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
 namespace cw
 {
+	namespace serial
+	{
+		class Packetstream;
+	}
+
 	namespace net
 	{
-		class Host : public virtual NetBase
+		class Host
 		{
 		public:
 			Host();
-			virtual ~Host() {}
+			virtual ~Host() { disconnectHost(); }
 
 			void updateHost();
 
 			void host( unsigned char clients, unsigned short port = 8888 );
-			void send( serial::Packetstream& );
-			void disconnect();
+			void sendToClients( serial::Packetstream& );
+			void disconnectHost();
 
 			bool isHosting() const { return m_maxClients > 0; }
 			bool isFull() const { return isHosting() && m_numClients == m_maxClients; }
 
 		private:
+			virtual void onHost() = 0;
 			virtual void onHostConnect( sf::TcpSocket& ) = 0;
-			virtual void onHostDisconnect( sf::TcpSocket& ) = 0;
+			virtual void onHostDisconnect() = 0;
 
 		private:
 			sf::TcpListener m_tcpListener;

@@ -3,7 +3,9 @@
 #include "controller_mouse.h"
 #include "controller_text.h"
 
-#include "listener.h"
+#include "listener_key.h"
+#include "listener_mouse.h"
+#include "listener_text.h"
 
 #include <algorithm>
 #include <functional>
