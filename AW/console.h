@@ -1,6 +1,7 @@
 #pragma once
 
-#include "listener.h"
+#include "listener_key.h"
+#include "listener_text.h"
 #include "console_command.h"
 
 #include <vector>

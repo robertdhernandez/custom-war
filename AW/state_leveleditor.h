@@ -4,7 +4,8 @@
 #include "map.h"
 #include "mapviewer.h"
 
-#include "listener.h"
+#include "listener_key.h"
+#include "listener_mouse.h"
 
 namespace cw
 {

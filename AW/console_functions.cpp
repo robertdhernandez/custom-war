@@ -9,10 +9,6 @@ namespace cw
 namespace con
 {
 
-using std::bind;
-using std::make_pair;
-using namespace std::placeholders;
-
 typedef const std::vector< std::string >& Arguments;
 
 /***************************************************/

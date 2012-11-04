@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Serialization">
       <UniqueIdentifier>{d69c9dab-50fe-466d-9e57-e3658485d5c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility\Controller">
+      <UniqueIdentifier>{07879ac5-2caf-4ae7-a75a-0ed832cc5011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility\Listener">
+      <UniqueIdentifier>{aad4699f-5575-4884-a7bd-a63e8d5fd22a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,14 +96,14 @@
     <ClCompile Include="mapviewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="controller_general.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="datastream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controller_general.h">
+      <Filter>Header Files\Utility\Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,18 +161,6 @@
     <ClInclude Include="tile_road.h">
       <Filter>Header Files\Tile\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="controller_key.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="listener.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_mouse.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_text.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="mapviewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -187,6 +181,33 @@
     </ClInclude>
     <ClInclude Include="packetstream.h">
       <Filter>Header Files\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_key.h">
+      <Filter>Header Files\Utility\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_mouse.h">
+      <Filter>Header Files\Utility\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_text.h">
+      <Filter>Header Files\Utility\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="listener_general.h">
+      <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="listener_key.h">
+      <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="listener_mouse.h">
+      <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="listener_text.h">
+      <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="listener_packet.h">
+      <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="controller_packet.h">
+      <Filter>Header Files\Utility\Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

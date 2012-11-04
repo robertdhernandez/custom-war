@@ -1,6 +1,7 @@
 #pragma once
 
-#include "listener.h"
+#include "listener_key.h"
+#include "listener_mouse.h"
 
 #include <array>
 #include <tuple>
@@ -11,7 +12,11 @@ namespace cw
 {
 	class Map;
 
-	class MapViewer : public sf::Drawable, public sf::Transformable, public util::KeyListener, public util::MouseListener
+	class MapViewer : 
+		public sf::Drawable, 
+		public sf::Transformable, 
+		public util::KeyListener, 
+		public util::MouseListener
 	{
 	public:
 		MapViewer( Map& );
