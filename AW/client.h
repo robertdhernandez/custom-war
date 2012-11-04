@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tuple>
+#include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
 namespace cw
@@ -23,6 +25,7 @@ namespace cw
 			void disconnectClient();
 
 			bool isConnected() const;
+			bool isConnecting() const;
 
 		private:
 			virtual void onClientConnect( serial::Packetstream& ) = 0;
@@ -31,7 +34,7 @@ namespace cw
 
 		private:
 			sf::TcpSocket m_socket;
-			bool m_init;
+			std::tuple< int, sf::IpAddress, unsigned short > m_connection;
 		};
 	}
 }
