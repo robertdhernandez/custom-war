@@ -34,7 +34,7 @@ namespace cw
 
 		private:
 			sf::TcpSocket m_socket;
-			std::tuple< int, sf::IpAddress, unsigned short > m_connection;
+			int m_state;
 		};
 	}
 }

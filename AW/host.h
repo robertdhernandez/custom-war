@@ -36,7 +36,6 @@ namespace cw
 		private:
 			sf::TcpListener m_tcpListener;
 			std::unique_ptr< sf::TcpSocket[] > m_clients;
-			sf::TcpSocket* m_nextClient;
 			unsigned char m_numClients, m_maxClients;
 		};
 	}

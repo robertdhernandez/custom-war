@@ -14,18 +14,9 @@ inline bool isSocketConnected( const sf::TcpSocket& socket )
 	return socket.getRemoteAddress() != sf::IpAddress::None;
 }
 
-inline sf::TcpSocket* getFreeSocket( std::unique_ptr< sf::TcpSocket[] >& list, unsigned char size )
-{
-	for ( unsigned i = 0; i < size; i++ )
-		if ( !isSocketConnected( list[ i ] ) )
-			return &list[ i ];
-	return nullptr;
-}
-
 /***************************************************/
 
 Host::Host() :
-	m_nextClient( nullptr ),
 	m_numClients( 0U ),
 	m_maxClients( 0U )
 {
@@ -36,37 +27,10 @@ void Host::updateHost()
 {
 	if ( !isHosting() ) return;
 
-	// Search for new clients if not maxed out
-	if ( !isFull() )
-	{
-		sf::TcpSocket& connect = *m_nextClient;
-		switch ( m_tcpListener.accept( connect ) )
-		{
-		case sf::Socket::Done:
-			m_numClients++;
-			onHostConnect( connect );			
-			Console::getSingleton() << con::setcinfo << "[Host] Established connection from " << connect.getRemoteAddress() << " (" << (int) m_numClients << "/" << (int) m_maxClients << ")" << con::endl;
-			m_nextClient = getFreeSocket( m_clients, m_maxClients );
-		break;
-
-		case sf::Socket::NotReady: break;
-
-		case sf::Socket::Disconnected:
-			Console::getSingleton() << con::setcinfo << "[Host] Client " << connect.getRemoteAddress() << " disconnected while connecting"  << con::endl;
-		break;
-
-		case sf::Socket::Error:
-			Console::getSingleton() << con::setcinfo << "[Host] Client " << connect.getRemoteAddress() << " had an error while connecting"  << con::endl;
-		break;
-		}
-
-		if ( isFull() )
-			Console::getSingleton() << con::setcinfo << "[Host] Note: Server is now full -- no longer accepting connections" << con::endl;
-	}
-
-	// Get updates from clients
 	for ( unsigned i = 0; i < m_maxClients; i++ )
-		if ( &m_clients[ i ] != m_nextClient && isSocketConnected( m_clients[ i ] ) )
+	{
+		sf::TcpSocket& client = m_clients[ i ];
+		if ( isSocketConnected( client ) )
 		{
 			serial::Packetstream ps;
 			switch ( m_clients[ i ].receive( ps ) )
@@ -82,6 +46,16 @@ void Host::updateHost()
 			break;
 			}
 		}
+		else if ( m_tcpListener.accept( client ) == sf::Socket::Done )
+		{
+			m_numClients++;
+			onHostConnect( client );			
+			Console::getSingleton() << con::setcinfo << "[Host] Established connection from " << client.getRemoteAddress() << " (" << (int) m_numClients << "/" << (int) m_maxClients << ")" << con::endl;
+
+			if ( isFull() )
+				Console::getSingleton() << con::setcinfo << "[Host] Note: Server is now full -- no longer accepting connections" << con::endl;
+		}
+	}
 }
 
 void Host::host( unsigned char clients, unsigned short port )
@@ -100,9 +74,9 @@ void Host::host( unsigned char clients, unsigned short port )
 	m_clients.reset( new sf::TcpSocket[ clients ] );
 	for ( unsigned i = 0; i < clients; i++ )
 		m_clients[ i ].setBlocking( false );
-	m_nextClient = &m_clients[ 0 ];
-
+	
 	Console::getSingleton() << con::setcinfo << "[Host] Awaiting connections..." << con::endl;
+	//Console::getSingleton() << con::setcinfo << "[Host] IP Address: " << sf::IpAddress::getPublicAddress() << con::endl;
 	onHost();
 }
 
@@ -132,26 +106,26 @@ enum
 };
 
 Client::Client() :
-	m_connection( LOCAL, sf::IpAddress::None, 0U )
+	m_state( LOCAL )
 {
 	m_socket.setBlocking( false );
 }
 
 void Client::updateClient()
 {
-	if ( isConnecting() || isConnected() )
+	if ( m_socket.getRemoteAddress() != sf::IpAddress::None )
 	{
 		serial::Packetstream ps;
 		switch ( m_socket.receive( ps ) )
 		{
 		case sf::Socket::Done:
-			if ( !isConnecting() )
+			if ( m_state == CONNECTED )
 				onClientRecieve( ps );
 			else
 			{
 				onClientConnect( ps );
-				std::get< 0 >( m_connection ) = CONNECTED;
-				Console::getSingleton() << con::setcinfo << "[Client] Succcessfully connected to " << m_socket.getRemoteAddress() << con::endl;
+				m_state = CONNECTED;
+				Console::getSingleton() << con::setcinfo << "[Client] Succcessfully synchronized to " << m_socket.getRemoteAddress() << con::endl;
 			}
 		break;
 
@@ -162,10 +136,10 @@ void Client::updateClient()
 			disconnectClient();
 		break;
 
-		case sf::Socket::Error:
+		/*case sf::Socket::Error:
 			Console::getSingleton() << con::setcerr << "[Client] An unknown error occured -- disconnecting" << con::endl;
 			disconnectClient();
-		break;
+		break;*/
 		}
 	}
 }
@@ -178,29 +152,12 @@ void Client::connect( sf::IpAddress& addr, unsigned short port )
 	if ( isConnected() ) 
 		disconnectClient();
 
-	m_connection = std::make_tuple( CONNECTING, addr, port );
-
+	m_state = CONNECTING;
 	Console::getSingleton() << con::setcinfo << "[Client] Attempting to connect to " << addr << con::endl;
+	m_socket.setBlocking( addr != sf::IpAddress::getLocalAddress() );
+	m_socket.connect( addr, port, sf::milliseconds( 10000 ) );
 
-	switch ( m_socket.connect( std::get< 1 >( m_connection ), std::get< 2 >( m_connection ) ) )
-	{
-	case sf::Socket::Done:
-		std::get< 0 >( m_connection ) = CONNECTED;
-		Console::getSingleton() << con::setcinfo << "[Client] Succcessfully connected to " << std::get< 1 >( m_connection ) << con::endl;
-	break;
-
-	case sf::Socket::NotReady: break;
-
-	case sf::Socket::Disconnected:
-		Console::getSingleton() << con::setcerr << "[Client] Lost connection to host while trying to connect" << con::endl;
-		disconnectClient();
-	break;
-
-	case sf::Socket::Error:
-		Console::getSingleton() << con::setcerr << "[Client] An unknown error occured while trying to connect" << con::endl;
-		disconnectClient();
-	break;
-	}
+	m_socket.setBlocking( false );
 }
 
 void Client::sendToHost( serial::Packetstream& ps )
@@ -212,20 +169,20 @@ void Client::sendToHost( serial::Packetstream& ps )
 
 void Client::disconnectClient()
 {
+	m_state = LOCAL;
 	Console::getSingleton() << con::setcerr << "[Client] Disconnected from " << m_socket.getRemoteAddress() << con::endl;
 	m_socket.disconnect();
 	onClientDisconnect();
-	std::get< 0 >( m_connection ) = LOCAL;
 }
 
 bool Client::isConnected() const
 {
-	return std::get< 0 >( m_connection ) == CONNECTED;
+	return m_state == CONNECTED;
 }
 
 bool Client::isConnecting() const
 {
-	return std::get< 0 >( m_connection ) == CONNECTING;
+	return m_state == CONNECTING;
 }
 
 /***************************************************/
