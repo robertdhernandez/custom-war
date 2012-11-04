@@ -58,6 +58,12 @@
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{500f2a3b-53de-4bb2-84c7-a499b565093c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Packets">
+      <UniqueIdentifier>{1e5734f8-af3b-4ec5-a774-cffbe4b6cd15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Network\Packets">
+      <UniqueIdentifier>{f7776002-40be-4fe0-b9c3-2c2a218275f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -110,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="network.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="packet_multileveleditor.cpp">
+      <Filter>Source Files\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="state_multileveleditor.cpp">
+      <Filter>Source Files\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="state_multileveleditor.h">
       <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="packet.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="packet_multileveleditor.h">
+      <Filter>Header Files\Network\Packets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

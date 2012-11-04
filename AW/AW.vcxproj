@@ -84,9 +84,11 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapviewer.cpp" />
     <ClCompile Include="network.cpp" />
+    <ClCompile Include="packet_multileveleditor.cpp" />
     <ClCompile Include="skirmish.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="state_leveleditor.cpp" />
+    <ClCompile Include="state_multileveleditor.cpp" />
     <ClCompile Include="team.cpp" />
     <ClCompile Include="texture_loader.cpp" />
     <ClCompile Include="texture_manager.cpp" />
@@ -112,7 +114,9 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="mapviewer.h" />
     <ClInclude Include="movement.h" />
+    <ClInclude Include="packet.h" />
     <ClInclude Include="packetstream.h" />
+    <ClInclude Include="packet_multileveleditor.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="serializable.h" />

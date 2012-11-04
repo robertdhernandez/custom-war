@@ -17,13 +17,17 @@ namespace cw
 			LevelEditor();
 			virtual ~LevelEditor() {}
 
-			void createMap( int x, int y );
-			void resizeMap( int width, int height );
+			virtual void createMap( int x, int y );
+			virtual void resizeMap( int width, int height );
 
+			void setTile( int x, int y, const std::string& type );
 			void setCurrentTile( const std::string& tile );
 
 			void load( const std::string& );
 			void save( const std::string& ) const;
+
+		protected:
+			static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale );
 
 		private:
 			void onKeyPressed( const sf::Event::KeyEvent& );

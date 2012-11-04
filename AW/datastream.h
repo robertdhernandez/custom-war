@@ -13,6 +13,7 @@ namespace cw
 		public:
 			virtual ~InputDatastream() {}
 
+			InputDatastream& operator>>( unsigned char& t );
 			InputDatastream& operator>>( char& t );
 			InputDatastream& operator>>( int& t );
 			InputDatastream& operator>>( std::string& str );
@@ -27,6 +28,7 @@ namespace cw
 		public:
 			virtual ~OutputDatastream() {}
 
+			OutputDatastream& operator<<( unsigned char t );
 			OutputDatastream& operator<<( char t );
 			OutputDatastream& operator<<( int t );
 			OutputDatastream& operator<<( const std::string& t );

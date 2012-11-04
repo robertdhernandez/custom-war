@@ -2,6 +2,7 @@
 #include "filestream.h"
 #include "packetstream.h"
 
+#include "packet.h"
 #include "serializable.h"
 
 #include <cstring>
@@ -28,6 +29,12 @@ private:
 };
 
 /***************************************************/
+
+InputDatastream& InputDatastream::operator>>( unsigned char& t )
+{
+	read( (char*) &t, sizeof( char ) );
+	return *this;
+}
 
 InputDatastream& InputDatastream::operator>>( char& t )
 {
@@ -60,6 +67,13 @@ InputDatastream& InputDatastream::operator>>( Serializable& s )
 }
 
 /***************************************************/
+
+OutputDatastream& OutputDatastream::operator<<( unsigned char t )
+{
+	write( (char*) &t, sizeof( char ) );
+	return *this;
+}
+
 
 OutputDatastream& OutputDatastream::operator<<( char t )
 {
@@ -117,6 +131,13 @@ void OutputFilestream::write( const char* c, size_t size )
 Packetstream::Packetstream() :
 	m_index( 0U )
 {
+}
+
+Packetstream::Packetstream( const net::PacketBase& pb ) :
+	m_index( 0U )
+{
+	*this << pb.getID();
+	pb.write( *this );
 }
 
 void Packetstream::read( char* c, std::size_t size )

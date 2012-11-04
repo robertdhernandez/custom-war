@@ -33,7 +33,7 @@ namespace cw
 		{
 			DEFAULT_COLOR = 0xFFFFFF,
 			ERROR_COLOR   = 0xFF0000,
-			INFO_COLOR    = 0x666666
+			INFO_COLOR    = 0x0099FF
 		};
 
 		void pushLine( const std::string& str, unsigned color = DEFAULT_COLOR );

@@ -7,6 +7,13 @@
 
 namespace cw
 {
+	namespace net
+	{
+		class TileChange;
+		class MapCreate;
+		class MapResize;
+	}
+
 	namespace state
 	{
 		class MultiplayerLevelEditor : 
@@ -17,7 +24,14 @@ namespace cw
 		public:
 			MultiplayerLevelEditor();
 
+			void packet_tileChange( int x, int y, const std::string& type );
+			void packet_createMap( int width, int height );
+			void packet_resizeMap( int width, int height );
+
 		private:
+			void createMap( int width, int height );
+			void resizeMap( int width, int height );
+
 			void update();
 
 			void onHost();

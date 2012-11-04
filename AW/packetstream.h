@@ -7,12 +7,18 @@
 
 namespace cw
 {
+	namespace net
+	{
+		class PacketBase;
+	}
+
 	namespace serial
 	{
 		class Packetstream : public InputDatastream, public OutputDatastream
 		{
 		public:
 			Packetstream();
+			Packetstream( const net::PacketBase& );
 
 			sf::Packet& getPacket() { return m_packet; }
 			operator sf::Packet&() { return m_packet; }

@@ -2,24 +2,19 @@
 #include "state_multileveleditor.h"
 
 #include "global.h"
-
 #include "console.h"
 #include "console_functions.h"
 
 #include "filestream.h"
-#include "packetstream.h"
-
-#include <fstream>
 
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Network/IpAddress.hpp>
 
 namespace cw
 {
 namespace state
 {
 
-static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale )
+sf::Vector2i LevelEditor::convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale )
 {
 	return sf::Vector2i( static_cast< int >( ( x - offset.x ) / ( TILE_WIDTH * scale.x ) ), 
 						 static_cast< int >( ( y - offset.y ) / ( TILE_HEIGHT * scale.y ) ) );
@@ -56,6 +51,11 @@ void LevelEditor::resizeMap( int width, int height )
 	m_viewer.setScale( 1.0f, 1.0f );
 }
 
+void LevelEditor::setTile( int x, int y, const std::string& type )
+{
+	m_map.setTile( createTile( type, x, y ) );
+}
+
 void LevelEditor::setCurrentTile( const std::string& type )
 {
 	if ( !isValidTileType( type ) )
@@ -89,7 +89,7 @@ void LevelEditor::update()
 	{
 		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition(), m_viewer.getScale() );
 		if ( m_map.isInBounds( pos.x, pos.y ) )
-			m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
+			setTile( pos.x, pos.y, m_curTile );
 	}
 }
 
@@ -150,99 +150,6 @@ void LevelEditor::onMouseMoved( const sf::Event::MouseMoveEvent& ev )
 }
 
 void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
-{
-}
-
-/***************************************************/
-
-class UpdatePacket : public serial::Serializable
-{
-public:
-	UpdatePacket( serial::Packetstream& ps )
-	{
-		read( ps );
-	}
-
-	UpdatePacket( int x, int y, const std::string& type ) :
-		x( x ),
-		y( y ),
-		type( type )
-	{
-	}
-
-	int x, y;
-	std::string type;
-
-private:
-	void read( serial::InputDatastream& ds )
-	{
-		ds >> x >> y >> type;
-	}
-
-	void write( serial::OutputDatastream& ds ) const
-	{
-		ds << x << y << type;
-	}
-};
-
-MultiplayerLevelEditor::MultiplayerLevelEditor()
-{
-	con::networkCommands( Console::getSingleton() );
-}
-
-void MultiplayerLevelEditor::update()
-{
-	m_viewer.update();
-
-	updateClient();
-	updateHost();
-
-	if ( m_mouse.first )
-	{
-		sf::Vector2i pos = convertMousePos( m_mouse.second.x, m_mouse.second.y, m_viewer.getPosition(), m_viewer.getScale() );
-		if ( m_map.isInBounds( pos.x, pos.y ) )
-		{
-			if ( isConnected() )
-			{
-				serial::Packetstream ps;
-				ps << UpdatePacket( pos.x, pos.y, m_curTile );
-				sendToHost( ps );
-			}
-			else
-				m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
-		}
-	}
-}
-
-void MultiplayerLevelEditor::onHost()
-{
-	connect( sf::IpAddress( "localhost" ) );
-}
-
-void MultiplayerLevelEditor::onHostConnect( sf::TcpSocket& s )
-{
-	serial::Packetstream ps;
-	ps << m_map;
-	s.send( ps );
-}
-
-void MultiplayerLevelEditor::onHostDisconnect()
-{
-}
-
-void MultiplayerLevelEditor::onClientConnect( serial::Packetstream& ps )
-{
-	ps >> m_map;
-}
-
-void MultiplayerLevelEditor::onClientRecieve( serial::Packetstream& ps )
-{
-	// For now, assume it is an update packet
-	UpdatePacket update( ps );
-	m_map.setTile( createTile( update.type, update.x, update.y ) );
-}
-
-void MultiplayerLevelEditor::onClientDisconnect()
 {
 }
 
