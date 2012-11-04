@@ -25,7 +25,6 @@ namespace cw
 			void disconnectClient();
 
 			bool isConnected() const;
-			bool isConnecting() const;
 
 		private:
 			virtual void onClientConnect( serial::Packetstream& ) = 0;

@@ -76,7 +76,6 @@ void Host::host( unsigned char clients, unsigned short port )
 		m_clients[ i ].setBlocking( false );
 	
 	Console::getSingleton() << con::setcinfo << "[Host] Awaiting connections..." << con::endl;
-	//Console::getSingleton() << con::setcinfo << "[Host] IP Address: " << sf::IpAddress::getPublicAddress() << con::endl;
 	onHost();
 }
 
@@ -105,6 +104,8 @@ enum
 	CONNECTED
 };
 
+static const unsigned CONNECT_TIMEOUT_TIME = 5000U;
+
 Client::Client() :
 	m_state( LOCAL )
 {
@@ -113,7 +114,7 @@ Client::Client() :
 
 void Client::updateClient()
 {
-	if ( m_socket.getRemoteAddress() != sf::IpAddress::None )
+	if ( isConnected() )
 	{
 		serial::Packetstream ps;
 		switch ( m_socket.receive( ps ) )
@@ -135,11 +136,6 @@ void Client::updateClient()
 			Console::getSingleton() << con::setcerr << "[Client] Lost connection to host" << con::endl;
 			disconnectClient();
 		break;
-
-		/*case sf::Socket::Error:
-			Console::getSingleton() << con::setcerr << "[Client] An unknown error occured -- disconnecting" << con::endl;
-			disconnectClient();
-		break;*/
 		}
 	}
 }
@@ -152,10 +148,18 @@ void Client::connect( sf::IpAddress& addr, unsigned short port )
 	if ( isConnected() ) 
 		disconnectClient();
 
-	m_state = CONNECTING;
-	Console::getSingleton() << con::setcinfo << "[Client] Attempting to connect to " << addr << con::endl;
 	m_socket.setBlocking( addr != sf::IpAddress::getLocalAddress() );
-	m_socket.connect( addr, port, sf::milliseconds( 10000 ) );
+
+	if ( m_socket.connect( addr, port, sf::milliseconds( CONNECT_TIMEOUT_TIME ) ) == sf::Socket::Done )
+	{
+		m_state = CONNECTING;
+		Console::getSingleton() << con::setcinfo << "[Client] Successfully established connection with " << addr << con::endl;
+	}
+	else
+	{
+		m_state = LOCAL;
+		Console::getSingleton() << con::setcerr << "[Client] Failed to get a response from " << addr << con::endl;
+	}
 
 	m_socket.setBlocking( false );
 }
@@ -177,12 +181,7 @@ void Client::disconnectClient()
 
 bool Client::isConnected() const
 {
-	return m_state == CONNECTED;
-}
-
-bool Client::isConnecting() const
-{
-	return m_state == CONNECTING;
+	return m_socket.getRemoteAddress() != sf::IpAddress::None;
 }
 
 /***************************************************/
