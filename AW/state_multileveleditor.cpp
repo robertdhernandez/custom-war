@@ -49,8 +49,8 @@ void MultiplayerLevelEditor::update()
 {
 	m_viewer.update();
 
-	updateClient();
 	updateHost();
+	updateClient();
 
 	if ( m_mouse.first )
 	{
