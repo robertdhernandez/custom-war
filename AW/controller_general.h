@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <vector>
 #include <SFML/Window/Event.hpp>
 
 namespace cw
@@ -19,7 +19,7 @@ namespace cw
 			void updateGeneralListeners( const sf::Event& );
 
 		private:
-			std::set< GeneralListener* > m_generalListeners;
+			std::vector< GeneralListener* > m_generalListeners;
 		};
 	}
 }

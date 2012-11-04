@@ -24,7 +24,8 @@ using namespace std::placeholders;
 
 void GeneralController::addGeneralListener( GeneralListener& l )
 {
-	m_generalListeners.insert( &l );
+	if ( std::find( m_generalListeners.begin(), m_generalListeners.end(), &l ) == m_generalListeners.end() )
+		m_generalListeners.push_back( &l );
 }
 
 void GeneralController::updateGeneralListeners( const sf::Event& ev )
