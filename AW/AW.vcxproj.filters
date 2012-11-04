@@ -203,11 +203,5 @@
     <ClInclude Include="listener_text.h">
       <Filter>Header Files\Utility\Listener</Filter>
     </ClInclude>
-    <ClInclude Include="listener_packet.h">
-      <Filter>Header Files\Utility\Listener</Filter>
-    </ClInclude>
-    <ClInclude Include="controller_packet.h">
-      <Filter>Header Files\Utility\Controller</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

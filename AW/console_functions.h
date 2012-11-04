@@ -7,6 +7,7 @@ namespace cw
 	namespace con
 	{
 		void defaultCommands( Console& );
+		void networkCommands( Console& );
 		void levelEditorCommands( Console& );
 	}
 }

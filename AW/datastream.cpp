@@ -4,6 +4,8 @@
 
 #include "serializable.h"
 
+#include <cstring>
+
 namespace cw
 {
 namespace serial
@@ -113,45 +115,19 @@ void OutputFilestream::write( const char* c, size_t size )
 /***************************************************/
 
 Packetstream::Packetstream() :
-	m_data( std::ios_base::binary | std::ios_base::in | std::ios_base::out )
+	m_index( 0U )
 {
-}
-
-Packetstream::Packetstream( const sf::Packet& p ) :
-	m_data( std::ios_base::binary | std::ios_base::in | std::ios_base::out )
-{
-	*this = p;
-}
-
-Packetstream& Packetstream::operator=( const sf::Packet& p )
-{
-	m_data.str( "" );
-	m_data.clear();
-	m_data.write( (char*) p.getData(), p.getDataSize() );
-	return *this;
-}
-
-const sf::Packet Packetstream::toPacket() const
-{
-	sf::Packet packet;
-	std::string data = m_data.str();
-	packet.append( data.c_str(), data.size() );
-	return packet;
-}
-
-Packetstream::operator const sf::Packet() const
-{
-	return toPacket();
 }
 
 void Packetstream::read( char* c, std::size_t size )
 {
-	m_data.read( c, size );
+	memcpy( c, (char*) m_packet.getData() + m_index, size );
+	m_index += size;
 }
 
 void Packetstream::write( const char* c, std::size_t size )
 {
-	m_data.write( c, size );
+	m_packet.append( c, size );
 }
 
 /***************************************************/

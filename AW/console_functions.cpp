@@ -4,6 +4,8 @@
 
 #include "state_leveleditor.h"
 
+#include <SFML/Network/IpAddress.hpp>
+
 namespace cw
 {
 namespace con
@@ -211,6 +213,86 @@ void levelEditorCommands( Console& console )
 	console.addCommand( LE_LOAD );
 }
 
+/***************************************************/
+// NETWORK COMMANDS
+
+static class CONNECT : public con::Command
+{
+	std::string getName() const
+	{
+		return "connect";
+	}
+
+	unsigned getMinArgs() const 
+	{
+		return 1;
+	}
+
+	void help( Console& c )
+	{
+	}
+
+	void execute( Console& c, const Arguments& args )
+	{
+		sf::IpAddress addr( args[ 0 ] );
+		if ( addr == sf::IpAddress::None )
+			throw std::exception( "Invalid IP address" );
+		c << con::setcinfo <<  "Attempting to connect to " << addr << con::endl;
+		getLevelEditor().connect( sf::IpAddress( args[ 0 ] ) );
+	}
+} CONNECT;
+
+static class HOST : public con::Command
+{
+	std::string getName() const
+	{
+		return "host";
+	}
+
+	unsigned getMinArgs() const 
+	{
+		return 0;
+	}
+
+	void help( Console& c )
+	{
+	}
+
+	void execute( Console& c, const Arguments& args )
+	{
+		c << con::setcinfo << "Hosting..." << con::endl;
+		getLevelEditor().host();
+	}
+} HOST;
+
+static class DISCONNECT : public con::Command
+{
+	std::string getName() const
+	{
+		return "disconnect";
+	}
+
+	unsigned getMinArgs() const 
+	{
+		return 0;
+	}
+
+	void help( Console& c )
+	{
+	}
+
+	void execute( Console& c, const Arguments& args )
+	{
+		getLevelEditor().disconnect();
+	}
+} DISCONNECT;
+
+void networkCommands( Console& c )
+{
+	c.addCommand( CONNECT );
+	c.addCommand( HOST );
+	c.addCommand( DISCONNECT );
+}
 
 /***************************************************/
 

@@ -98,7 +98,6 @@
     <ClInclude Include="console_functions.h" />
     <ClInclude Include="controller_key.h" />
     <ClInclude Include="controller_mouse.h" />
-    <ClInclude Include="controller_packet.h" />
     <ClInclude Include="controller_text.h" />
     <ClInclude Include="datastream.h" />
     <ClInclude Include="filestream.h" />
@@ -106,7 +105,6 @@
     <ClInclude Include="listener_general.h" />
     <ClInclude Include="listener_key.h" />
     <ClInclude Include="listener_mouse.h" />
-    <ClInclude Include="listener_packet.h" />
     <ClInclude Include="listener_text.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mapviewer.h" />

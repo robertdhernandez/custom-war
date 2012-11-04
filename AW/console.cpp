@@ -121,14 +121,12 @@ void Console::execute( const std::string& line )
 
 	try
 	{
-		if ( find != m_cmds.end() )
-			(**find)( *this, parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
-		else
-			*this << con::setcerr << "Unknown command" << con::endl;
+		if ( find == m_cmds.end() )
+			throw std::runtime_error( "Unknown command" );
+		(**find)( *this, parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
 	}
 	catch ( std::exception& err )
 	{
-		*this << con::setcerr << "Error executing " << (*find)->getName() << ": " << con::endl;
 		*this << con::setcerr << err.what() << con::endl;
 	}
 }

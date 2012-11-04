@@ -13,18 +13,17 @@ namespace cw
 		{
 		public:
 			Packetstream();
-			Packetstream( const sf::Packet& );
-			Packetstream& operator=( const sf::Packet& );
 
-			const sf::Packet toPacket() const;
-			operator const sf::Packet() const;
+			sf::Packet& getPacket() { return m_packet; }
+			operator sf::Packet&() { return m_packet; }
 
 		private:
 			void read( char*, std::size_t );
 			void write( const char*, std::size_t );
 
 		private:
-			std::stringstream m_data;
+			sf::Packet m_packet;
+			std::size_t m_index;
 		};
 	}
 }

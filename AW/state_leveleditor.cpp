@@ -6,9 +6,12 @@
 #include "console_functions.h"
 
 #include "filestream.h"
+#include "packetstream.h"
 
 #include <fstream>
+
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Network/IpAddress.hpp>
 
 namespace cw
 {
@@ -24,7 +27,8 @@ static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, c
 /***************************************************/
 
 LevelEditor::LevelEditor() :
-	m_viewer( m_map )
+	m_viewer( m_map ),
+	m_state( LOCAL )
 {
 	addKeyListener( *this );
 	addKeyListener( m_viewer );
@@ -35,6 +39,12 @@ LevelEditor::LevelEditor() :
 	createMap( SCREEN_WIDTH / TILE_WIDTH, SCREEN_HEIGHT / TILE_HEIGHT );
 	setCurrentTile( "plains" );
 	con::levelEditorCommands( Console::getSingleton() );
+
+	//DEBUG
+	con::networkCommands( Console::getSingleton() );
+
+	//m_tcpListener.setBlocking( false );
+	//m_tcpSocket.setBlocking( false );
 }
 
 void LevelEditor::createMap( int width, int height )
@@ -131,6 +141,45 @@ void LevelEditor::onMouseWheelMoved( const sf::Event::MouseWheelEvent& ev )
 
 /***************************************************/
 
+void LevelEditor::host( unsigned short port )
+{
+	m_tcpSocket.disconnect();
+	m_tcpListener.listen( port );
+	if ( m_tcpListener.accept( m_tcpSocket ) == sf::Socket::Done )
+	{
+		Console::getSingleton() << con::setcinfo << "Established connection from " << m_tcpSocket.getRemoteAddress() << con::endl;
+
+		serial::Packetstream ps;
+		ps << m_map;
+
+		m_tcpSocket.send( ps );
+		m_state = HOST;
+	}
+	else
+		Console::getSingleton() << con::setcerr << "Failed to establish connection" << con::endl;
+}
+
+void LevelEditor::connect( sf::IpAddress& addr, unsigned short port )
+{
+	serial::Packetstream packet;
+	if ( m_tcpSocket.connect( addr, port ) == sf::Socket::Done && m_tcpSocket.receive( packet ) == sf::Socket::Done )
+	{
+		packet >> m_map;
+		m_state = CLIENT;
+	}
+	else
+		Console::getSingleton() << con::setcerr << "Failed to establish connection to " << addr << con::endl;
+}
+
+void LevelEditor::disconnect()
+{
+	m_tcpListener.close();
+	m_tcpSocket.disconnect();
+	m_state = LOCAL;
+}
+
+/***************************************************/
+
 void LevelEditor::update()
 {
 	m_viewer.update();
@@ -141,6 +190,14 @@ void LevelEditor::update()
 		if ( m_map.isInBounds( pos.x, pos.y ) )
 			m_map.setTile( createTile( m_curTile, pos.x, pos.y ) );
 	}
+
+	/*if ( m_state == HOST )
+	{
+
+	}
+	else if ( m_state == CLIENT )
+	{
+	}*/
 }
 
 void LevelEditor::draw( sf::RenderTarget& target, sf::RenderStates states ) const
