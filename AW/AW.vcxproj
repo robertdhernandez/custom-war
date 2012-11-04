@@ -83,6 +83,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapviewer.cpp" />
+    <ClCompile Include="network.cpp" />
     <ClCompile Include="skirmish.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="state_leveleditor.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="client.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="console_command.h" />
     <ClInclude Include="console_functions.h" />
@@ -102,6 +104,7 @@
     <ClInclude Include="datastream.h" />
     <ClInclude Include="filestream.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="host.h" />
     <ClInclude Include="listener_general.h" />
     <ClInclude Include="listener_key.h" />
     <ClInclude Include="listener_mouse.h" />
@@ -109,6 +112,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="mapviewer.h" />
     <ClInclude Include="movement.h" />
+    <ClInclude Include="netbase.h" />
     <ClInclude Include="packetstream.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="resource_manager.h" />

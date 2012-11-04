@@ -55,6 +55,9 @@
     <Filter Include="Header Files\Utility\Listener">
       <UniqueIdentifier>{aad4699f-5575-4884-a7bd-a63e8d5fd22a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{500f2a3b-53de-4bb2-84c7-a499b565093c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="controller_general.h">
       <Filter>Header Files\Utility\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="network.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +208,15 @@
     </ClInclude>
     <ClInclude Include="listener_text.h">
       <Filter>Header Files\Utility\Listener</Filter>
+    </ClInclude>
+    <ClInclude Include="host.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="netbase.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
