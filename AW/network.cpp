@@ -4,6 +4,8 @@
 #include "console.h"
 #include "packetstream.h"
 
+#include <SFML/Network/IpAddress.hpp>
+
 namespace cw
 {
 namespace net
@@ -64,7 +66,7 @@ void Host::host( unsigned char clients, unsigned short port )
 		throw std::exception( "Hosting requires at least 2 clients" );
 
 	if ( isHosting() )
-		disconnectHost();
+		disconnect();
 
 	m_numClients = 0U;
 	m_maxClients = clients;
@@ -87,7 +89,7 @@ void Host::sendToClients( serial::Packetstream& ps )
 			m_clients[ i ].send( ps );
 }
 
-void Host::disconnectHost()
+void Host::disconnect()
 {
 	m_tcpListener.close();
 	m_clients.reset();
@@ -134,7 +136,7 @@ void Client::updateClient()
 
 		case sf::Socket::Disconnected:
 			Console::getSingleton() << con::setcerr << "[Client] Lost connection to host" << con::endl;
-			disconnectClient();
+			disconnect();
 		break;
 		}
 	}
@@ -146,7 +148,7 @@ void Client::connect( sf::IpAddress& addr, unsigned short port )
 		throw std::exception( "Invalid IP address" );
 
 	if ( isConnected() ) 
-		disconnectClient();
+		disconnect();
 
 	m_socket.setBlocking( addr != sf::IpAddress::getLocalAddress() );
 
@@ -171,7 +173,7 @@ void Client::sendToHost( serial::Packetstream& ps )
 	m_socket.send( ps );
 }
 
-void Client::disconnectClient()
+void Client::disconnect()
 {
 	m_state = LOCAL;
 	Console::getSingleton() << con::setcerr << "[Client] Disconnected from " << m_socket.getRemoteAddress() << con::endl;

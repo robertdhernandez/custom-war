@@ -115,6 +115,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="mapviewer.h" />
     <ClInclude Include="movement.h" />
+    <ClInclude Include="network.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="packetstream.h" />
     <ClInclude Include="packet_multileveleditor.h" />

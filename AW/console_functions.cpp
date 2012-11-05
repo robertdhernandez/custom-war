@@ -219,6 +219,14 @@ void levelEditorCommands( Console& console )
 /***************************************************/
 // NETWORK COMMANDS
 
+net::NetBase& getNetBase()
+{
+	net::NetBase* ret = dynamic_cast< net::NetBase* >( &StateBase::getGlobal() );
+	if ( ret == nullptr )
+		throw std::runtime_error( "Network commands are currently unavailable" );
+	return *ret;
+}
+
 net::Host& getHost()
 {
 	net::Host* ret = dynamic_cast< net::Host* >( &StateBase::getGlobal() );
@@ -297,7 +305,7 @@ static class DISCONNECT : public con::Command
 
 	void execute( Console& c, const Arguments& args )
 	{
-		//getLevelEditor().disconnect();
+		getNetBase().disconnect();
 	}
 } DISCONNECT;
 
@@ -305,7 +313,7 @@ void networkCommands( Console& c )
 {
 	c.addCommand( CONNECT );
 	c.addCommand( HOST );
-	//c.addCommand( DISCONNECT );
+	c.addCommand( DISCONNECT );
 }
 
 /***************************************************/

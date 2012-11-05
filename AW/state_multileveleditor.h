@@ -32,6 +32,7 @@ namespace cw
 			void createMap( int width, int height );
 			void resizeMap( int width, int height );
 
+			void disconnect();
 			void update();
 
 			void onHost();

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <tuple>
-#include <SFML/Network/IpAddress.hpp>
+#include "network.h"
+
 #include <SFML/Network/TcpSocket.hpp>
 
 namespace cw
@@ -13,16 +13,17 @@ namespace cw
 
 	namespace net
 	{
-		class Client
+		class Client : public virtual NetBase
 		{
 		public:
 			Client();
 			virtual ~Client() {}
+
 			void updateClient();
 
 			void connect( sf::IpAddress&, unsigned short port = 8888 );
 			void sendToHost( serial::Packetstream& );
-			void disconnectClient();
+			virtual void disconnect();
 
 			bool isConnected() const;
 

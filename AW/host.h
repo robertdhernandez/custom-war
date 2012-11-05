@@ -1,5 +1,7 @@
 #pragma once
 
+#include "network.h"
+
 #include <memory>
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/TcpSocket.hpp>
@@ -13,17 +15,17 @@ namespace cw
 
 	namespace net
 	{
-		class Host
+		class Host : public virtual NetBase
 		{
 		public:
 			Host();
-			virtual ~Host() { disconnectHost(); }
+			virtual ~Host() { disconnect(); }
 
 			void updateHost();
 
 			void host( unsigned char clients, unsigned short port = 8888 );
 			void sendToClients( serial::Packetstream& );
-			void disconnectHost();
+			virtual void disconnect();
 
 			bool isHosting() const { return m_maxClients > 0; }
 			bool isFull() const { return isHosting() && m_numClients == m_maxClients; }

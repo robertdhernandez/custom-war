@@ -45,6 +45,14 @@ void MultiplayerLevelEditor::resizeMap( int width, int height )
 		LevelEditor::resizeMap( width, height );
 }
 
+void MultiplayerLevelEditor::disconnect()
+{
+	if ( isConnected() )
+		net::Client::disconnect();
+	if ( isHosting() )
+		net::Host::disconnect();
+}
+
 void MultiplayerLevelEditor::update()
 {
 	m_viewer.update();

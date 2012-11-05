@@ -236,5 +236,8 @@
     <ClInclude Include="packet_multileveleditor.h">
       <Filter>Header Files\Network\Packets</Filter>
     </ClInclude>
+    <ClInclude Include="network.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
