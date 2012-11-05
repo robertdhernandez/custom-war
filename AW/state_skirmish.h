@@ -3,39 +3,37 @@
 #include "state.h"
 #include "state_saveable.h"
 
+#include "listener_key.h"
+#include "listener_mouse.h"
+
 #include "map.h"
 #include "mapviewer.h"
 
-#include "listener_key.h"
-#include "listener_mouse.h"
+#include "team.h"
+
+#include <string>
+#include <memory>
 
 namespace cw
 {
 	namespace state
 	{
-		class LevelEditor : 
+		class Skirmish : 
 			public StateBase, 
 			public Saveable,
 			public util::KeyListener, 
 			public util::MouseListener
 		{
 		public:
-			LevelEditor();
-			virtual ~LevelEditor() {}
+			Skirmish();
 
-			virtual void createMap( int x, int y );
-			virtual void resizeMap( int width, int height );
+			unsigned getDay() const { return m_turn / m_map.getNumPlayers() + 1; }
+			Team& getActiveTeam() { return *m_teams[ m_turn % m_map.getNumPlayers() ]; }
 
-			void setTile( int x, int y, const std::string& type );
-			void setCurrentTile( const std::string& tile );
-
+		private:
 			void load( const std::string& );
 			void save( const std::string& ) const;
 
-		protected:
-			static sf::Vector2i convertMousePos( int x, int y, const sf::Vector2f& offset, const sf::Vector2f& scale );
-
-		private:
 			void onKeyPressed( const sf::Event::KeyEvent& );
 			void onKeyReleased( const sf::Event::KeyEvent& );
 
@@ -46,16 +44,16 @@ namespace cw
 			void onMouseMoved( const sf::Event::MouseMoveEvent& );
 			void onMouseWheelMoved( const sf::Event::MouseWheelEvent& );
 
-			virtual void update();
+			void update();
 			void draw( sf::RenderTarget&, sf::RenderStates ) const;
 
-		protected:
+		private:
+			unsigned m_turn;
+
 			Map m_map;
 			MapViewer m_viewer;
 
-			std::string m_curTile;
-
-			std::pair< bool, sf::Vector2i > m_mouse;
+			std::unique_ptr< std::unique_ptr< Team >[] > m_teams;
 		};
 	}
 }

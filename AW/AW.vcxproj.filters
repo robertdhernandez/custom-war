@@ -123,6 +123,9 @@
     <ClCompile Include="state_multileveleditor.cpp">
       <Filter>Source Files\State</Filter>
     </ClCompile>
+    <ClCompile Include="state_skirmish.cpp">
+      <Filter>Source Files\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource_manager.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="network.h">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="state_skirmish.h">
+      <Filter>Header Files\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
