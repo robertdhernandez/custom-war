@@ -14,6 +14,7 @@ namespace cw
 
 static const float CONSOLE_OFFSET = 0.0f;
 static const unsigned FONT_SIZE = 12U;
+static const unsigned MAX_LINES = 250U;
 
 sf::Color hexToColor( int color )
 {
@@ -108,7 +109,13 @@ void Console::pushLine( const std::string& str, unsigned color )
 		}
 	}
 
-	if ( !insertCount ) m_history.push_back( std::make_pair( str, color ) );
+	if ( !insertCount ) 
+		m_history.push_back( std::make_pair( str, color ) );
+	else
+		m_history.push_back( std::make_pair( input, color ) );
+
+	while ( m_history.size() > MAX_LINES )
+		m_history.erase( m_history.begin() );
 }
 
 void Console::execute( const std::string& line )
