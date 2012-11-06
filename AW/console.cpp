@@ -63,7 +63,7 @@ Console::Console() :
 void Console::addCommand( con::Command& cmd )
 {
 	m_cmds.push_back( &cmd );
-	std::sort( m_cmds.begin(), m_cmds.end() );
+	std::sort( m_cmds.begin(), m_cmds.end(), []( const con::Command* a, const con::Command* b ) { return *a < *b; } );
 }
 
 void Console::clearCommands()
