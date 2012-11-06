@@ -152,9 +152,6 @@
     <ClInclude Include="texture_loader.h">
       <Filter>Header Files\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="movement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="skirmish.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -244,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="state_skirmish.h">
       <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="state_saveable.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="movement.h">
+      <Filter>Header Files\Unit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
