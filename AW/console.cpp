@@ -42,6 +42,33 @@ std::vector< std::string > parseArguments( const std::string& str, const std::st
 
 /***************************************************/
 
+class UnknownCommandException : public std::exception
+{
+public:
+	UnknownCommandException() :
+		std::exception( "Unknown command" )
+	{
+	}
+};
+
+class TooFewArgumentsException : public std::exception
+{
+public:
+	TooFewArgumentsException( const std::string& name, unsigned minArgs )
+	{
+		std::ostringstream ss;
+		ss << "Requires at least " << minArgs << " arguments\nSee \"" << name << " help\" for more details";
+		m_err = ss.str();
+	}
+
+	const char* what() const { return m_err.c_str(); }
+
+private:
+	std::string m_err;
+};
+
+/***************************************************/
+
 Console& Console::getSingleton()
 {
 	static Console console;
@@ -146,7 +173,7 @@ void Console::execute( const std::string& line )
 	try
 	{
 		if ( find == m_cmds.end() )
-			throw std::runtime_error( "Unknown command" );
+			throw UnknownCommandException();
 		(**find)( *this, parseArguments( pos != std::string::npos ? std::string( line.begin() + pos + 1, line.end() ) : "" ) );
 	}
 	catch ( std::exception& err )
@@ -298,11 +325,7 @@ void con::Command::operator()( Console& c, const Arguments& args )
 	if ( size >= 1 && args[ 0 ] == "help" )
 		help( Console::getSingleton() );
 	else if ( size < argReq )
-	{
-		std::ostringstream ss;
-		ss << "Requires at least " << argReq << " arguments\nSee \"" << getName() << " help\" for more details";
-		throw std::runtime_error( ss.str() );
-	}
+		throw TooFewArgumentsException( getName(), argReq );
 	else
 		execute( c, args );
 }
