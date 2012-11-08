@@ -132,12 +132,12 @@ void Console::pushLine( const std::string& str, unsigned color )
 			std::string buffer;
 			std::string::iterator ij = input.end() - 1;
 
-			do
+			while ( *ij != ' ' )
 			{
 				buffer.push_back( *ij );
 				input.erase( ij );
 				ij--;
-			} while ( *ij != ' ' );
+			}
 
 			m_history.push_back( std::make_pair( input, color ) );
 
