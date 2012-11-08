@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include <algorithm>
+#include <iterator>
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -101,10 +102,20 @@ void Console::pushLine( const std::string& str, unsigned color )
 		sf::FloatRect rect = text.getLocalBounds();
 		if ( rect.width >= SCREEN_WIDTH )
 		{
-			input.erase( input.end() - 1 );
+			std::string buffer;
+			std::string::iterator ij = input.end() - 1;
+
+			do
+			{
+				buffer.push_back( *ij );
+				input.erase( ij );
+				ij--;
+			} while ( *ij != ' ' );
+
 			m_history.push_back( std::make_pair( input, color ) );
+
 			input.clear();
-			input.push_back( *it );
+			input.insert( input.begin(), buffer.rbegin(), buffer.rend() );
 			insertCount++;
 		}
 	}
@@ -283,7 +294,7 @@ void con::Command::operator()( Console& c, const Arguments& args )
 	else if ( size < argReq )
 	{
 		std::ostringstream ss;
-		ss << "Requires at least " << argReq << " arguments -- see \"" << getName() << "help \" for more details";
+		ss << "Requires at least " << argReq << " arguments -- see \"" << getName() << " help\" for more details";
 		throw std::runtime_error( ss.str() );
 	}
 	else
