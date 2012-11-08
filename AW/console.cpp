@@ -118,6 +118,12 @@ void Console::pushLine( const std::string& str, unsigned color )
 			input.insert( input.begin(), buffer.rbegin(), buffer.rend() );
 			insertCount++;
 		}
+		else if ( *it == '\n' )
+		{
+			m_history.push_back( std::make_pair( input, color ) );
+			input.clear();
+			insertCount++;
+		}
 	}
 
 	if ( !insertCount ) 
@@ -294,7 +300,7 @@ void con::Command::operator()( Console& c, const Arguments& args )
 	else if ( size < argReq )
 	{
 		std::ostringstream ss;
-		ss << "Requires at least " << argReq << " arguments -- see \"" << getName() << " help\" for more details";
+		ss << "Requires at least " << argReq << " arguments\nSee \"" << getName() << " help\" for more details";
 		throw std::runtime_error( ss.str() );
 	}
 	else
