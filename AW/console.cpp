@@ -278,7 +278,7 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 		
 		if ( m_index < (int) m_input.size() )
 		{
-			float xPos = text.getLocalBounds().width;
+			float xPos = text.findCharacterPos( m_index + 1 ).x;
 
 			// Index char
 			text.setString( m_input.at( m_index ) );
@@ -295,7 +295,7 @@ void Console::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 		}
 		else
 		{
-			text.setPosition( (float) text.getLocalBounds().width, yPos );
+			text.setPosition( text.findCharacterPos( m_index + 1 ).x, yPos );
 			text.setString( "_" );
 			text.setStyle( sf::Text::Underlined );
 			target.draw( text );
@@ -322,9 +322,7 @@ void con::Command::operator()( Console& c, const Arguments& args )
 	unsigned argReq = getMinArgs();
 	auto size = args.size();
 
-	if ( size >= 1 && args[ 0 ] == "help" )
-		help( Console::getSingleton() );
-	else if ( size < argReq )
+	if ( size < argReq )
 		throw TooFewArgumentsException( getName(), argReq );
 	else
 		execute( c, args );

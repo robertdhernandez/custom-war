@@ -40,9 +40,19 @@ static class HELP : public con::Command
 	{
 		const auto& cmds = c.getCommands();
 
-		c << setcinfo << "Commands:" << endl;
-		for ( auto it = cmds.begin(); it != cmds.end(); ++it )
-			c << setcinfo << "\t" << (*it)->getName() << endl;
+		if ( args.size() == 0 )
+		{
+			c << setcinfo << "Commands:" << endl;
+			for ( auto it = cmds.begin(); it != cmds.end(); ++it )
+				c << setcinfo << "\t" << (*it)->getName() << endl;
+		}
+		else
+		{
+			auto find = std::find_if( cmds.begin(), cmds.end(), std::bind( &con::Command::operator==, std::placeholders::_1, args[ 0 ] ) );
+			if ( find == cmds.end() )
+				throw std::exception( "Unknown console command" );
+			(*find)->help( c );
+		}
 	}
 } HELP;
 

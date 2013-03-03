@@ -20,12 +20,13 @@ namespace cw
 			typedef std::vector< std::string > Arguments;
 			void operator()( Console&, const Arguments& );
 
+			virtual void help( Console& ) = 0;
+
 			virtual std::string getName() const = 0;
 
 		private:
 			virtual unsigned getMinArgs() const = 0;
 
-			virtual void help( Console& ) = 0;
 			virtual void execute( Console&, const Arguments& ) = 0;
 
 		};
