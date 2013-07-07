@@ -65,6 +65,8 @@ void Host::updateHost()
 				Console::getSingleton() << con::setcinfo << "[Host] Client " << m_clients[ i ].getRemoteAddress() << " disconnected (" << (int) m_numClients << "/" << (int) m_maxClients << ")" << con::endl;
 				m_clients[ i ].disconnect();
 			break;
+			
+			default: break;
 			}
 		}
 		else if ( m_tcpListener.accept( client ) == sf::Socket::Done )
@@ -157,6 +159,8 @@ void Client::updateClient()
 			Console::getSingleton() << con::setcerr << "[Client] Lost connection to host" << con::endl;
 			disconnect();
 		break;
+		
+		default: break;
 		}
 	}
 }

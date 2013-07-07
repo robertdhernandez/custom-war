@@ -36,6 +36,7 @@ void GeneralController::updateGeneralListeners( const sf::Event& ev )
 	case Event::GainedFocus:	for_each( list.begin(), list.end(), bind( &GeneralListener::onGainedFocus, _1 ) ); break;
 	case Event::LostFocus:		for_each( list.begin(), list.end(), bind( &GeneralListener::onLostFocus, _1 ) ); break;
 	case Event::Resized:		for_each( list.begin(), list.end(), bind( &GeneralListener::onResize, _1, ev.size ) ); break;
+	default: break;
 	}
 }
 
@@ -54,6 +55,7 @@ void KeyController::updateKeyListeners( const Event& ev )
 	{
 	case Event::KeyPressed:	 for_each( vec.begin(), vec.end(), bind( &KeyListener::onKeyPressed,  _1, ev.key ) ); break;
 	case Event::KeyReleased: for_each( vec.begin(), vec.end(), bind( &KeyListener::onKeyReleased, _1, ev.key ) ); break;
+	default: break;
 	}
 }
 
@@ -76,6 +78,7 @@ void MouseController::updateMouseListeners( const Event& ev )
 	case Event::MouseLeft:				for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseLeft, _1 ) ); break;
 	case Event::MouseMoved:				for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseMoved, _1, ev.mouseMove ) ); break;
 	case Event::MouseWheelMoved:		for_each( vec.begin(), vec.end(), bind( &MouseListener::onMouseWheelMoved, _1, ev.mouseWheel ) ); break;
+	default: break;
 	}
 }
 

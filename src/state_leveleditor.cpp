@@ -117,6 +117,8 @@ void LevelEditor::onKeyPressed( const sf::Event::KeyEvent& ev )
 	case sf::Keyboard::Num2:
 		setCurrentTile( "road" );
 	break;
+	
+	default: break;
 	}
 }
 
@@ -132,6 +134,8 @@ void LevelEditor::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 		m_mouse.first = true;
 		m_mouse.second = sf::Vector2i( ev.x, ev.y );
 	break;
+	
+	default: break;
 	}
 }
 

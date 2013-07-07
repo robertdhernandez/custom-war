@@ -192,6 +192,8 @@ void MapViewer::onKeyPressed( const sf::Event::KeyEvent& ev )
 		if ( !std::get< 0 >( m_zoom ) )
 			m_zoom = std::make_tuple( true, ZOOM_OUT, ev.code );
 	break;
+	
+	default: break;
 	}
 }
 
@@ -230,6 +232,8 @@ void MapViewer::onKeyReleased( const sf::Event::KeyEvent& ev )
 		if ( std::get< 0 >( m_zoom ) && std::get< 2 >( m_zoom ) == ev.code )
 			std::get< 0 >( m_zoom ) = false;
 	break;
+	
+	default: break;
 	}
 }
 
@@ -244,6 +248,8 @@ void MapViewer::onMouseButtonPressed( const sf::Event::MouseButtonEvent& ev )
 		m_mouse.second = sf::Vector2i( ev.x, ev.y );
 		std::fill( m_dir.begin(), m_dir.end(), false );
 	break;
+	
+	default: break;
 	}
 }
 
@@ -254,6 +260,8 @@ void MapViewer::onMouseButtonReleased( const sf::Event::MouseButtonEvent& ev )
 	case sf::Mouse::Right:
 		m_mouse.first = false;
 	break;
+	
+	default: break;
 	}
 }
 

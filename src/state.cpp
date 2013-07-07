@@ -17,6 +17,8 @@ static class : public util::KeyListener
 		case sf::Keyboard::Tab:
 			c.setState( !c.isActive() );
 		break;
+		
+		default: break;
 		}
 	}
 
